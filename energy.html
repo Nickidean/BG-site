@@ -151,11 +151,11 @@
     .tariff-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 240px; flex: 1; }
     .tariff-cta { margin-top: 2rem; }
 
-    /* ── USP GRID ── */
-    .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
-    .usp-card { background: #001029; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .usp-title { font-size: 0.95rem; font-weight: 700; }
-    .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
+    /* ── USP GRID (4-col) ── */
+    .usp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
+    .usp-card { background: #001029; padding: 2.5rem 2rem; }
+    .usp-stat { font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
+    .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.55; }
 
     /* ── FEATURE CARDS (tall gradient) ── */
     .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -335,12 +335,22 @@
     <div class="section-inner">
       <h2 class="section-title">Why choose British Gas</h2>
       <div class="usp-grid">
-        <div class="usp-card"><div class="usp-title">5 star service</div><div class="usp-desc">Rated excellent by millions of customers across the UK.</div></div>
-        <div class="usp-card"><div class="usp-title">Energy at your fingertips</div><div class="usp-desc">Track usage and manage your account with the British Gas app.</div></div>
-        <div class="usp-card"><div class="usp-title">Greener electricity</div><div class="usp-desc">Renewable options and a commitment to a lower carbon future.</div></div>
-        <div class="usp-card"><div class="usp-title">Fixed price peace of mind</div><div class="usp-desc">Know exactly what you'll pay &mdash; no nasty surprises.</div></div>
-        <div class="usp-card"><div class="usp-title">Smart meter included</div><div class="usp-desc">Free smart meter installation so you can monitor usage in real time.</div></div>
-        <div class="usp-card"><div class="usp-title">24/7 support</div><div class="usp-desc">Help on hand by phone, app, or chat &mdash; day or night.</div></div>
+        <div class="usp-card">
+          <div class="usp-stat">Uswitch Award Winner</div>
+          <div class="usp-desc">Best Overall Improvement 2024 &amp; 2025</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">7 million+ customers</div>
+          <div class="usp-desc">The UK&rsquo;s largest energy supplier</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">200 years</div>
+          <div class="usp-desc">Powering British homes since 1812</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">Half price electricity</div>
+          <div class="usp-desc">Half-price electricity every Sunday</div>
+        </div>
       </div>
     </div>
   </section>
