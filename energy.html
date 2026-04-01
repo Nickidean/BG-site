@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy — British Gas Wireframe</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a1628; }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      height: 64px;
+      background: linear-gradient(135deg, #0d2b6b 0%, #1a4fa0 50%, #0d2b6b 100%);
+      gap: 2.5rem;
+    }
+
+    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #fff; white-space: nowrap; }
+    .logo-icon { width: 32px; height: 32px; }
+    .logo-text { font-size: 1.1rem; font-weight: 600; line-height: 1.1; }
+    .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; flex: 1; }
+
+    .nav-links a {
+      display: block; padding: 0.45rem 1rem; text-decoration: none;
+      color: #fff; font-size: 0.95rem; border-radius: 999px;
+      white-space: nowrap; transition: background 0.15s;
+    }
+    .nav-links a:hover { background: rgba(255,255,255,0.12); }
+    .nav-links a.active { background: #00c8e0; color: #0a1628; font-weight: 600; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; margin-left: auto; }
+
+    .search-btn {
+      background: none; border: none; cursor: pointer;
+      color: #fff; padding: 0.35rem; display: flex;
+      align-items: center; justify-content: center; opacity: 0.85;
+    }
+    .search-btn:hover { opacity: 1; }
+
+    .my-account-btn {
+      padding: 0.45rem 1.25rem; background: #7ed321; color: #0a1628;
+      border: none; border-radius: 999px; font-size: 0.9rem;
+      font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .my-account-btn:hover { background: #96e82e; }
+
+    .page-header {
+      padding: 2.5rem 2rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.4rem; }
+    .page-header p { color: rgba(255,255,255,0.6); font-size: 1rem; }
+
+    .blocks-section { padding: 2rem; }
+    .blocks-label {
+      font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 1rem;
+    }
+
+    .blocks-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+
+    .block-card {
+      border: 2px dashed rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      min-height: 160px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 1.5rem 1rem; gap: 0.75rem;
+      cursor: pointer; transition: background 0.15s, border-color 0.15s;
+      text-decoration: none; color: #fff;
+    }
+    .block-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.45); }
+
+    .block-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: #00c8e0;
+    }
+    .block-title { font-size: 0.95rem; font-weight: 600; line-height: 1.3; }
+    .block-desc { font-size: 0.78rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+    .wire-row { padding: 0 2rem; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+    .wire-box {
+      border: 2px dashed rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.35); font-size: 0.8rem;
+      text-transform: uppercase; letter-spacing: 0.06em; border-radius: 8px;
+    }
+    .wire-hero { height: 220px; }
+    .wire-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .wire-half { height: 140px; }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding: 1rem 2rem; display: flex; gap: 1.5rem;
+      font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    }
+    footer a { color: inherit; text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.8); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Primary navigation">
+      <a href="index.html" class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 4 C20 4 10 14 10 22 C10 27.5 14.5 32 20 32 C25.5 32 30 27.5 30 22 C30 14 20 4 20 4Z" fill="#fff" opacity="0.9"/>
+          <path d="M20 14 C20 14 15 20 15 24 C15 26.8 17.2 29 20 29 C22.8 29 25 26.8 25 24 C25 20 20 14 20 14Z" fill="#00c8e0"/>
+        </svg>
+        <span class="logo-text">British Gas</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="energy.html" class="active">Energy</a></li>
+        <li><a href="#">Cover</a></li>
+        <li><a href="#">Repairs</a></li>
+        <li><a href="#">Servicing</a></li>
+        <li><a href="#">Products</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="search-btn" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+        </button>
+        <button class="my-account-btn">My Account</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="page-header">
+    <h1>Energy</h1>
+    <p>Tariff landing page</p>
+  </div>
+
+  <section class="blocks-section">
+    <p class="blocks-label">Content blocks</p>
+    <div class="blocks-grid">
+
+      <a href="#" class="block-card">
+        <div class="block-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <span class="block-title">Get a quote</span>
+        <span class="block-desc">[Quote form / CTA]</span>
+      </a>
+
+      <a href="#" class="block-card">
+        <div class="block-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <span class="block-title">Tariffs</span>
+        <span class="block-desc">[Tariff comparison]</span>
+      </a>
+
+      <a href="#" class="block-card">
+        <div class="block-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+        </div>
+        <span class="block-title">Why join us</span>
+        <span class="block-desc">[Benefits / USPs]</span>
+      </a>
+
+      <a href="#" class="block-card">
+        <div class="block-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <span class="block-title">PeakSave Intro</span>
+        <span class="block-desc">[PeakSave explainer]</span>
+      </a>
+
+      <a href="#" class="block-card">
+        <div class="block-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 22c1.25-1.25 2.5-2.5 3.5-3.5C7 17 8.5 16.5 10 17c2 .67 4 1 5.5.5s3-2 3.5-4c.5-2 0-4-1-5.5S15 5 13 4.5C11 4 9 4.5 7.5 6S5 9 5.5 11c.5 2 2 3.5 3.5 4"/>
+          </svg>
+        </div>
+        <span class="block-title">Green Energy</span>
+        <span class="block-desc">[Green tariff info]</span>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="wire-row">
+    <div class="wire-box wire-hero">[Hero / Promotional Banner]</div>
+    <div class="wire-two-col">
+      <div class="wire-box wire-half">[Supporting Content]</div>
+      <div class="wire-box wire-half">[Quick Links / CTA]</div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="#">About Us</a>
+    <a href="#">Contact</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms &amp; Conditions</a>
+    <a href="#">Accessibility</a>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>British Gas — Wireframe</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a1628; }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      height: 64px;
+      background: linear-gradient(135deg, #0d2b6b 0%, #1a4fa0 50%, #0d2b6b 100%);
+      gap: 2.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .logo-icon { width: 32px; height: 32px; }
+    .logo-text { font-size: 1.1rem; font-weight: 600; line-height: 1.1; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      flex: 1;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0.45rem 1rem;
+      text-decoration: none;
+      color: #fff;
+      font-size: 0.95rem;
+      border-radius: 999px;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .nav-links a:hover { background: rgba(255,255,255,0.12); }
+    .nav-links a.active { background: #00c8e0; color: #0a1628; font-weight: 600; }
+
+    .nav-right { display: flex; align-items: center; gap: 1rem; margin-left: auto; }
+
+    .search-btn {
+      background: none; border: none; cursor: pointer;
+      color: #fff; padding: 0.35rem; display: flex;
+      align-items: center; justify-content: center; opacity: 0.85;
+    }
+    .search-btn:hover { opacity: 1; }
+
+    .my-account-btn {
+      padding: 0.45rem 1.25rem;
+      background: #7ed321;
+      color: #0a1628;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .my-account-btn:hover { background: #96e82e; }
+
+    .wire-box {
+      border: 2px dashed rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .page-body {
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .hero { height: 260px; }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+    }
+
+    .content-card { height: 140px; flex-direction: column; gap: 0.4rem; }
+
+    .secondary-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+    }
+
+    .secondary-block { height: 120px; }
+
+    footer {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding: 1rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+    }
+
+    footer a { color: inherit; text-decoration: none; }
+    footer a:hover { color: rgba(255,255,255,0.8); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar" aria-label="Primary navigation">
+      <a href="index.html" class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 4 C20 4 10 14 10 22 C10 27.5 14.5 32 20 32 C25.5 32 30 27.5 30 22 C30 14 20 4 20 4Z" fill="#fff" opacity="0.9"/>
+          <path d="M20 14 C20 14 15 20 15 24 C15 26.8 17.2 29 20 29 C22.8 29 25 26.8 25 24 C25 20 20 14 20 14Z" fill="#00c8e0"/>
+        </svg>
+        <span class="logo-text">British Gas</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="energy.html">Energy</a></li>
+        <li><a href="#">Cover</a></li>
+        <li><a href="#">Repairs</a></li>
+        <li><a href="#">Servicing</a></li>
+        <li><a href="#" class="active">Products</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <button class="search-btn" aria-label="Search">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+        </button>
+        <button class="my-account-btn">My Account</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page-body">
+    <div class="wire-box hero">[Hero Banner / Promotional Area]</div>
+    <div class="content-grid">
+      <div class="wire-box content-card">[Energy]</div>
+      <div class="wire-box content-card">[Cover]</div>
+      <div class="wire-box content-card">[Repairs]</div>
+      <div class="wire-box content-card">[Servicing]</div>
+      <div class="wire-box content-card">[Products]</div>
+    </div>
+    <div class="secondary-row">
+      <div class="wire-box secondary-block">[Featured Content / Offers]</div>
+      <div class="wire-box secondary-block">[Quick Links / CTA]</div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="#">About Us</a>
+    <a href="#">Contact</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms &amp; Conditions</a>
+    <a href="#">Accessibility</a>
+  </footer>
+
+</body>
+</html>
