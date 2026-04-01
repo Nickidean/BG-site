@@ -40,28 +40,97 @@
     }
     .btn:hover { background: #45c1ff; }
 
-    /* ── HERO ── */
+    /* ── HERO (two-column) ── */
     .hero {
-      min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 4rem 2rem 6rem; position: relative;
-      background:
-        radial-gradient(ellipse 70% 55% at 15% 30%, rgba(31,180,255,0.25) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(31,180,255,0.12) 0%, transparent 60%),
-        #001029;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      min-height: 85vh;
+      padding: 4rem 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .breadcrumb { position: absolute; top: 1rem; left: 2.5rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
-    .breadcrumb a { color: inherit; text-decoration: none; }
-    .breadcrumb a:hover { color: #fff; }
-    .hero h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 3rem; letter-spacing: -0.02em; color: #1fb4ff; }
-    .postcode-wrap { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.25rem; }
-    .postcode-input { padding: 0.85rem 1.25rem; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 999px; color: #fff; font-size: 1rem; width: 220px; outline: none; transition: border-color 0.15s; }
-    .postcode-input::placeholder { color: rgba(255,255,255,0.4); }
-    .postcode-input:focus { border-color: rgba(255,255,255,0.5); }
-    .quote-btn { padding: 0.85rem 1.75rem; background: #8dc63f; color: #001029; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-    .quote-btn:hover { background: #a0d94f; }
-    .cover-pill { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 0.9rem 2.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.55); }
-    .cover-pill a { color: #8dc63f; text-decoration: none; font-weight: 600; }
-    .cover-pill a:hover { text-decoration: underline; }
+    .hero-content { display: flex; flex-direction: column; gap: 2.5rem; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .postcode-form { display: flex; gap: 0.75rem; }
+    .postcode-input {
+      padding: 1.1rem 1.5rem;
+      background: #fff;
+      border: 2px solid #fff;
+      border-radius: 999px;
+      color: #001029;
+      font-size: 1.05rem;
+      width: 240px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .postcode-input::placeholder { color: #666; }
+    .postcode-input:focus { border-color: #1fb4ff; }
+    .quote-btn {
+      padding: 1.1rem 2.25rem;
+      background: #1fb4ff;
+      color: #001029;
+      border: none;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .quote-btn:hover { background: #45c1ff; }
+    .hero-image {
+      border-radius: 24px;
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(160deg, #1a6fcc 0%, #0d3d8a 60%, #001840 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+    }
+    .hero-image-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* ── TRUSTPILOT BAR ── */
+    .trustpilot-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.25rem 2.5rem;
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tp-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .tp-stars { display: flex; gap: 3px; }
+    .tp-star {
+      width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tp-star svg { width: 22px; height: 22px; }
+    .tp-star.full svg { fill: #00b67a; }
+    .tp-star.half svg { fill: #dcdce6; }
+    .tp-count { font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .tp-logo { font-size: 0.85rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.3rem; }
+    .tp-logo-star { color: #00b67a; font-size: 1rem; }
 
     /* ── SHARED SECTION ── */
     .section { padding: 5rem 2.5rem; }
@@ -146,6 +215,36 @@
     .faq-a { font-size: 0.85rem; color: rgba(255,255,255,0.45); padding-bottom: 1.4rem; line-height: 1.7; display: none; max-width: 640px; }
     .faq-item.open .faq-a { display: block; }
 
+    /* ── WHITE CTA STRIP ── */
+    .cta-strip {
+      background: #fff;
+      padding: 5rem 2.5rem;
+      text-align: center;
+    }
+    .cta-strip-inner { max-width: 700px; margin: 0 auto; }
+    .cta-strip h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #1a1a1a;
+      margin-bottom: 2rem;
+    }
+    .cta-strip h2 span { color: #2e7d32; }
+    .cta-strip .btn-dark {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: #1a2e1a;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .cta-strip .btn-dark:hover { background: #2a4a2a; }
+
     /* ── FOOTER ── */
     footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 2.5rem; display: flex; gap: 2rem; font-size: 0.78rem; color: rgba(255,255,255,0.3); flex-wrap: wrap; }
     footer a { color: inherit; text-decoration: none; }
@@ -180,17 +279,31 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="breadcrumb"><a href="index.html">Home</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a></div>
-    <h1>Find the right energy<br>tariff for your home</h1>
-    <div class="postcode-wrap">
-      <input class="postcode-input" type="text" placeholder="Enter postcode" maxlength="8" aria-label="Postcode">
-      <button class="quote-btn">Get a quote</button>
+    <div class="hero-content">
+      <h1>Lock in a fixed rate below the price cap</h1>
+      <div class="postcode-form">
+        <input class="postcode-input" type="text" placeholder="Postcode" maxlength="8" aria-label="Postcode">
+        <button class="quote-btn">Get a Quote</button>
+      </div>
     </div>
-    <div class="cover-pill">
-      <span>Already a customer?</span>
-      <a href="#">Log in to manage your account</a>
+    <div class="hero-image">
+      <span class="hero-image-label">Image</span>
     </div>
   </section>
+
+  <!-- TRUSTPILOT BAR -->
+  <div class="trustpilot-bar">
+    <span class="tp-label">Great</span>
+    <div class="tp-stars">
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star half"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+    </div>
+    <span class="tp-count">198K</span>
+    <span class="tp-logo"><span class="tp-logo-star">&#9733;</span> Trustpilot</span>
+  </div>
 
   <!-- TARIFF TYPES -->
   <section class="section">
@@ -299,6 +412,14 @@
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div><div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div></div>
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div><div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy from solar, wind, and hydro sources fed into the National Grid.</div></div>
       </div>
+    </div>
+  </section>
+
+  <!-- WHITE CTA STRIP -->
+  <section class="cta-strip">
+    <div class="cta-strip-inner">
+      <h2>Start your energy<br><span>switch today</span></h2>
+      <a href="#" class="btn-dark">Switch now</a>
     </div>
   </section>
 
