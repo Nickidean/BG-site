@@ -3,150 +3,430 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Energy — British Gas Wireframe</title>
+  <title>Energy — British Gas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a1628; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #001029; min-height: 100vh; }
 
-    /* ── Shared navbar ── */
-    .navbar {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      padding: 0 2rem;
-      height: 70px;
-      background: #0a1628;
-    }
-
-    .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #fff; white-space: nowrap; }
-    .logo-icon { width: 32px; height: 32px; }
-    .logo-text { font-size: 1.1rem; font-weight: 700; line-height: 1.1; }
-
+    /* ── NAV ── */
+    .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 2.5rem; height: 72px; background: transparent; position: relative; z-index: 10; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo img { height: 36px; width: auto; }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; justify-content: center; }
+    .nav-links a { display: block; padding: 0.5rem 1.2rem; text-decoration: none; color: #fff; font-size: 1.05rem; font-weight: 600; border-radius: 999px; transition: background 0.15s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.08); }
+    .nav-links a.active { background: #1fb4ff; color: #001029; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; justify-content: flex-end; }
+    .search-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; }
+    .sparkle { width: 22px; height: 22px; color: #8dc63f; }
+    .login-btn { padding: 0.5rem 1.5rem; background: #8dc63f; color: #001029; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .login-btn:hover { background: #a0d94f; }
 
-    .nav-links a {
-      display: block; padding: 0.45rem 1.1rem; text-decoration: none;
-      color: #fff; font-size: 0.95rem; font-weight: 700;
-      white-space: nowrap; opacity: 0.9; transition: opacity 0.15s;
-    }
-    .nav-links a:hover { opacity: 1; }
-    .nav-links a.active { border-bottom: 2px solid #fff; opacity: 1; }
-
-    .nav-right { display: flex; align-items: center; gap: 1.25rem; justify-content: flex-end; }
-
-    .search-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
-    .sparkle { width: 24px; height: 24px; color: #7ed321; }
-
-    .my-account-btn {
-      background: none; border: none; color: #fff; font-size: 0.95rem;
-      font-weight: 700; cursor: pointer; white-space: nowrap;
-      padding: 0; opacity: 0.9; transition: opacity 0.15s;
-    }
-    .my-account-btn:hover { opacity: 1; }
-
-    /* ── Content blocks ── */
-    .blocks-section {
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .block {
-      background: #112044;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .block-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .block-desc {
+    /* ── STANDARD CTA BUTTON ── */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      background: #1fb4ff;
+      color: #001029;
+      border: none;
+      border-radius: 999px;
       font-size: 0.9rem;
-      color: rgba(255,255,255,0.5);
-      line-height: 1.5;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #45c1ff; }
+
+    /* ── HERO (two-column) ── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      min-height: 85vh;
+      padding: 4rem 2.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero-content { display: flex; flex-direction: column; gap: 2.5rem; }
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .postcode-form { display: flex; gap: 0.75rem; }
+    .postcode-input {
+      padding: 1.1rem 1.5rem;
+      background: #fff;
+      border: 2px solid #fff;
+      border-radius: 999px;
+      color: #001029;
+      font-size: 1.05rem;
+      width: 240px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .postcode-input::placeholder { color: #666; }
+    .postcode-input:focus { border-color: #1fb4ff; }
+    .quote-btn {
+      padding: 1.1rem 2.25rem;
+      background: #1fb4ff;
+      color: #001029;
+      border: none;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .quote-btn:hover { background: #45c1ff; }
+    .hero-image {
+      border-radius: 24px;
+      aspect-ratio: 4 / 5;
+      background: linear-gradient(160deg, #1a6fcc 0%, #0d3d8a 60%, #001840 100%);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+    }
+    .hero-image-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.15);
-      padding: 1rem 2rem;
+    /* ── TRUSTPILOT BAR ── */
+    .trustpilot-bar {
       display: flex;
-      gap: 1.5rem;
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.4);
-      margin-top: 2rem;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.25rem 2.5rem;
+      background: #001029;
     }
+    .tp-label {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .tp-stars { display: flex; gap: 3px; }
+    .tp-star {
+      width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tp-star svg { width: 22px; height: 22px; }
+    .tp-star.full svg { fill: #00b67a; }
+    .tp-star.half svg { fill: #dcdce6; }
+    .tp-count { font-size: 0.85rem; font-weight: 700; color: #fff; }
+    .tp-logo { font-size: 0.85rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.3rem; }
+    .tp-logo-star { color: #00b67a; font-size: 1rem; }
+
+    /* ── SHARED SECTION ── */
+    .section { padding: 5rem 2.5rem; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; line-height: 1.15; margin-bottom: 2.5rem; letter-spacing: -0.02em; color: #1fb4ff; }
+
+    /* ── TARIFF TYPE CARDS ── */
+    .tariff-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .tariff-card {
+      background: radial-gradient(ellipse at 50% 38%, #1a4d9a 0%, #0d2d6e 55%, #001840 100%);
+      border-radius: 24px; border: 1.5px solid transparent;
+      padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 0; min-height: 420px;
+    }
+    .tariff-card.standard { border-color: #1fb4ff; }
+    .tariff-card.prepay   { border-color: #e8b84b; }
+    .tariff-card.smart    { border-color: #8dc63f; }
+    .tariff-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; margin-bottom: 1.25rem; }
+    .tariff-name { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+    .tariff-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 240px; flex: 1; }
+    .tariff-cta { margin-top: 2rem; }
+
+    /* ── USP GRID (4-col) ── */
+    .usp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
+    .usp-card { background: #001029; padding: 2.5rem 2rem; text-align: center; }
+    .usp-stat { font-size: clamp(1.3rem, 2.5vw, 1.6rem); font-weight: 800; line-height: 1.2; margin-bottom: 0.6rem; }
+    .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.55; }
+
+    /* ── FEATURE CARDS (tall gradient) ── */
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .feature-card {
+      border-radius: 24px; overflow: hidden; min-height: 480px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2.5rem 2rem; position: relative;
+    }
+    .feature-card.peaksave { background: linear-gradient(145deg, #3d9be9 0%, #6b8fc7 35%, #c0622d 70%, #e8531a 100%); }
+    .feature-card.green    { background: linear-gradient(145deg, #3d9be9 0%, #4aadaa 35%, #7abf45 70%, #8dc63f 100%); }
+    .feature-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, transparent 100%); border-radius: 24px; }
+    .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; }
+    .feature-card h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; color: #fff; }
+    .feature-card .card-body { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.6; max-width: 400px; }
+    .feature-card .btn { margin-top: 0.5rem; }
+
+    /* ── STEPS ── */
+    .steps-header { text-align: center; margin-bottom: 4rem; }
+    .steps-header .section-title { margin-bottom: 1.5rem; }
+    .steps-body { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .steps-image-wrap { position: relative; }
+    .steps-image-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(ellipse at center, rgba(0,60,160,0.7) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .steps-image-card {
+      position: relative; z-index: 1; border-radius: 20px; overflow: hidden;
+      aspect-ratio: 3 / 4;
+      background: linear-gradient(160deg, #1a6fcc 0%, #0d3d8a 60%, #001840 100%);
+      display: flex; align-items: flex-end; padding: 1.5rem;
+    }
+    .steps-image-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-transform: uppercase; }
+    .steps-list { display: flex; flex-direction: column; gap: 0; }
+    .step-item { display: grid; grid-template-columns: 3.5rem 1fr; padding: 2rem 0 2rem 1.75rem; border-left: 3px solid transparent; }
+    .step-item.s1 { border-color: #1fb4ff; }
+    .step-item.s2 { border-color: #e8531a; }
+    .step-item.s3 { border-color: #8dc63f; }
+    .step-num { font-size: 1.4rem; font-weight: 800; line-height: 1; padding-top: 0.2rem; }
+    .step-item.s1 .step-num { color: #1fb4ff; }
+    .step-item.s2 .step-num { color: #e8531a; }
+    .step-item.s3 .step-num { color: #8dc63f; }
+    .step-copy h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff; }
+    .step-copy p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 360px; }
+
+    /* ── FAQ ── */
+    .faq-list { border-top: 1px solid rgba(255,255,255,0.1); }
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; gap: 1rem; user-select: none; }
+    .faq-q .toggle { width: 26px; height: 26px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; color: rgba(255,255,255,0.4); transition: border-color 0.15s, color 0.15s; }
+    .faq-item.open .toggle { border-color: #8dc63f; color: #8dc63f; }
+    .faq-a { font-size: 0.85rem; color: rgba(255,255,255,0.45); padding-bottom: 1.4rem; line-height: 1.7; display: none; max-width: 640px; }
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── WHITE CTA STRIP ── */
+    .cta-strip {
+      background: #fff;
+      padding: 5rem 2.5rem;
+      text-align: center;
+    }
+    .cta-strip-inner { max-width: 700px; margin: 0 auto; }
+    .cta-strip h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      color: #1a1a1a;
+      margin-bottom: 2rem;
+    }
+    .cta-strip h2 span { color: #2e7d32; }
+    .cta-strip .btn-dark {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: #1a2e1a;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .cta-strip .btn-dark:hover { background: #2a4a2a; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 2.5rem; display: flex; gap: 2rem; font-size: 0.78rem; color: rgba(255,255,255,0.3); flex-wrap: wrap; }
     footer a { color: inherit; text-decoration: none; }
-    footer a:hover { color: rgba(255,255,255,0.8); }
+    footer a:hover { color: rgba(255,255,255,0.7); }
   </style>
 </head>
 <body>
 
-  <header>
-    <nav class="navbar" aria-label="Primary navigation">
-      <a href="index.html" class="logo">
-        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20 4 C20 4 10 14 10 22 C10 27.5 14.5 32 20 32 C25.5 32 30 27.5 30 22 C30 14 20 4 20 4Z" fill="#fff" opacity="0.9"/>
-          <path d="M20 14 C20 14 15 20 15 24 C15 26.8 17.2 29 20 29 C22.8 29 25 26.8 25 24 C25 20 20 14 20 14Z" fill="#00c8e0"/>
-        </svg>
-        <span class="logo-text">British Gas</span>
-      </a>
+  <!-- NAV -->
+  <nav class="navbar" aria-label="Primary navigation">
+    <a href="index.html" class="logo" aria-label="British Gas home">
+      <img src="BG_SolidWhite_Logo_Clearance_RGB_2022 (1).png" alt="British Gas" style="height: 36px; width: auto;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="energy.html" class="active">Energy</a></li>
+      <li><a href="#">Cover</a></li>
+      <li><a href="#">Repairs</a></li>
+      <li><a href="#">Servicing</a></li>
+      <li><a href="#">Products</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="search-btn" aria-label="Search">
+        <svg class="sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z"/></svg>
+      </button>
+      <button class="login-btn">My Account</button>
+    </div>
+  </nav>
 
-      <ul class="nav-links">
-        <li><a href="energy.html" class="active">Energy</a></li>
-        <li><a href="#">Cover</a></li>
-        <li><a href="#">Repairs</a></li>
-        <li><a href="#">Servicing</a></li>
-        <li><a href="#">Products</a></li>
-      </ul>
-
-      <div class="nav-right">
-        <button class="search-btn" aria-label="Search">
-          <svg class="sparkle" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z"/>
-          </svg>
-        </button>
-        <button class="my-account-btn">My Account</button>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Lock in a fixed rate below the price cap</h1>
+      <div class="postcode-form">
+        <input class="postcode-input" type="text" placeholder="Postcode" maxlength="8" aria-label="Postcode">
+        <button class="quote-btn">Get a Quote</button>
       </div>
-    </nav>
-  </header>
-
-  <!-- ── CONTENT BLOCKS ── -->
-  <section class="blocks-section">
-
-    <div class="block">
-      <div class="block-title">Get a quote</div>
-      <div class="block-desc">Postcode entry, fuel type selector, and a CTA button to start the quote journey. Likely the primary conversion point on this page.</div>
     </div>
-
-    <div class="block">
-      <div class="block-title">Tariffs</div>
-      <div class="block-desc">Overview of available energy tariffs — fixed vs variable, pricing info, and comparison tools to help customers choose the right plan.</div>
+    <div class="hero-image">
+      <span class="hero-image-label">Image</span>
     </div>
-
-    <div class="block">
-      <div class="block-title">Why join us</div>
-      <div class="block-desc">Key benefits and USPs — e.g. 24/7 support, smart meter compatibility, trusted brand. Designed to build confidence and reduce drop-off.</div>
-    </div>
-
-    <div class="block">
-      <div class="block-title">PeakSave Intro</div>
-      <div class="block-desc">Introduction to the PeakSave smart tariff — explains how customers can save money by shifting usage away from peak hours, with an explainer or short video.</div>
-    </div>
-
-    <div class="block">
-      <div class="block-title">Green Energy</div>
-      <div class="block-desc">Information on green and renewable tariff options — 100% renewable electricity, carbon offsetting, and environmental credentials.</div>
-    </div>
-
   </section>
 
+  <!-- TRUSTPILOT BAR -->
+  <div class="trustpilot-bar">
+    <span class="tp-label">Great</span>
+    <div class="tp-stars">
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star full"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+      <span class="tp-star half"><svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9"/></svg></span>
+    </div>
+    <span class="tp-count">198K</span>
+    <span class="tp-logo"><span class="tp-logo-star">&#9733;</span> Trustpilot</span>
+  </div>
+
+  <!-- TARIFF TYPES -->
+  <section class="section">
+    <div class="section-inner">
+      <h2 class="section-title">Types of energy tariff</h2>
+      <div class="tariff-grid">
+        <div class="tariff-card standard">
+          <div class="tariff-label">Fixed or Variable</div>
+          <div class="tariff-name">Standard<br>Tariff</div>
+          <div class="tariff-desc">Choose a fixed rate for price certainty, or go variable and move with the market. No smart meter required.</div>
+          <a href="#" class="btn tariff-cta">See standard tariffs</a>
+        </div>
+        <div class="tariff-card prepay">
+          <div class="tariff-label">Pay As You Go</div>
+          <div class="tariff-name">Prepayment<br>Meter</div>
+          <div class="tariff-desc">Top up when you need to and only pay for what you use. Great for budgeting, and available with a smart meter.</div>
+          <a href="#" class="btn tariff-cta">See prepayment tariffs</a>
+        </div>
+        <div class="tariff-card smart">
+          <div class="tariff-label">PeakSave Eligible</div>
+          <div class="tariff-name">Smart<br>Tariff</div>
+          <div class="tariff-desc">Save money by shifting your energy use to off-peak times. Requires a smart meter and rewards smarter habits.</div>
+          <a href="#" class="btn tariff-cta">See smart tariffs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY BRITISH GAS -->
+  <section class="section" style="padding-top:0">
+    <div class="section-inner">
+      <h2 class="section-title">Why choose British Gas</h2>
+      <div class="usp-grid">
+        <div class="usp-card">
+          <div class="usp-stat">Uswitch Award Winner</div>
+          <div class="usp-desc">Best Overall Improvement 2024 &amp; 2025</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">7 million+ customers</div>
+          <div class="usp-desc">The UK&rsquo;s largest energy supplier</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">200 years</div>
+          <div class="usp-desc">Powering British homes since 1812</div>
+        </div>
+        <div class="usp-card">
+          <div class="usp-stat">Half price electricity</div>
+          <div class="usp-desc">Half-price electricity every Sunday</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORE THAN JUST A TARIFF -->
+  <section class="section" style="padding-top:0">
+    <div class="section-inner">
+      <h2 class="section-title">More than just a tariff.</h2>
+      <div class="feature-grid">
+        <div class="feature-card peaksave">
+          <div class="card-content">
+            <h3>Half-price electricity every Sunday</h3>
+            <p class="card-body">Register for PeakSave and get electricity at half price from 11am&ndash;4pm every Sunday. Just switch, sign up in your online account, and save.</p>
+            <a href="#" class="btn">More about PeakSave</a>
+          </div>
+        </div>
+        <div class="feature-card green">
+          <div class="card-content">
+            <h3>Save up to &pound;175 a year with Hive</h3>
+            <p class="card-body">As a British Gas customer, you get up to 15% off Hive's smart eco-tech. Your discount code is waiting in your online account.</p>
+            <a href="#" class="btn">Log in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- IT'S EASY TO CHANGE -->
+  <section class="section" style="padding-top:0">
+    <div class="section-inner">
+      <div class="steps-header">
+        <h2 class="section-title">It&rsquo;s easy to change to us</h2>
+        <a href="#" class="btn">Switch to British Gas</a>
+      </div>
+      <div class="steps-body">
+        <div class="steps-image-wrap">
+          <div class="steps-image-card">
+            <span class="steps-image-label">Image</span>
+          </div>
+        </div>
+        <div class="steps-list">
+          <div class="step-item s1">
+            <div class="step-num">01</div>
+            <div class="step-copy"><h3>Pick your plan</h3><p>Get a quote and pick your tariff. Takes about 5 minutes.</p></div>
+          </div>
+          <div class="step-item s2">
+            <div class="step-num">02</div>
+            <div class="step-copy"><h3>We&rsquo;ll do the rest</h3><p>We sort the switch date with your current supplier. No disruption to your supply.</p></div>
+          </div>
+          <div class="step-item s3">
+            <div class="step-num">03</div>
+            <div class="step-copy"><h3>Submit a reading</h3><p>We&rsquo;ll tell you when you&rsquo;re switched and when to send your first meter reading.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="padding-top:0">
+    <div class="section-inner">
+      <h2 class="section-title">Common questions</h2>
+      <div class="faq-list">
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div><div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything &mdash; you don't need to contact your current supplier.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We'll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div><div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div><div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy from solar, wind, and hydro sources fed into the National Grid.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHITE CTA STRIP -->
+  <section class="cta-strip">
+    <div class="cta-strip-inner">
+      <h2>Start your energy<br><span>switch today</span></h2>
+      <a href="#" class="btn-dark">Switch now</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
     <a href="#">About Us</a>
     <a href="#">Contact</a>
