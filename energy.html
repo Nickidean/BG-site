@@ -23,6 +23,26 @@
     .login-btn { padding: 0.45rem 1.4rem; background: #8dc63f; color: #0a0e1a; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .login-btn:hover { background: #a0d94f; }
 
+    /* ── STANDARD CTA BUTTON ──
+       Used consistently across all sections.
+       The only exception is the hero quote button which stays green
+       as it is the primary page action. */
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      background: #3d9be9;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #5aaef0; }
+
     /* ── HERO ── */
     .hero {
       min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -54,7 +74,7 @@
       background: radial-gradient(ellipse at 50% 38%, #1a3f7a 0%, #0d2050 55%, #070f1e 100%);
       border-radius: 24px; border: 1.5px solid transparent;
       padding: 2.5rem 2rem; display: flex; flex-direction: column; align-items: center;
-      text-align: center; gap: 0; min-height: 420px; transition: border-color 0.2s;
+      text-align: center; gap: 0; min-height: 420px;
     }
     .tariff-card.standard { border-color: #3d9be9; }
     .tariff-card.prepay   { border-color: #e8b84b; }
@@ -62,13 +82,11 @@
     .tariff-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; margin-bottom: 1.25rem; }
     .tariff-name { font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
     .tariff-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; max-width: 240px; flex: 1; }
-    .tariff-cta { display: inline-block; margin-top: 2rem; padding: 0.75rem 1.75rem; background: #3d9be9; color: #fff; border: none; border-radius: 999px; font-size: 0.88rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.15s; white-space: nowrap; }
-    .tariff-cta:hover { background: #5aaef0; }
+    .tariff-cta { margin-top: 2rem; }
 
     /* ── USP GRID ── */
     .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-    .usp-card { background: #0a0e1a; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
-    .usp-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .usp-card { background: #0a0e1a; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .usp-title { font-size: 0.95rem; font-weight: 700; }
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
@@ -85,17 +103,33 @@
     .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; }
     .feature-card h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
     .feature-card .card-body { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.6; max-width: 400px; }
-    .card-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; background: #fff; color: #0a0e1a; border-radius: 999px; font-size: 0.88rem; font-weight: 700; text-decoration: none; width: fit-content; transition: background 0.15s; margin-top: 0.5rem; }
-    .card-pill:hover { background: #e8e8e8; }
-    .card-pill::before { content: '→'; }
+    .feature-card .btn { margin-top: 0.5rem; }
 
     /* ── STEPS ── */
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-    .step-card { background: #112044; border-radius: 20px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; }
-    .step-header { display: flex; align-items: center; justify-content: space-between; }
-    .step-label { font-size: 1rem; font-weight: 800; color: #3d9be9; }
-    .step-icon { font-size: 1.6rem; }
-    .step-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+    .steps-header { text-align: center; margin-bottom: 4rem; }
+    .steps-header .section-title { margin-bottom: 1.5rem; }
+    .steps-list { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 0; }
+    .step-item {
+      display: grid;
+      grid-template-columns: 4rem 1fr;
+      gap: 0;
+      padding: 2rem 0 2rem 2rem;
+      border-left: 3px solid transparent;
+    }
+    .step-item.s1 { border-color: #3d9be9; }
+    .step-item.s2 { border-color: #e8531a; }
+    .step-item.s3 { border-color: #8dc63f; }
+    .step-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1;
+      padding-top: 0.15rem;
+    }
+    .step-item.s1 .step-num { color: #3d9be9; }
+    .step-item.s2 .step-num { color: #e8531a; }
+    .step-item.s3 .step-num { color: #8dc63f; }
+    .step-copy h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .step-copy p { font-size: 0.88rem; color: rgba(255,255,255,0.5); line-height: 1.6; max-width: 420px; }
 
     /* ── FAQ ── */
     .faq-list { border-top: 1px solid rgba(255,255,255,0.08); }
@@ -140,7 +174,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="breadcrumb"><a href="index.html">🏠</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a></div>
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a></div>
     <h1>Find the right energy<br>tariff for your home</h1>
     <div class="postcode-wrap">
       <input class="postcode-input" type="text" placeholder="Enter postcode" maxlength="8" aria-label="Postcode">
@@ -161,19 +195,19 @@
           <div class="tariff-label">Fixed or Variable</div>
           <div class="tariff-name">Standard<br>Tariff</div>
           <div class="tariff-desc">Choose a fixed rate for price certainty, or go variable and move with the market. No smart meter required.</div>
-          <a href="#" class="tariff-cta">See standard tariffs</a>
+          <a href="#" class="btn tariff-cta">See standard tariffs</a>
         </div>
         <div class="tariff-card prepay">
           <div class="tariff-label">Pay As You Go</div>
           <div class="tariff-name">Prepayment<br>Meter</div>
           <div class="tariff-desc">Top up when you need to and only pay for what you use. Great for budgeting, and available with a smart meter.</div>
-          <a href="#" class="tariff-cta">See prepayment tariffs</a>
+          <a href="#" class="btn tariff-cta">See prepayment tariffs</a>
         </div>
         <div class="tariff-card smart">
           <div class="tariff-label">PeakSave Eligible</div>
           <div class="tariff-name">Smart<br>Tariff</div>
           <div class="tariff-desc">Save money by shifting your energy use to off-peak times. Requires a smart meter and rewards smarter habits.</div>
-          <a href="#" class="tariff-cta">See smart tariffs</a>
+          <a href="#" class="btn tariff-cta">See smart tariffs</a>
         </div>
       </div>
     </div>
@@ -184,12 +218,12 @@
     <div class="section-inner">
       <h2 class="section-title">Why choose British Gas</h2>
       <div class="usp-grid">
-        <div class="usp-card"><div class="usp-icon">⭐</div><div class="usp-title">5 star service</div><div class="usp-desc">Rated excellent by millions of customers across the UK.</div></div>
-        <div class="usp-card"><div class="usp-icon">📱</div><div class="usp-title">Energy at your fingertips</div><div class="usp-desc">Track usage and manage your account with the British Gas app.</div></div>
-        <div class="usp-card"><div class="usp-icon">🌱</div><div class="usp-title">Greener electricity</div><div class="usp-desc">Renewable options and a commitment to a lower carbon future.</div></div>
-        <div class="usp-card"><div class="usp-icon">🔒</div><div class="usp-title">Fixed price peace of mind</div><div class="usp-desc">Know exactly what you'll pay — no nasty surprises.</div></div>
-        <div class="usp-card"><div class="usp-icon">⚡</div><div class="usp-title">Smart meter included</div><div class="usp-desc">Free smart meter installation so you can monitor usage in real time.</div></div>
-        <div class="usp-card"><div class="usp-icon">💬</div><div class="usp-title">24/7 support</div><div class="usp-desc">Help on hand by phone, app, or chat — day or night.</div></div>
+        <div class="usp-card"><div class="usp-title">5 star service</div><div class="usp-desc">Rated excellent by millions of customers across the UK.</div></div>
+        <div class="usp-card"><div class="usp-title">Energy at your fingertips</div><div class="usp-desc">Track usage and manage your account with the British Gas app.</div></div>
+        <div class="usp-card"><div class="usp-title">Greener electricity</div><div class="usp-desc">Renewable options and a commitment to a lower carbon future.</div></div>
+        <div class="usp-card"><div class="usp-title">Fixed price peace of mind</div><div class="usp-desc">Know exactly what you'll pay &mdash; no nasty surprises.</div></div>
+        <div class="usp-card"><div class="usp-title">Smart meter included</div><div class="usp-desc">Free smart meter installation so you can monitor usage in real time.</div></div>
+        <div class="usp-card"><div class="usp-title">24/7 support</div><div class="usp-desc">Help on hand by phone, app, or chat &mdash; day or night.</div></div>
       </div>
     </div>
   </section>
@@ -202,46 +236,49 @@
         <div class="feature-card peaksave">
           <div class="card-content">
             <h3>Half-price electricity every Sunday</h3>
-            <p class="card-body">Register for PeakSave and get electricity at half price from 11am–4pm every Sunday. Just switch, sign up in your online account, and save.</p>
-            <a href="#" class="card-pill">More about PeakSave</a>
+            <p class="card-body">Register for PeakSave and get electricity at half price from 11am&ndash;4pm every Sunday. Just switch, sign up in your online account, and save.</p>
+            <a href="#" class="btn">More about PeakSave</a>
           </div>
         </div>
         <div class="feature-card green">
           <div class="card-content">
             <h3>Save up to &pound;175 a year with Hive</h3>
             <p class="card-body">As a British Gas customer, you get up to 15% off Hive's smart eco-tech. Your discount code is waiting in your online account.</p>
-            <a href="#" class="card-pill">Log in</a>
+            <a href="#" class="btn">Log in</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- READY TO SWITCH -->
+  <!-- IT'S EASY TO CHANGE -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
-      <h2 class="section-title">Ready to switch? Here’s what to expect</h2>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-label">Step 1</span>
-            <span class="step-icon">⚡💧</span>
+      <div class="steps-header">
+        <h2 class="section-title">It&rsquo;s easy to change to us</h2>
+        <a href="#" class="btn">Switch to British Gas</a>
+      </div>
+      <div class="steps-list">
+        <div class="step-item s1">
+          <div class="step-num">01</div>
+          <div class="step-copy">
+            <h3>Pick your plan</h3>
+            <p>Get a quote and pick your tariff. Takes about 5 minutes.</p>
           </div>
-          <p class="step-desc">Get a quote and pick your tariff. Takes about 5 minutes.</p>
         </div>
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-label">Step 2</span>
-            <span class="step-icon">📅</span>
+        <div class="step-item s2">
+          <div class="step-num">02</div>
+          <div class="step-copy">
+            <h3>We'll do the rest</h3>
+            <p>We sort the switch date with your current supplier. No disruption to your supply.</p>
           </div>
-          <p class="step-desc">We sort the switch date with your current supplier. No disruption to your supply.</p>
         </div>
-        <div class="step-card">
-          <div class="step-header">
-            <span class="step-label">Step 3</span>
-            <span class="step-icon">📲</span>
+        <div class="step-item s3">
+          <div class="step-num">03</div>
+          <div class="step-copy">
+            <h3>Submit a reading</h3>
+            <p>We'll tell you when you're switched and when to send your first meter reading.</p>
           </div>
-          <p class="step-desc">We’ll tell you when you’re switched and when to send your first meter reading.</p>
         </div>
       </div>
     </div>
@@ -253,8 +290,8 @@
       <h2 class="section-title">Common questions</h2>
       <div class="faq-list">
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div><div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything — you don’t need to contact your current supplier.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything &mdash; you don't need to contact your current supplier.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We'll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div><div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div></div>
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div><div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy from solar, wind, and hydro sources fed into the National Grid.</div></div>
       </div>
