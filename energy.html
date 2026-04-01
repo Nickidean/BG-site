@@ -6,7 +6,7 @@
   <title>Energy — British Gas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #00245f; min-height: 100vh; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #001029; min-height: 100vh; }
 
     /* ── NAV ── */
     .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 2.5rem; height: 72px; background: transparent; position: relative; z-index: 10; }
@@ -16,11 +16,11 @@
     .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; justify-content: center; }
     .nav-links a { display: block; padding: 0.4rem 1.1rem; text-decoration: none; color: #fff; font-size: 0.9rem; font-weight: 600; border-radius: 999px; transition: background 0.15s; }
     .nav-links a:hover { background: rgba(255,255,255,0.08); }
-    .nav-links a.active { background: #1fb4ff; color: #00245f; }
+    .nav-links a.active { background: #1fb4ff; color: #001029; }
     .nav-right { display: flex; align-items: center; gap: 1rem; justify-content: flex-end; }
     .search-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; }
     .sparkle { width: 22px; height: 22px; color: #8dc63f; }
-    .login-btn { padding: 0.45rem 1.4rem; background: #8dc63f; color: #00245f; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .login-btn { padding: 0.45rem 1.4rem; background: #8dc63f; color: #001029; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .login-btn:hover { background: #a0d94f; }
 
     /* ── STANDARD CTA BUTTON ── */
@@ -28,7 +28,7 @@
       display: inline-block;
       padding: 0.75rem 1.75rem;
       background: #1fb4ff;
-      color: #00245f;
+      color: #001029;
       border: none;
       border-radius: 999px;
       font-size: 0.9rem;
@@ -47,7 +47,7 @@
       background:
         radial-gradient(ellipse 70% 55% at 15% 30%, rgba(31,180,255,0.25) 0%, transparent 70%),
         radial-gradient(ellipse 50% 40% at 85% 70%, rgba(31,180,255,0.12) 0%, transparent 60%),
-        #00245f;
+        #001029;
     }
     .breadcrumb { position: absolute; top: 1rem; left: 2.5rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
     .breadcrumb a { color: inherit; text-decoration: none; }
@@ -57,7 +57,7 @@
     .postcode-input { padding: 0.85rem 1.25rem; background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 999px; color: #fff; font-size: 1rem; width: 220px; outline: none; transition: border-color 0.15s; }
     .postcode-input::placeholder { color: rgba(255,255,255,0.4); }
     .postcode-input:focus { border-color: rgba(255,255,255,0.5); }
-    .quote-btn { padding: 0.85rem 1.75rem; background: #8dc63f; color: #00245f; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .quote-btn { padding: 0.85rem 1.75rem; background: #8dc63f; color: #001029; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
     .quote-btn:hover { background: #a0d94f; }
     .cover-pill { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 999px; padding: 0.9rem 2.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.55); }
     .cover-pill a { color: #8dc63f; text-decoration: none; font-weight: 600; }
@@ -86,7 +86,7 @@
 
     /* ── USP GRID ── */
     .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; }
-    .usp-card { background: #00245f; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .usp-card { background: #001029; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.5rem; }
     .usp-title { font-size: 0.95rem; font-weight: 700; }
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
@@ -108,19 +108,9 @@
     /* ── STEPS ── */
     .steps-header { text-align: center; margin-bottom: 4rem; }
     .steps-header .section-title { margin-bottom: 1.5rem; }
-
-    /* Two-column layout: image left, steps right */
-    .steps-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    /* Image placeholder card — mimics a tall photo card */
+    .steps-body { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
     .steps-image-wrap { position: relative; }
     .steps-image-wrap::before {
-      /* Dark radial glow behind the card, like the reference */
       content: '';
       position: absolute;
       inset: -30%;
@@ -129,32 +119,14 @@
       z-index: 0;
     }
     .steps-image-card {
-      position: relative;
-      z-index: 1;
-      border-radius: 20px;
-      overflow: hidden;
+      position: relative; z-index: 1; border-radius: 20px; overflow: hidden;
       aspect-ratio: 3 / 4;
       background: linear-gradient(160deg, #1a6fcc 0%, #0d3d8a 60%, #001840 100%);
-      display: flex;
-      align-items: flex-end;
-      padding: 1.5rem;
+      display: flex; align-items: flex-end; padding: 1.5rem;
     }
-    .steps-image-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    /* Numbered steps list */
+    .steps-image-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; text-transform: uppercase; }
     .steps-list { display: flex; flex-direction: column; gap: 0; }
-    .step-item {
-      display: grid;
-      grid-template-columns: 3.5rem 1fr;
-      padding: 2rem 0 2rem 1.75rem;
-      border-left: 3px solid transparent;
-    }
+    .step-item { display: grid; grid-template-columns: 3.5rem 1fr; padding: 2rem 0 2rem 1.75rem; border-left: 3px solid transparent; }
     .step-item.s1 { border-color: #1fb4ff; }
     .step-item.s2 { border-color: #e8531a; }
     .step-item.s3 { border-color: #8dc63f; }
@@ -293,39 +265,25 @@
         <a href="#" class="btn">Switch to British Gas</a>
       </div>
       <div class="steps-body">
-
-        <!-- Image placeholder — replace src with real asset -->
         <div class="steps-image-wrap">
           <div class="steps-image-card">
             <span class="steps-image-label">Image</span>
           </div>
         </div>
-
-        <!-- Numbered steps -->
         <div class="steps-list">
           <div class="step-item s1">
             <div class="step-num">01</div>
-            <div class="step-copy">
-              <h3>Pick your plan</h3>
-              <p>Get a quote and pick your tariff. Takes about 5 minutes.</p>
-            </div>
+            <div class="step-copy"><h3>Pick your plan</h3><p>Get a quote and pick your tariff. Takes about 5 minutes.</p></div>
           </div>
           <div class="step-item s2">
             <div class="step-num">02</div>
-            <div class="step-copy">
-              <h3>We&rsquo;ll do the rest</h3>
-              <p>We sort the switch date with your current supplier. No disruption to your supply.</p>
-            </div>
+            <div class="step-copy"><h3>We&rsquo;ll do the rest</h3><p>We sort the switch date with your current supplier. No disruption to your supply.</p></div>
           </div>
           <div class="step-item s3">
             <div class="step-num">03</div>
-            <div class="step-copy">
-              <h3>Submit a reading</h3>
-              <p>We&rsquo;ll tell you when you&rsquo;re switched and when to send your first meter reading.</p>
-            </div>
+            <div class="step-copy"><h3>Submit a reading</h3><p>We&rsquo;ll tell you when you&rsquo;re switched and when to send your first meter reading.</p></div>
           </div>
         </div>
-
       </div>
     </div>
   </section>
