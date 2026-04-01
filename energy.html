@@ -10,8 +10,9 @@
 
     /* ── NAV ── */
     .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 2.5rem; height: 72px; background: transparent; position: relative; z-index: 10; }
-    .logo { display: flex; align-items: center; text-decoration: none; color: #fff; }
-    .logo-svg { height: 32px; width: auto; }
+    .logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; color: #fff; }
+    .logo-icon { width: 36px; height: 36px; flex-shrink: 0; }
+    .logo-text { font-size: 1.15rem; font-weight: 700; white-space: nowrap; }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; justify-content: center; }
     .nav-links a { display: block; padding: 0.5rem 1.2rem; text-decoration: none; color: #fff; font-size: 1.05rem; font-weight: 600; border-radius: 999px; transition: background 0.15s; }
     .nav-links a:hover { background: rgba(255,255,255,0.08); }
@@ -252,17 +253,16 @@
 
   <!-- NAV -->
   <nav class="navbar" aria-label="Primary navigation">
-    <a href="index.html" class="logo">
-      <!-- British Gas logo: flame icon + wordmark -->
-      <svg class="logo-svg" viewBox="0 0 180 40" fill="none" aria-label="British Gas home">
-        <!-- Flame / droplet -->
-        <path d="M16.5 2C16.5 2 8 11.5 8 18.5C8 24.3 11.8 29 16.5 29C21.2 29 25 24.3 25 18.5C25 11.5 16.5 2 16.5 2Z" fill="#fff"/>
-        <path d="M16.5 12C16.5 12 12.5 17 12.5 20.5C12.5 22.7 14.3 24.5 16.5 24.5C18.7 24.5 20.5 22.7 20.5 20.5C20.5 17 16.5 12 16.5 12Z" fill="#1fb4ff"/>
-        <!-- Leaf accent -->
-        <path d="M19 6.5C19 6.5 22 10 23 13C21 11.5 18 11 18 11L19 6.5Z" fill="#8dc63f"/>
-        <!-- "British Gas" wordmark -->
-        <text x="33" y="22" fill="#fff" font-family="'Segoe UI', Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="0.02em">British Gas</text>
+    <a href="index.html" class="logo" aria-label="British Gas home">
+      <svg class="logo-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <!-- Outer droplet -->
+        <path d="M20 3C20 3 9 14 9 22.5C9 28.3 13.9 33 20 33C26.1 33 31 28.3 31 22.5C31 14 20 3 20 3Z" fill="#fff"/>
+        <!-- Inner flame -->
+        <path d="M20 14C20 14 14.5 20 14.5 24C14.5 27 17 29.5 20 29.5C23 29.5 25.5 27 25.5 24C25.5 20 20 14 20 14Z" fill="#1fb4ff"/>
+        <!-- Green leaf accent -->
+        <path d="M23 7C23 7 27 11.5 28 15C25.5 13 22 12.5 22 12.5L23 7Z" fill="#8dc63f"/>
       </svg>
+      <span class="logo-text">British Gas</span>
     </a>
     <ul class="nav-links">
       <li><a href="energy.html" class="active">Energy</a></li>
