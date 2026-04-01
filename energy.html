@@ -73,37 +73,29 @@
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
     /* ── FEATURE CARDS (tall gradient) ── */
-    .feature-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
-    .feature-nav { display: flex; gap: 0.5rem; padding-top: 0.5rem; }
-    .feature-nav button { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: none; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
-    .feature-nav button:hover { border-color: rgba(255,255,255,0.6); }
     .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .feature-card { border-radius: 24px; overflow: hidden; min-height: 480px; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem 2rem; position: relative; }
+    .feature-card {
+      border-radius: 24px; overflow: hidden; min-height: 480px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2.5rem 2rem; position: relative;
+    }
     .feature-card.peaksave { background: linear-gradient(145deg, #3d9be9 0%, #6b8fc7 35%, #c0622d 70%, #e8531a 100%); }
     .feature-card.green    { background: linear-gradient(145deg, #3d9be9 0%, #4aadaa 35%, #7abf45 70%, #8dc63f 100%); }
-    .feature-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); border-radius: 24px; }
-    .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; }
-    .feature-card h3 { font-size: clamp(1.5rem, 2.5vw, 2.1rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
-    .card-pill { display: inline-block; padding: 0.65rem 1.4rem; background: #fff; color: #0a0e1a; border-radius: 999px; font-size: 0.88rem; font-weight: 700; text-decoration: none; width: fit-content; transition: background 0.15s; }
+    .feature-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 55%, transparent 100%); border-radius: 24px; }
+    .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; }
+    .feature-card h3 { font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+    .feature-card .card-body { font-size: 0.88rem; color: rgba(255,255,255,0.75); line-height: 1.6; max-width: 400px; }
+    .card-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.4rem; background: #fff; color: #0a0e1a; border-radius: 999px; font-size: 0.88rem; font-weight: 700; text-decoration: none; width: fit-content; transition: background 0.15s; margin-top: 0.5rem; }
     .card-pill:hover { background: #e8e8e8; }
+    .card-pill::before { content: '→'; }
 
     /* ── STEPS ── */
     .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-    .step-card {
-      background: #112044;
-      border-radius: 20px;
-      padding: 2rem 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+    .step-card { background: #112044; border-radius: 20px; padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 1rem; }
     .step-header { display: flex; align-items: center; justify-content: space-between; }
     .step-label { font-size: 1rem; font-weight: 800; color: #3d9be9; }
     .step-icon { font-size: 1.6rem; }
     .step-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
-    .step-connector {
-      display: none;
-    }
 
     /* ── FAQ ── */
     .faq-list { border-top: 1px solid rgba(255,255,255,0.08); }
@@ -202,27 +194,23 @@
     </div>
   </section>
 
-  <!-- PEAKSAVE + GREEN ENERGY -->
+  <!-- MORE THAN JUST A TARIFF -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
-      <div class="feature-header">
-        <h2 class="section-title" style="margin-bottom:0">Energy features</h2>
-        <div class="feature-nav">
-          <button aria-label="Previous">&larr;</button>
-          <button aria-label="Next">&rarr;</button>
-        </div>
-      </div>
+      <h2 class="section-title">More than just a tariff.</h2>
       <div class="feature-grid">
         <div class="feature-card peaksave">
           <div class="card-content">
-            <h3>Save money by using energy at smarter times</h3>
-            <a href="#" class="card-pill">Learn about PeakSave</a>
+            <h3>Half-price electricity every Sunday</h3>
+            <p class="card-body">Register for PeakSave and get electricity at half price from 11am–4pm every Sunday. Just switch, sign up in your online account, and save.</p>
+            <a href="#" class="card-pill">More about PeakSave</a>
           </div>
         </div>
         <div class="feature-card green">
           <div class="card-content">
-            <h3>Power your home with 100% renewable electricity</h3>
-            <a href="#" class="card-pill">Explore green tariffs</a>
+            <h3>Save up to &pound;175 a year with Hive</h3>
+            <p class="card-body">As a British Gas customer, you get up to 15% off Hive's smart eco-tech. Your discount code is waiting in your online account.</p>
+            <a href="#" class="card-pill">Log in</a>
           </div>
         </div>
       </div>
@@ -232,7 +220,7 @@
   <!-- READY TO SWITCH -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
-      <h2 class="section-title">Ready to switch? Here's what to expect</h2>
+      <h2 class="section-title">Ready to switch? Here’s what to expect</h2>
       <div class="steps-grid">
         <div class="step-card">
           <div class="step-header">
@@ -253,7 +241,7 @@
             <span class="step-label">Step 3</span>
             <span class="step-icon">📲</span>
           </div>
-          <p class="step-desc">We'll tell you when you're switched and when to send your first meter reading.</p>
+          <p class="step-desc">We’ll tell you when you’re switched and when to send your first meter reading.</p>
         </div>
       </div>
     </div>
@@ -265,8 +253,8 @@
       <h2 class="section-title">Common questions</h2>
       <div class="faq-list">
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div><div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything — you don't need to contact your current supplier.</div></div>
-        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We'll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything — you don’t need to contact your current supplier.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div><div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div></div>
         <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div><div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy from solar, wind, and hydro sources fed into the National Grid.</div></div>
       </div>
