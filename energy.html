@@ -6,31 +6,34 @@
   <title>Energy — British Gas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #071628; min-height: 100vh; }
+
+    /* ── Brand tokens ──
+       Background 1 : #0a0e1a  (canvas base)
+       Background 2 : #111e36  (lift atop dark)
+       Primary      : #3d9be9  (brand blue)
+       Secondary    : #8dc63f  (greener future)
+       Highlight    : #e8531a  (heat/orange)
+       Gradient 1   : #3d9be9 → #8dc63f  (cyan → green)
+       Gradient 2   : radial white shine on blue
+       Gradient 3   : #3d9be9 → #e8531a  (cyan → orange)
+    */
+
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a0e1a; min-height: 100vh; }
 
     /* ── NAV ── */
-    .navbar {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      padding: 0 2.5rem;
-      height: 72px;
-      background: transparent;
-      position: relative;
-      z-index: 10;
-    }
+    .navbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 2.5rem; height: 72px; background: transparent; position: relative; z-index: 10; }
     .logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #fff; }
     .logo-icon { width: 34px; height: 34px; }
     .logo-text { font-size: 1rem; font-weight: 700; }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; justify-content: center; }
     .nav-links a { display: block; padding: 0.4rem 1.1rem; text-decoration: none; color: #fff; font-size: 0.9rem; font-weight: 600; border-radius: 999px; transition: background 0.15s; }
     .nav-links a:hover { background: rgba(255,255,255,0.08); }
-    .nav-links a.active { background: #00c8e0; color: #071628; }
+    .nav-links a.active { background: #3d9be9; color: #0a0e1a; }
     .nav-right { display: flex; align-items: center; gap: 1rem; justify-content: flex-end; }
     .search-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; }
-    .sparkle { width: 22px; height: 22px; color: #7ed321; }
-    .login-btn { padding: 0.45rem 1.4rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-    .login-btn:hover { background: #96e82e; }
+    .sparkle { width: 22px; height: 22px; color: #8dc63f; }
+    .login-btn { padding: 0.45rem 1.4rem; background: #8dc63f; color: #0a0e1a; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+    .login-btn:hover { background: #a0d94f; }
 
     /* ── HERO ── */
     .hero {
@@ -38,9 +41,9 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 4rem 2rem 6rem; position: relative;
       background:
-        radial-gradient(ellipse 80% 60% at 15% 30%, rgba(15,80,180,0.55) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(10,50,120,0.3) 0%, transparent 60%),
-        #071628;
+        radial-gradient(ellipse 70% 55% at 15% 30%, rgba(61,155,233,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(61,155,233,0.15) 0%, transparent 60%),
+        #0a0e1a;
     }
     .breadcrumb { position: absolute; top: 1rem; left: 2.5rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
     .breadcrumb a { color: inherit; text-decoration: none; }
@@ -51,117 +54,68 @@
     .postcode-input { padding: 0.85rem 1.25rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 999px; color: #fff; font-size: 1rem; width: 220px; outline: none; transition: border-color 0.15s; }
     .postcode-input::placeholder { color: rgba(255,255,255,0.35); }
     .postcode-input:focus { border-color: rgba(255,255,255,0.4); }
-    .quote-btn { padding: 0.85rem 1.75rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-    .quote-btn:hover { background: #96e82e; }
-    .cover-pill { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 0.9rem 2.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
-    .cover-pill a { color: #7ed321; text-decoration: none; font-weight: 600; }
+    .quote-btn { padding: 0.85rem 1.75rem; background: #8dc63f; color: #0a0e1a; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+    .quote-btn:hover { background: #a0d94f; }
+    .cover-pill { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 0.9rem 2.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+    .cover-pill a { color: #8dc63f; text-decoration: none; font-weight: 600; }
     .cover-pill a:hover { text-decoration: underline; }
 
     /* ── SHARED SECTION ── */
     .section { padding: 5rem 2.5rem; }
     .section-inner { max-width: 1100px; margin: 0 auto; }
-    .eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #00c8e0; margin-bottom: 0.75rem; }
+    .eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #3d9be9; margin-bottom: 0.75rem; }
     .section-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
     .section-sub { color: rgba(255,255,255,0.45); font-size: 0.95rem; margin-bottom: 3rem; max-width: 520px; }
 
     /* ── TARIFF CARDS ── */
     .tariff-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-    .tariff-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color 0.2s; }
-    .tariff-card:hover { border-color: rgba(255,255,255,0.2); }
-    .tariff-card.featured { border-color: #00c8e0; }
-    .tariff-badge { display: inline-block; background: rgba(0,200,224,0.15); color: #00c8e0; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; width: fit-content; }
+    .tariff-card { background: #111e36; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color 0.2s; }
+    .tariff-card:hover { border-color: rgba(255,255,255,0.18); }
+    .tariff-card.featured { border-color: #3d9be9; }
+    .tariff-badge { display: inline-block; background: rgba(61,155,233,0.15); color: #3d9be9; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; width: fit-content; }
     .tariff-name { font-size: 1.05rem; font-weight: 700; }
     .tariff-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
     .tariff-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
     .tariff-features li { font-size: 0.8rem; color: rgba(255,255,255,0.55); padding-left: 1.1rem; position: relative; }
-    .tariff-features li::before { content: '✓'; position: absolute; left: 0; color: #7ed321; }
-    .tariff-cta { display: block; margin-top: auto; padding: 0.65rem 1rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.15s; }
-    .tariff-cta:hover { background: #96e82e; }
+    .tariff-features li::before { content: '✓'; position: absolute; left: 0; color: #8dc63f; }
+    .tariff-cta { display: block; margin-top: auto; padding: 0.65rem 1rem; background: #8dc63f; color: #0a0e1a; border: none; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.15s; }
+    .tariff-cta:hover { background: #a0d94f; }
 
     /* ── USP GRID ── */
-    .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
-    .usp-card { background: #071628; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
+    .usp-card { background: #0a0e1a; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
     .usp-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
     .usp-title { font-size: 0.95rem; font-weight: 700; }
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
-    /* ── FEATURE CARDS (tall) ── */
-    .feature-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1.5rem;
-    }
-    .feature-nav { display: flex; gap: 0.5rem; }
-    .feature-nav button {
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      background: none;
-      color: #fff;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.15s;
-    }
+    /* ── FEATURE CARDS (tall, gradient bg) ── */
+    .feature-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+    .feature-nav { display: flex; gap: 0.5rem; padding-top: 0.5rem; }
+    .feature-nav button { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: none; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
     .feature-nav button:hover { border-color: rgba(255,255,255,0.6); }
-
     .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .feature-card { border-radius: 24px; overflow: hidden; min-height: 480px; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem 2rem; position: relative; }
 
-    .feature-card {
+    /* Gradient 3: cyan → orange (PeakSave — heat/energy) */
+    .feature-card.peaksave {
+      background: linear-gradient(145deg, #3d9be9 0%, #6b8fc7 35%, #c0622d 70%, #e8531a 100%);
+    }
+    /* Gradient 1: cyan → green (Green Energy — greener future) */
+    .feature-card.green {
+      background: linear-gradient(145deg, #3d9be9 0%, #4aadaa 35%, #7abf45 70%, #8dc63f 100%);
+    }
+
+    /* Dark scrim at bottom so text is legible */
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
       border-radius: 24px;
-      overflow: hidden;
-      min-height: 500px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
     }
-
-    /* Illustration area */
-    .feature-card .card-visual {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card.peaksave .card-visual {
-      background:
-        radial-gradient(ellipse at 70% 80%, rgba(0,200,224,0.25) 0%, transparent 60%),
-        linear-gradient(160deg, #0d2a5a 0%, #071628 100%);
-    }
-    .feature-card.green .card-visual {
-      background:
-        radial-gradient(ellipse at 30% 80%, rgba(126,211,33,0.2) 0%, transparent 60%),
-        linear-gradient(160deg, #0a2240 0%, #071628 100%);
-    }
-    /* Simple SVG illustration placeholders */
-    .card-visual svg { position: absolute; bottom: 0; right: 0; opacity: 0.35; }
-
-    /* Text content at bottom of card */
-    .card-content {
-      padding: 2rem 2rem 2rem;
-      background: rgba(7,22,40,0.6);
-      backdrop-filter: blur(4px);
-    }
-    .card-content h3 {
-      font-size: clamp(1.5rem, 2.5vw, 2rem);
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-    .card-content h3 span { color: #00c8e0; }
-    .feature-card.green .card-content h3 span { color: #7ed321; }
-    .card-pill {
-      display: inline-block;
-      padding: 0.6rem 1.4rem;
-      background: #fff;
-      color: #071628;
-      border-radius: 999px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
+    .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; }
+    .feature-card h3 { font-size: clamp(1.5rem, 2.5vw, 2.1rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+    .card-pill { display: inline-block; padding: 0.65rem 1.4rem; background: #fff; color: #0a0e1a; border-radius: 999px; font-size: 0.88rem; font-weight: 700; text-decoration: none; width: fit-content; transition: background 0.15s; }
     .card-pill:hover { background: #e8e8e8; }
 
     /* ── FAQ ── */
@@ -169,7 +123,7 @@
     .faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
     .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; gap: 1rem; user-select: none; }
     .faq-q .toggle { width: 26px; height: 26px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; color: rgba(255,255,255,0.4); transition: border-color 0.15s, color 0.15s; }
-    .faq-item.open .toggle { border-color: #7ed321; color: #7ed321; }
+    .faq-item.open .toggle { border-color: #8dc63f; color: #8dc63f; }
     .faq-a { font-size: 0.85rem; color: rgba(255,255,255,0.45); padding-bottom: 1.4rem; line-height: 1.7; display: none; max-width: 640px; }
     .faq-item.open .faq-a { display: block; }
 
@@ -186,7 +140,7 @@
     <a href="index.html" class="logo">
       <svg class="logo-icon" viewBox="0 0 40 40" fill="none" aria-hidden="true">
         <path d="M20 4 C20 4 10 14 10 22 C10 27.5 14.5 32 20 32 C25.5 32 30 27.5 30 22 C30 14 20 4 20 4Z" fill="#fff" opacity="0.9"/>
-        <path d="M20 14 C20 14 15 20 15 24 C15 26.8 17.2 29 20 29 C22.8 29 25 26.8 25 24 C25 20 20 14 20 14Z" fill="#00c8e0"/>
+        <path d="M20 14 C20 14 15 20 15 24 C15 26.8 17.2 29 20 29 C22.8 29 25 26.8 25 24 C25 20 20 14 20 14Z" fill="#3d9be9"/>
       </svg>
       <span class="logo-text">British Gas</span>
     </a>
@@ -199,9 +153,7 @@
     </ul>
     <div class="nav-right">
       <button class="search-btn" aria-label="Search">
-        <svg class="sparkle" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z"/>
-        </svg>
+        <svg class="sparkle" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z"/></svg>
       </button>
       <button class="login-btn">My Account</button>
     </div>
@@ -210,9 +162,7 @@
   <!-- HERO -->
   <section class="hero">
     <div class="breadcrumb">
-      <a href="index.html">🏠</a>
-      <span>&rsaquo;</span>
-      <a href="energy.html">Energy</a>
+      <a href="index.html">🏠</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a>
     </div>
     <h1>Find the right energy<br>tariff for your home</h1>
     <p>Compare our latest tariffs and get a personalised quote in minutes.</p>
@@ -279,7 +229,7 @@
     </div>
   </section>
 
-  <!-- PEAKSAVE + GREEN ENERGY — tall feature cards -->
+  <!-- PEAKSAVE + GREEN ENERGY — gradient feature cards -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
       <div class="feature-header">
@@ -293,44 +243,18 @@
         </div>
       </div>
       <div class="feature-grid">
-
-        <!-- PeakSave card -->
         <div class="feature-card peaksave">
-          <div class="card-visual">
-            <!-- Abstract illustration: lightning bolt + clock shapes -->
-            <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="200" cy="180" r="120" fill="#00c8e0" opacity="0.08"/>
-              <circle cx="200" cy="180" r="80" fill="#00c8e0" opacity="0.08"/>
-              <path d="M160 60 L120 150 L155 150 L130 230 L190 120 L155 120 Z" fill="#00c8e0" opacity="0.5"/>
-            </svg>
-          </div>
           <div class="card-content">
-            <h3>Save money by using energy at <span>smarter times</span></h3>
+            <h3>Save money by using energy at smarter times</h3>
             <a href="#" class="card-pill">Learn about PeakSave</a>
           </div>
         </div>
-
-        <!-- Green Energy card -->
         <div class="feature-card green">
-          <div class="card-visual">
-            <!-- Abstract illustration: house + sun shapes -->
-            <svg width="300" height="280" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="220" cy="80" r="60" fill="#7ed321" opacity="0.12"/>
-              <circle cx="220" cy="80" r="35" fill="#7ed321" opacity="0.15"/>
-              <!-- House -->
-              <rect x="80" y="160" width="120" height="90" rx="4" fill="#7ed321" opacity="0.2"/>
-              <polygon points="70,160 140,100 210,160" fill="#7ed321" opacity="0.3"/>
-              <!-- Solar panels -->
-              <rect x="100" y="125" width="30" height="20" rx="2" fill="#00c8e0" opacity="0.4"/>
-              <rect x="135" y="125" width="30" height="20" rx="2" fill="#00c8e0" opacity="0.4"/>
-            </svg>
-          </div>
           <div class="card-content">
-            <h3>Power your home with <span>100% renewable electricity</span></h3>
+            <h3>Power your home with 100% renewable electricity</h3>
             <a href="#" class="card-pill">Explore green tariffs</a>
           </div>
         </div>
-
       </div>
     </div>
   </section>
