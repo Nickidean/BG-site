@@ -8,15 +8,17 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a1628; }
 
+    /* ── Nav bar ── */
     .navbar {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
       padding: 0 2rem;
-      height: 64px;
-      background: linear-gradient(135deg, #0d2b6b 0%, #1a4fa0 50%, #0d2b6b 100%);
-      gap: 2.5rem;
+      height: 70px;
+      background: #0a1628;
     }
 
+    /* Logo */
     .logo {
       display: flex;
       align-items: center;
@@ -27,52 +29,70 @@
     }
 
     .logo-icon { width: 32px; height: 32px; }
-    .logo-text { font-size: 1.1rem; font-weight: 600; line-height: 1.1; }
+    .logo-text { font-size: 1.1rem; font-weight: 700; line-height: 1.1; }
 
+    /* Nav links — centred column */
     .nav-links {
       display: flex;
       align-items: center;
       gap: 0.25rem;
       list-style: none;
-      flex: 1;
+      justify-content: center;
     }
 
     .nav-links a {
       display: block;
-      padding: 0.45rem 1rem;
+      padding: 0.45rem 1.1rem;
       text-decoration: none;
       color: #fff;
       font-size: 0.95rem;
-      border-radius: 999px;
+      font-weight: 700;
       white-space: nowrap;
-      transition: background 0.15s;
+      opacity: 0.9;
+      transition: opacity 0.15s;
     }
 
-    .nav-links a:hover { background: rgba(255,255,255,0.12); }
-    .nav-links a.active { background: #00c8e0; color: #0a1628; font-weight: 600; }
+    .nav-links a:hover { opacity: 1; }
 
-    .nav-right { display: flex; align-items: center; gap: 1rem; margin-left: auto; }
+    /* Right-side controls */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      justify-content: flex-end;
+    }
 
     .search-btn {
-      background: none; border: none; cursor: pointer;
-      color: #fff; padding: 0.35rem; display: flex;
-      align-items: center; justify-content: center; opacity: 0.85;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .search-btn:hover { opacity: 1; }
+
+    /* Green sparkle icon */
+    .sparkle {
+      width: 24px;
+      height: 24px;
+      color: #7ed321;
+    }
 
     .my-account-btn {
-      padding: 0.45rem 1.25rem;
-      background: #7ed321;
-      color: #0a1628;
+      background: none;
       border: none;
-      border-radius: 999px;
-      font-size: 0.9rem;
+      color: #fff;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s;
+      padding: 0;
+      opacity: 0.9;
+      transition: opacity 0.15s;
     }
-    .my-account-btn:hover { background: #96e82e; }
+
+    .my-account-btn:hover { opacity: 1; }
 
     .wire-box {
       border: 2px dashed rgba(255,255,255,0.25);
@@ -142,14 +162,13 @@
         <li><a href="#">Cover</a></li>
         <li><a href="#">Repairs</a></li>
         <li><a href="#">Servicing</a></li>
-        <li><a href="#" class="active">Products</a></li>
+        <li><a href="#">Products</a></li>
       </ul>
 
       <div class="nav-right">
         <button class="search-btn" aria-label="Search">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="7"/>
-            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          <svg class="sparkle" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2 L13.5 10.5 L22 12 L13.5 13.5 L12 22 L10.5 13.5 L2 12 L10.5 10.5 Z"/>
           </svg>
         </button>
         <button class="my-account-btn">My Account</button>
