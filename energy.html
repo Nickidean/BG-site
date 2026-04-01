@@ -6,15 +6,9 @@
   <title>Energy — British Gas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #071628; min-height: 100vh; }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #fff;
-      background: #071628;
-      min-height: 100vh;
-    }
-
-    /* ───────────────────── NAV ───────────────────── */
+    /* ── NAV ── */
     .navbar {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -29,315 +23,158 @@
     .logo-icon { width: 34px; height: 34px; }
     .logo-text { font-size: 1rem; font-weight: 700; }
     .nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; justify-content: center; }
-    .nav-links a {
-      display: block; padding: 0.4rem 1.1rem; text-decoration: none;
-      color: #fff; font-size: 0.9rem; font-weight: 600;
-      border-radius: 999px; transition: background 0.15s;
-    }
+    .nav-links a { display: block; padding: 0.4rem 1.1rem; text-decoration: none; color: #fff; font-size: 0.9rem; font-weight: 600; border-radius: 999px; transition: background 0.15s; }
     .nav-links a:hover { background: rgba(255,255,255,0.08); }
     .nav-links a.active { background: #00c8e0; color: #071628; }
     .nav-right { display: flex; align-items: center; gap: 1rem; justify-content: flex-end; }
     .search-btn { background: none; border: none; cursor: pointer; padding: 0; display: flex; }
     .sparkle { width: 22px; height: 22px; color: #7ed321; }
-    .login-btn {
-      padding: 0.45rem 1.4rem;
-      background: #7ed321;
-      color: #071628;
-      border: none;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
+    .login-btn { padding: 0.45rem 1.4rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
     .login-btn:hover { background: #96e82e; }
 
-    /* ───────────────────── HERO ───────────────────── */
+    /* ── HERO ── */
     .hero {
       min-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem 6rem;
-      position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 2rem 6rem; position: relative;
       background:
-        radial-gradient(ellipse 80% 60% at 15% 30%, rgba(15, 80, 180, 0.55) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(10, 50, 120, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 15% 30%, rgba(15,80,180,0.55) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(10,50,120,0.3) 0%, transparent 60%),
         #071628;
     }
-    .breadcrumb {
-      position: absolute;
-      top: 1rem;
-      left: 2.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.45);
-    }
+    .breadcrumb { position: absolute; top: 1rem; left: 2.5rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
     .breadcrumb a { color: inherit; text-decoration: none; }
     .breadcrumb a:hover { color: #fff; }
-    .breadcrumb span { opacity: 0.4; }
-
-    .hero h1 {
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
-      letter-spacing: -0.02em;
-    }
-    .hero p {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.55);
-      max-width: 480px;
-      margin-bottom: 3rem;
-      line-height: 1.6;
-    }
-
-    /* Postcode form */
-    .postcode-wrap {
-      display: flex;
-      gap: 0.6rem;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-    .postcode-input {
-      padding: 0.85rem 1.25rem;
-      background: rgba(255,255,255,0.08);
-      border: 1.5px solid rgba(255,255,255,0.15);
-      border-radius: 999px;
-      color: #fff;
-      font-size: 1rem;
-      width: 220px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
+    .hero h1 { font-size: clamp(3rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+    .hero p { font-size: 1.05rem; color: rgba(255,255,255,0.55); max-width: 480px; margin-bottom: 3rem; line-height: 1.6; }
+    .postcode-wrap { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.25rem; }
+    .postcode-input { padding: 0.85rem 1.25rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.15); border-radius: 999px; color: #fff; font-size: 1rem; width: 220px; outline: none; transition: border-color 0.15s; }
     .postcode-input::placeholder { color: rgba(255,255,255,0.35); }
     .postcode-input:focus { border-color: rgba(255,255,255,0.4); }
-    .quote-btn {
-      padding: 0.85rem 1.75rem;
-      background: #7ed321;
-      color: #071628;
-      border: none;
-      border-radius: 999px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
+    .quote-btn { padding: 0.85rem 1.75rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
     .quote-btn:hover { background: #96e82e; }
-
-    /* Cover pill */
-    .cover-pill {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.2rem;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 999px;
-      padding: 0.9rem 2.5rem;
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.6);
-    }
-    .cover-pill a {
-      color: #7ed321;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
+    .cover-pill { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 0.9rem 2.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+    .cover-pill a { color: #7ed321; text-decoration: none; font-weight: 600; }
     .cover-pill a:hover { text-decoration: underline; }
 
-    /* ───────────────────── SECTIONS ───────────────────── */
+    /* ── SHARED SECTION ── */
     .section { padding: 5rem 2.5rem; }
     .section-inner { max-width: 1100px; margin: 0 auto; }
-    .eyebrow {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: #00c8e0;
-      margin-bottom: 0.75rem;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 0.6rem;
-      letter-spacing: -0.02em;
-    }
-    .section-sub {
-      color: rgba(255,255,255,0.45);
-      font-size: 0.95rem;
-      margin-bottom: 3rem;
-      max-width: 520px;
-    }
+    .eyebrow { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #00c8e0; margin-bottom: 0.75rem; }
+    .section-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+    .section-sub { color: rgba(255,255,255,0.45); font-size: 0.95rem; margin-bottom: 3rem; max-width: 520px; }
 
-    /* ───────────────────── TARIFF CARDS ───────────────────── */
-    .tariff-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-    }
-    .tariff-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 1.75rem 1.5rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      transition: border-color 0.2s;
-    }
+    /* ── TARIFF CARDS ── */
+    .tariff-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .tariff-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color 0.2s; }
     .tariff-card:hover { border-color: rgba(255,255,255,0.2); }
     .tariff-card.featured { border-color: #00c8e0; }
-    .tariff-badge {
-      display: inline-block;
-      background: rgba(0,200,224,0.15);
-      color: #00c8e0;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      width: fit-content;
-    }
+    .tariff-badge { display: inline-block; background: rgba(0,200,224,0.15); color: #00c8e0; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; width: fit-content; }
     .tariff-name { font-size: 1.05rem; font-weight: 700; }
     .tariff-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
     .tariff-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-    .tariff-features li {
-      font-size: 0.8rem;
-      color: rgba(255,255,255,0.55);
-      padding-left: 1.1rem;
-      position: relative;
-    }
+    .tariff-features li { font-size: 0.8rem; color: rgba(255,255,255,0.55); padding-left: 1.1rem; position: relative; }
     .tariff-features li::before { content: '✓'; position: absolute; left: 0; color: #7ed321; }
-    .tariff-cta {
-      display: block;
-      margin-top: auto;
-      padding: 0.65rem 1rem;
-      background: #7ed321;
-      color: #071628;
-      border: none;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      transition: background 0.15s;
-    }
+    .tariff-cta { display: block; margin-top: auto; padding: 0.65rem 1rem; background: #7ed321; color: #071628; border: none; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.15s; }
     .tariff-cta:hover { background: #96e82e; }
 
-    /* ───────────────────── USP GRID ───────────────────── */
-    .usp-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    .usp-card {
-      background: #071628;
-      padding: 2.5rem 2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
+    /* ── USP GRID ── */
+    .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; }
+    .usp-card { background: #071628; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
     .usp-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
     .usp-title { font-size: 0.95rem; font-weight: 700; }
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
-    /* ───────────────────── FEATURE CARDS ───────────────────── */
-    .feature-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+    /* ── FEATURE CARDS (tall) ── */
+    .feature-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
     }
+    .feature-nav { display: flex; gap: 0.5rem; }
+    .feature-nav button {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      background: none;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .feature-nav button:hover { border-color: rgba(255,255,255,0.6); }
+
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
     .feature-card {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 500px;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      position: relative;
     }
-    .feature-tag {
-      display: inline-block;
-      background: rgba(0,200,224,0.12);
-      color: #00c8e0;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.2rem 0.65rem;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      width: fit-content;
-    }
-    .feature-title { font-size: 1.3rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; }
-    .feature-body { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.65; }
-    .feature-link {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: #7ed321;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      width: fit-content;
-    }
-    .feature-link:hover { text-decoration: underline; }
 
-    /* ───────────────────── FAQ ───────────────────── */
+    /* Illustration area */
+    .feature-card .card-visual {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card.peaksave .card-visual {
+      background:
+        radial-gradient(ellipse at 70% 80%, rgba(0,200,224,0.25) 0%, transparent 60%),
+        linear-gradient(160deg, #0d2a5a 0%, #071628 100%);
+    }
+    .feature-card.green .card-visual {
+      background:
+        radial-gradient(ellipse at 30% 80%, rgba(126,211,33,0.2) 0%, transparent 60%),
+        linear-gradient(160deg, #0a2240 0%, #071628 100%);
+    }
+    /* Simple SVG illustration placeholders */
+    .card-visual svg { position: absolute; bottom: 0; right: 0; opacity: 0.35; }
+
+    /* Text content at bottom of card */
+    .card-content {
+      padding: 2rem 2rem 2rem;
+      background: rgba(7,22,40,0.6);
+      backdrop-filter: blur(4px);
+    }
+    .card-content h3 {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .card-content h3 span { color: #00c8e0; }
+    .feature-card.green .card-content h3 span { color: #7ed321; }
+    .card-pill {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      background: #fff;
+      color: #071628;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .card-pill:hover { background: #e8e8e8; }
+
+    /* ── FAQ ── */
     .faq-list { border-top: 1px solid rgba(255,255,255,0.08); }
     .faq-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .faq-q {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.4rem 0;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-      gap: 1rem;
-      user-select: none;
-    }
-    .faq-q .toggle {
-      width: 26px; height: 26px;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      font-size: 1rem;
-      color: rgba(255,255,255,0.4);
-      transition: border-color 0.15s, color 0.15s;
-    }
+    .faq-q { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; gap: 1rem; user-select: none; }
+    .faq-q .toggle { width: 26px; height: 26px; border: 1.5px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; color: rgba(255,255,255,0.4); transition: border-color 0.15s, color 0.15s; }
     .faq-item.open .toggle { border-color: #7ed321; color: #7ed321; }
-    .faq-a {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.45);
-      padding-bottom: 1.4rem;
-      line-height: 1.7;
-      display: none;
-      max-width: 640px;
-    }
+    .faq-a { font-size: 0.85rem; color: rgba(255,255,255,0.45); padding-bottom: 1.4rem; line-height: 1.7; display: none; max-width: 640px; }
     .faq-item.open .faq-a { display: block; }
 
-    /* ───────────────────── FOOTER ───────────────────── */
-    footer {
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding: 1.5rem 2.5rem;
-      display: flex;
-      gap: 2rem;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.3);
-      flex-wrap: wrap;
-    }
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid rgba(255,255,255,0.08); padding: 1.5rem 2.5rem; display: flex; gap: 2rem; font-size: 0.78rem; color: rgba(255,255,255,0.3); flex-wrap: wrap; }
     footer a { color: inherit; text-decoration: none; }
     footer a:hover { color: rgba(255,255,255,0.7); }
   </style>
@@ -399,42 +236,26 @@
         <div class="tariff-card">
           <div class="tariff-name">Variable</div>
           <div class="tariff-desc">Flexible pricing with no exit fees. Prices move with the market.</div>
-          <ul class="tariff-features">
-            <li>No contract length</li>
-            <li>No exit fees</li>
-            <li>Smart meter compatible</li>
-          </ul>
+          <ul class="tariff-features"><li>No contract length</li><li>No exit fees</li><li>Smart meter compatible</li></ul>
           <a href="#" class="tariff-cta">Get a quote</a>
         </div>
         <div class="tariff-card featured">
           <span class="tariff-badge">Most popular</span>
           <div class="tariff-name">1 Year Fixed</div>
           <div class="tariff-desc">Lock in your rate for 12 months. Protection from price rises.</div>
-          <ul class="tariff-features">
-            <li>12 month contract</li>
-            <li>Fixed unit rate</li>
-            <li>Smart meter compatible</li>
-          </ul>
+          <ul class="tariff-features"><li>12 month contract</li><li>Fixed unit rate</li><li>Smart meter compatible</li></ul>
           <a href="#" class="tariff-cta">Get a quote</a>
         </div>
         <div class="tariff-card">
           <div class="tariff-name">2 Year Fixed</div>
           <div class="tariff-desc">Greater long-term certainty over two years.</div>
-          <ul class="tariff-features">
-            <li>24 month contract</li>
-            <li>Fixed unit rate</li>
-            <li>Smart meter compatible</li>
-          </ul>
+          <ul class="tariff-features"><li>24 month contract</li><li>Fixed unit rate</li><li>Smart meter compatible</li></ul>
           <a href="#" class="tariff-cta">Get a quote</a>
         </div>
         <div class="tariff-card">
           <div class="tariff-name">Green Fixed</div>
           <div class="tariff-desc">100% renewable electricity matched to the National Grid.</div>
-          <ul class="tariff-features">
-            <li>12 month contract</li>
-            <li>100% renewable electricity</li>
-            <li>Carbon offset gas</li>
-          </ul>
+          <ul class="tariff-features"><li>12 month contract</li><li>100% renewable electricity</li><li>Carbon offset gas</li></ul>
           <a href="#" class="tariff-cta">Get a quote</a>
         </div>
       </div>
@@ -448,56 +269,68 @@
       <h2 class="section-title">Why choose British Gas</h2>
       <p class="section-sub">Over 100 years of keeping Britain’s homes warm and powered.</p>
       <div class="usp-grid">
-        <div class="usp-card">
-          <div class="usp-icon">⭐</div>
-          <div class="usp-title">5 star service</div>
-          <div class="usp-desc">Rated excellent by millions of customers across the UK.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-icon">📱</div>
-          <div class="usp-title">Energy at your fingertips</div>
-          <div class="usp-desc">Track usage and manage your account with the British Gas app.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-icon">🌱</div>
-          <div class="usp-title">Greener electricity</div>
-          <div class="usp-desc">Renewable options and a commitment to a lower carbon future.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-icon">🔒</div>
-          <div class="usp-title">Fixed price peace of mind</div>
-          <div class="usp-desc">Know exactly what you’ll pay — no nasty surprises.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-icon">⚡</div>
-          <div class="usp-title">Smart meter included</div>
-          <div class="usp-desc">Free smart meter installation so you can monitor usage in real time.</div>
-        </div>
-        <div class="usp-card">
-          <div class="usp-icon">💬</div>
-          <div class="usp-title">24/7 support</div>
-          <div class="usp-desc">Help on hand by phone, app, or chat — day or night.</div>
-        </div>
+        <div class="usp-card"><div class="usp-icon">⭐</div><div class="usp-title">5 star service</div><div class="usp-desc">Rated excellent by millions of customers across the UK.</div></div>
+        <div class="usp-card"><div class="usp-icon">📱</div><div class="usp-title">Energy at your fingertips</div><div class="usp-desc">Track usage and manage your account with the British Gas app.</div></div>
+        <div class="usp-card"><div class="usp-icon">🌱</div><div class="usp-title">Greener electricity</div><div class="usp-desc">Renewable options and a commitment to a lower carbon future.</div></div>
+        <div class="usp-card"><div class="usp-icon">🔒</div><div class="usp-title">Fixed price peace of mind</div><div class="usp-desc">Know exactly what you’ll pay — no nasty surprises.</div></div>
+        <div class="usp-card"><div class="usp-icon">⚡</div><div class="usp-title">Smart meter included</div><div class="usp-desc">Free smart meter installation so you can monitor usage in real time.</div></div>
+        <div class="usp-card"><div class="usp-icon">💬</div><div class="usp-title">24/7 support</div><div class="usp-desc">Help on hand by phone, app, or chat — day or night.</div></div>
       </div>
     </div>
   </section>
 
-  <!-- PEAKSAVE + GREEN -->
+  <!-- PEAKSAVE + GREEN ENERGY — tall feature cards -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
-      <div class="feature-row">
-        <div class="feature-card">
-          <span class="feature-tag">PeakSave</span>
-          <div class="feature-title">Save by shifting when you use energy</div>
-          <div class="feature-body">PeakSave rewards you for reducing electricity use at peak times. Shift usage to overnight or off-peak hours and see savings on your bills automatically.</div>
-          <a href="#" class="feature-link">Learn about PeakSave &rarr;</a>
+      <div class="feature-header">
+        <div>
+          <p class="eyebrow">Featured</p>
+          <h2 class="section-title" style="margin-bottom:0">Energy features</h2>
         </div>
-        <div class="feature-card">
-          <span class="feature-tag">Green Energy</span>
-          <div class="feature-title">Power your home with renewable electricity</div>
-          <div class="feature-body">Our green tariffs match every unit you use with renewable sources from the National Grid — solar, wind, and hydro. Better for the planet, same great service.</div>
-          <a href="#" class="feature-link">Explore green tariffs &rarr;</a>
+        <div class="feature-nav">
+          <button aria-label="Previous">&larr;</button>
+          <button aria-label="Next">&rarr;</button>
         </div>
+      </div>
+      <div class="feature-grid">
+
+        <!-- PeakSave card -->
+        <div class="feature-card peaksave">
+          <div class="card-visual">
+            <!-- Abstract illustration: lightning bolt + clock shapes -->
+            <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="200" cy="180" r="120" fill="#00c8e0" opacity="0.08"/>
+              <circle cx="200" cy="180" r="80" fill="#00c8e0" opacity="0.08"/>
+              <path d="M160 60 L120 150 L155 150 L130 230 L190 120 L155 120 Z" fill="#00c8e0" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h3>Save money by using energy at <span>smarter times</span></h3>
+            <a href="#" class="card-pill">Learn about PeakSave</a>
+          </div>
+        </div>
+
+        <!-- Green Energy card -->
+        <div class="feature-card green">
+          <div class="card-visual">
+            <!-- Abstract illustration: house + sun shapes -->
+            <svg width="300" height="280" viewBox="0 0 300 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="220" cy="80" r="60" fill="#7ed321" opacity="0.12"/>
+              <circle cx="220" cy="80" r="35" fill="#7ed321" opacity="0.15"/>
+              <!-- House -->
+              <rect x="80" y="160" width="120" height="90" rx="4" fill="#7ed321" opacity="0.2"/>
+              <polygon points="70,160 140,100 210,160" fill="#7ed321" opacity="0.3"/>
+              <!-- Solar panels -->
+              <rect x="100" y="125" width="30" height="20" rx="2" fill="#00c8e0" opacity="0.4"/>
+              <rect x="135" y="125" width="30" height="20" rx="2" fill="#00c8e0" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <h3>Power your home with <span>100% renewable electricity</span></h3>
+            <a href="#" class="card-pill">Explore green tariffs</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -510,38 +343,23 @@
       <p class="section-sub">Everything you need to know about switching.</p>
       <div class="faq-list">
         <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            What is the best energy tariff for me?
-            <span class="toggle">+</span>
-          </div>
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div>
           <div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            How long does switching take?
-            <span class="toggle">+</span>
-          </div>
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div>
           <div class="faq-a">Switching usually takes around 21 days. We handle everything — you don’t need to contact your current supplier.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            Will I need a smart meter?
-            <span class="toggle">+</span>
-          </div>
-          <div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time through the app.</div>
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div>
+          <div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            What is PeakSave?
-            <span class="toggle">+</span>
-          </div>
-          <div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours like overnight and earn savings automatically.</div>
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div>
+          <div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-            Is 100% renewable electricity really green?
-            <span class="toggle">+</span>
-          </div>
+          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div>
           <div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy fed into the National Grid from solar, wind, and hydro sources.</div>
         </div>
       </div>
