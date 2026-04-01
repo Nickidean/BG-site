@@ -6,18 +6,6 @@
   <title>Energy — British Gas</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    /* ── Brand tokens ──
-       Background 1 : #0a0e1a  (canvas base)
-       Background 2 : #111e36  (lift atop dark)
-       Primary      : #3d9be9  (brand blue)
-       Secondary    : #8dc63f  (greener future)
-       Highlight    : #e8531a  (heat/orange)
-       Gradient 1   : #3d9be9 → #8dc63f  (cyan → green)
-       Gradient 2   : radial white shine on blue
-       Gradient 3   : #3d9be9 → #e8531a  (cyan → orange)
-    */
-
     body { font-family: 'Segoe UI', Arial, sans-serif; color: #fff; background: #0a0e1a; min-height: 100vh; }
 
     /* ── NAV ── */
@@ -37,13 +25,9 @@
 
     /* ── HERO ── */
     .hero {
-      min-height: 88vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
       text-align: center; padding: 4rem 2rem 6rem; position: relative;
-      background:
-        radial-gradient(ellipse 70% 55% at 15% 30%, rgba(61,155,233,0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 85% 70%, rgba(61,155,233,0.15) 0%, transparent 60%),
-        #0a0e1a;
+      background: radial-gradient(ellipse 70% 55% at 15% 30%, rgba(61,155,233,0.35) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 85% 70%, rgba(61,155,233,0.15) 0%, transparent 60%), #0a0e1a;
     }
     .breadcrumb { position: absolute; top: 1rem; left: 2.5rem; display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
     .breadcrumb a { color: inherit; text-decoration: none; }
@@ -67,19 +51,67 @@
     .section-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
     .section-sub { color: rgba(255,255,255,0.45); font-size: 0.95rem; margin-bottom: 3rem; max-width: 520px; }
 
-    /* ── TARIFF CARDS ── */
-    .tariff-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-    .tariff-card { background: #111e36; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 1.75rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; transition: border-color 0.2s; }
-    .tariff-card:hover { border-color: rgba(255,255,255,0.18); }
-    .tariff-card.featured { border-color: #3d9be9; }
-    .tariff-badge { display: inline-block; background: rgba(61,155,233,0.15); color: #3d9be9; font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.65rem; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em; width: fit-content; }
-    .tariff-name { font-size: 1.05rem; font-weight: 700; }
-    .tariff-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
-    .tariff-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-    .tariff-features li { font-size: 0.8rem; color: rgba(255,255,255,0.55); padding-left: 1.1rem; position: relative; }
-    .tariff-features li::before { content: '✓'; position: absolute; left: 0; color: #8dc63f; }
-    .tariff-cta { display: block; margin-top: auto; padding: 0.65rem 1rem; background: #8dc63f; color: #0a0e1a; border: none; border-radius: 999px; font-size: 0.85rem; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.15s; }
-    .tariff-cta:hover { background: #a0d94f; }
+    /* ── TARIFF TYPE CARDS ── */
+    .tariff-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .tariff-card {
+      /* Gradient 2: radial glow — lighter centre on dark blue */
+      background: radial-gradient(ellipse at 50% 38%, #1a3f7a 0%, #0d2050 55%, #070f1e 100%);
+      border-radius: 24px;
+      border: 1.5px solid transparent;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      min-height: 420px;
+      transition: border-color 0.2s;
+    }
+    /* Per-card accent border */
+    .tariff-card.standard { border-color: #3d9be9; }
+    .tariff-card.prepay   { border-color: #e8b84b; }
+    .tariff-card.smart    { border-color: #8dc63f; }
+
+    .tariff-label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.04em;
+      margin-bottom: 1.25rem;
+    }
+    .tariff-name {
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .tariff-desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      max-width: 240px;
+      flex: 1;
+    }
+    .tariff-cta {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.75rem;
+      background: #3d9be9;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .tariff-cta:hover { background: #5aaef0; }
 
     /* ── USP GRID ── */
     .usp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
@@ -88,31 +120,16 @@
     .usp-title { font-size: 0.95rem; font-weight: 700; }
     .usp-desc { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.55; }
 
-    /* ── FEATURE CARDS (tall, gradient bg) ── */
+    /* ── FEATURE CARDS (tall gradient) ── */
     .feature-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
     .feature-nav { display: flex; gap: 0.5rem; padding-top: 0.5rem; }
     .feature-nav button { width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.2); background: none; color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
     .feature-nav button:hover { border-color: rgba(255,255,255,0.6); }
     .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .feature-card { border-radius: 24px; overflow: hidden; min-height: 480px; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem 2rem; position: relative; }
-
-    /* Gradient 3: cyan → orange (PeakSave — heat/energy) */
-    .feature-card.peaksave {
-      background: linear-gradient(145deg, #3d9be9 0%, #6b8fc7 35%, #c0622d 70%, #e8531a 100%);
-    }
-    /* Gradient 1: cyan → green (Green Energy — greener future) */
-    .feature-card.green {
-      background: linear-gradient(145deg, #3d9be9 0%, #4aadaa 35%, #7abf45 70%, #8dc63f 100%);
-    }
-
-    /* Dark scrim at bottom so text is legible */
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
-      border-radius: 24px;
-    }
+    .feature-card.peaksave { background: linear-gradient(145deg, #3d9be9 0%, #6b8fc7 35%, #c0622d 70%, #e8531a 100%); }
+    .feature-card.green    { background: linear-gradient(145deg, #3d9be9 0%, #4aadaa 35%, #7abf45 70%, #8dc63f 100%); }
+    .feature-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 50%, transparent 100%); border-radius: 24px; }
     .feature-card .card-content { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; }
     .feature-card h3 { font-size: clamp(1.5rem, 2.5vw, 2.1rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
     .card-pill { display: inline-block; padding: 0.65rem 1.4rem; background: #fff; color: #0a0e1a; border-radius: 999px; font-size: 0.88rem; font-weight: 700; text-decoration: none; width: fit-content; transition: background 0.15s; }
@@ -161,9 +178,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="breadcrumb">
-      <a href="index.html">🏠</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a>
-    </div>
+    <div class="breadcrumb"><a href="index.html">🏠</a> <span>&rsaquo;</span> <a href="energy.html">Energy</a></div>
     <h1>Find the right energy<br>tariff for your home</h1>
     <p>Compare our latest tariffs and get a personalised quote in minutes.</p>
     <div class="postcode-wrap">
@@ -176,38 +191,35 @@
     </div>
   </section>
 
-  <!-- TARIFFS -->
+  <!-- TARIFF TYPES -->
   <section class="section">
     <div class="section-inner">
       <p class="eyebrow">Our tariffs</p>
-      <h2 class="section-title">Pick the right tariff for you</h2>
-      <p class="section-sub">All tariffs include 24/7 support and smart meter compatibility.</p>
+      <h2 class="section-title">Types of energy tariff</h2>
+      <p class="section-sub">We offer different tariff types to suit how you live and how you like to manage your energy.</p>
       <div class="tariff-grid">
-        <div class="tariff-card">
-          <div class="tariff-name">Variable</div>
-          <div class="tariff-desc">Flexible pricing with no exit fees. Prices move with the market.</div>
-          <ul class="tariff-features"><li>No contract length</li><li>No exit fees</li><li>Smart meter compatible</li></ul>
-          <a href="#" class="tariff-cta">Get a quote</a>
+
+        <div class="tariff-card standard">
+          <div class="tariff-label">Fixed or Variable</div>
+          <div class="tariff-name">Standard<br>Tariff</div>
+          <div class="tariff-desc">Choose a fixed rate for price certainty, or go variable and move with the market. No smart meter required.</div>
+          <a href="#" class="tariff-cta">See standard tariffs</a>
         </div>
-        <div class="tariff-card featured">
-          <span class="tariff-badge">Most popular</span>
-          <div class="tariff-name">1 Year Fixed</div>
-          <div class="tariff-desc">Lock in your rate for 12 months. Protection from price rises.</div>
-          <ul class="tariff-features"><li>12 month contract</li><li>Fixed unit rate</li><li>Smart meter compatible</li></ul>
-          <a href="#" class="tariff-cta">Get a quote</a>
+
+        <div class="tariff-card prepay">
+          <div class="tariff-label">Pay As You Go</div>
+          <div class="tariff-name">Prepayment<br>Meter</div>
+          <div class="tariff-desc">Top up when you need to and only pay for what you use. Great for budgeting, and available with a smart meter.</div>
+          <a href="#" class="tariff-cta">See prepayment tariffs</a>
         </div>
-        <div class="tariff-card">
-          <div class="tariff-name">2 Year Fixed</div>
-          <div class="tariff-desc">Greater long-term certainty over two years.</div>
-          <ul class="tariff-features"><li>24 month contract</li><li>Fixed unit rate</li><li>Smart meter compatible</li></ul>
-          <a href="#" class="tariff-cta">Get a quote</a>
+
+        <div class="tariff-card smart">
+          <div class="tariff-label">PeakSave Eligible</div>
+          <div class="tariff-name">Smart<br>Tariff</div>
+          <div class="tariff-desc">Save money by shifting your energy use to off-peak times. Requires a smart meter and rewards smarter habits.</div>
+          <a href="#" class="tariff-cta">See smart tariffs</a>
         </div>
-        <div class="tariff-card">
-          <div class="tariff-name">Green Fixed</div>
-          <div class="tariff-desc">100% renewable electricity matched to the National Grid.</div>
-          <ul class="tariff-features"><li>12 month contract</li><li>100% renewable electricity</li><li>Carbon offset gas</li></ul>
-          <a href="#" class="tariff-cta">Get a quote</a>
-        </div>
+
       </div>
     </div>
   </section>
@@ -229,14 +241,11 @@
     </div>
   </section>
 
-  <!-- PEAKSAVE + GREEN ENERGY — gradient feature cards -->
+  <!-- PEAKSAVE + GREEN ENERGY -->
   <section class="section" style="padding-top:0">
     <div class="section-inner">
       <div class="feature-header">
-        <div>
-          <p class="eyebrow">Featured</p>
-          <h2 class="section-title" style="margin-bottom:0">Energy features</h2>
-        </div>
+        <div><p class="eyebrow">Featured</p><h2 class="section-title" style="margin-bottom:0">Energy features</h2></div>
         <div class="feature-nav">
           <button aria-label="Previous">&larr;</button>
           <button aria-label="Next">&rarr;</button>
@@ -266,26 +275,11 @@
       <h2 class="section-title">Common questions</h2>
       <p class="section-sub">Everything you need to know about switching.</p>
       <div class="faq-list">
-        <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div>
-          <div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div>
-          <div class="faq-a">Switching usually takes around 21 days. We handle everything — you don’t need to contact your current supplier.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div>
-          <div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div>
-          <div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div>
-          <div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy fed into the National Grid from solar, wind, and hydro sources.</div>
-        </div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the best energy tariff for me?<span class="toggle">+</span></div><div class="faq-a">It depends on how much certainty you want over your bills. A fixed tariff protects you from price rises; a variable tariff offers flexibility with no exit fees.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How long does switching take?<span class="toggle">+</span></div><div class="faq-a">Switching usually takes around 21 days. We handle everything — you don’t need to contact your current supplier.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Will I need a smart meter?<span class="toggle">+</span></div><div class="faq-a">We’ll install a smart meter for free. It sends automatic readings so your bills are always accurate, and you can track usage in real time.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is PeakSave?<span class="toggle">+</span></div><div class="faq-a">PeakSave rewards you for reducing electricity use during peak demand periods. Shift usage to off-peak hours and earn savings automatically.</div></div>
+        <div class="faq-item"><div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is 100% renewable electricity really green?<span class="toggle">+</span></div><div class="faq-a">Our green tariffs match every unit of electricity you use with renewable energy from solar, wind, and hydro sources fed into the National Grid.</div></div>
       </div>
     </div>
   </section>
