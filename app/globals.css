@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-gray-200 shadow-sm;
+  }
+
+  .btn-primary {
+    @apply bg-[#0085CA] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-150
+           hover:bg-[#006ba3] active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#0085CA];
+  }
+
+  .select-field {
+    @apply w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white
+           focus:outline-none focus:ring-2 focus:ring-[#0085CA] focus:border-transparent
+           transition-all duration-150 appearance-none cursor-pointer;
+  }
+
+  .pill-error {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold
+           bg-[#A32D2D]/10 text-[#A32D2D];
+  }
+
+  .pill-warn {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold
+           bg-[#BA7517]/10 text-[#BA7517];
+  }
+
+  .pill-tip {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold
+           bg-[#0085CA]/10 text-[#0085CA];
+  }
+}
