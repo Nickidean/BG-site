@@ -59,12 +59,11 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { copy, contentType, audience, fleschAge, fleschScore, avgSentenceLength } = body;
 
-    if (!copy || !contentType) {
-      return NextResponse.json({ error: "copy and contentType are required" }, { status: 400 });
+    if (!copy) {
+      return NextResponse.json({ error: "copy is required" }, { status: 400 });
     }
 
-    const userMessage = `Content type: ${contentType}
-Audience: ${audience || "General customers"}
+    const userMessage = `${contentType ? `Content type: ${contentType}\n` : ""}Audience: ${audience || "General customers"}
 Readability: Flesch Reading Ease score ${fleschScore} (reading age ~${fleschAge}, average sentence length ${avgSentenceLength} words)
 
 Copy to review:

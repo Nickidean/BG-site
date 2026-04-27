@@ -196,7 +196,7 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
-  const canSubmit = contentType !== "" && copy.trim().length > 20 && !loading;
+  const canSubmit = copy.trim().length > 20 && !loading;
 
   const handleCheck = useCallback(async () => {
     if (!canSubmit) return;
@@ -255,12 +255,9 @@ export default function Home() {
       <div className="relative z-10 flex flex-col min-h-screen items-center justify-center px-6 py-12">
         {/* Header */}
         <header className="w-full max-w-2xl mb-6">
-          <div className="flex items-center gap-3">
-            <img src="/bg-flame.png" alt="British Gas" className="w-10 h-10 object-contain flex-shrink-0" />
-            <div>
-              <h1 className="text-white font-bold text-lg leading-tight">Copy Checker</h1>
-              <p className="text-white/60 text-xs">British Gas brand guidelines</p>
-            </div>
+          <div className="flex items-center gap-4">
+            <img src="/bg-flame.png" alt="British Gas" className="w-16 h-16 object-contain flex-shrink-0" />
+            <h1 className="text-white font-bold text-2xl leading-tight">Tone of Voice Checker</h1>
           </div>
         </header>
 
@@ -272,7 +269,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Content type <span className="text-[#A32D2D]">*</span>
+                  Content type
                 </label>
                 <div className="relative">
                   <select
@@ -356,10 +353,7 @@ export default function Home() {
                   "Check copy"
                 )}
               </button>
-              {!contentType && (
-                <span className="text-xs text-gray-400">Select a content type to continue</span>
-              )}
-              {contentType && copy.trim().length <= 20 && (
+              {copy.trim().length <= 20 && (
                 <span className="text-xs text-gray-400">Add more copy to check (min 20 chars)</span>
               )}
             </div>
