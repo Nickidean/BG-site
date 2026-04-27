@@ -71,9 +71,10 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/stats", {
         headers: { "x-admin-token": pw },
       });
-      if (res.status === 401) { setError("Wrong password."); return; }
-      if (!res.ok) { setError("Failed to load stats."); return; }
       const data = await res.json();
+      if (res.status === 401) { setError("Wrong password."); return; }
+      if (res.status === 503) { setError(data.error ?? "Server not configured."); return; }
+      if (!res.ok) { setError(data.error ?? "Failed to load stats."); return; }
       setStats(data);
       setAuthed(true);
       setToken(pw);

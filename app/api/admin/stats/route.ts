@@ -2,8 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { redis, RequestLog } from "@/lib/redis";
 
 export async function GET(req: NextRequest) {
+  if (!process.env.ADMIN_PASSWORD) {
+    return NextResponse.json({ error: "ADMIN_PASSWORD env var not set on the server" }, { status: 503 });
+  }
   const token = req.headers.get("x-admin-token");
-  if (!process.env.ADMIN_PASSWORD || token !== process.env.ADMIN_PASSWORD) {
+  if (token !== process.env.ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
