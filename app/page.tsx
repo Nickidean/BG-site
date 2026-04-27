@@ -27,6 +27,7 @@ interface CheckResult {
   workingScore: number;
   issues: Issue[];
   rewriteSections: RewriteSection[];
+  checkId?: string;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -234,6 +235,13 @@ export default function Home() {
     await navigator.clipboard.writeText(plain);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    if (result.checkId) {
+      fetch("/api/log-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ checkId: result.checkId }),
+      }).catch(() => {});
+    }
   };
 
   return (

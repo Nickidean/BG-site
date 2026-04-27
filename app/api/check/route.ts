@@ -103,7 +103,27 @@ ${copy}
       return NextResponse.json({ error: "Failed to parse AI response", raw }, { status: 502 });
     }
 
-    return NextResponse.json(result);
+    // Log the check — fire-and-forget, never fail the request
+    const checkId = `${Date.now()}_${crypto.randomUUID().replace(/-/g, "")}`;
+    (async () => {
+      try {
+        const { getStore } = await import("@netlify/blobs");
+        const store = getStore("tov-checks");
+        await store.setJSON(checkId, {
+          id: checkId,
+          timestamp: new Date().toISOString(),
+          contentType: contentType || "",
+          audience: audience || "General customers",
+          copyPreview: copy.slice(0, 120),
+          copyLength: copy.length,
+          score: result.overallScore,
+        });
+      } catch {
+        // Silently skip in local dev (no Netlify context)
+      }
+    })();
+
+    return NextResponse.json({ ...result, checkId });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
