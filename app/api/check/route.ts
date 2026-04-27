@@ -89,7 +89,12 @@ ${copy}
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
 
-    const jsonStr = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+    // Extract the JSON object from the response — handles preamble text,
+    // markdown code fences, and any trailing content the model adds
+    const jsonMatch = raw.match(/\{[\s\S]*\}/);
+    const jsonStr = jsonMatch
+      ? jsonMatch[0]
+      : raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
 
     let result;
     try {
