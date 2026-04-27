@@ -30,6 +30,18 @@ TONE BALANCE BY TYPE:
 
 WRITING RULES: contractions, active voice, second person (you/your), present tense, short sentences, short paragraphs. Avoid: passive voice, jargon, corporate speak, exclamation mark overuse, ALL CAPS.
 
+COPY STRUCTURE DETECTION:
+First identify each distinct element in the copy. Use these labels:
+- Heading: The main title or H1. Should be short (≤8 words), benefit-led, punchy, no full stop.
+- Subheading: Secondary title or H2. Expands on the heading with one specific detail.
+- Body: Main paragraph copy. Applies all tone of voice rules.
+- CTA: Call to action button or link text. Must be action-led, specific, imperative verb. E.g. 'Get a quote', not 'Click here'.
+- Intro: Opening line or standfirst that sets context before body copy.
+- Sign-off: Closing line, sign-off, or next-steps sentence.
+- Legal: Disclaimer or legal text — flag issues but do not rewrite legal content.
+
+When reviewing issues, specify which element is affected (e.g. "Heading is passive", "CTA lacks specificity").
+
 Return ONLY valid JSON:
 {
   "overallScore": <1-10>,
@@ -38,9 +50,9 @@ Return ONLY valid JSON:
   "warmScore": <1-10>,
   "workingScore": <1-10>,
   "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional rewrite of that specific phrase>" }],
-  "rewrite": "<full rewrite applying all fixes, feels genuinely human>"
+  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text for this element>" }]
 }
-Max 5 issues. Most important first.`;
+Max 5 issues. Most important first. rewriteSections must preserve the same order and structure as the original copy. If the copy is a single block with no distinct elements, return one section with label "Body".`;
 
 export async function POST(req: NextRequest) {
   try {
