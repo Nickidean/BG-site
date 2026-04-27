@@ -27,6 +27,7 @@ interface CheckResult {
   workingScore: number;
   issues: Issue[];
   rewriteSections: RewriteSection[];
+  requestId?: string;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -234,6 +235,13 @@ export default function Home() {
     await navigator.clipboard.writeText(plain);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    if (result.requestId) {
+      fetch("/api/log-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requestId: result.requestId }),
+      }).catch(() => {});
+    }
   };
 
   const errorCount = result?.issues.filter((i) => i.type === "error").length ?? 0;
