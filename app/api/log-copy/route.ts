@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStore } from "@netlify/blobs";
+import { redis } from "@/lib/redis";
 
 export async function POST(req: NextRequest) {
   try {
     const { checkId } = await req.json();
     if (!checkId) return NextResponse.json({ ok: false });
-    const store = getStore("tov-copies");
-    await store.set(checkId, "1");
+    await redis.sadd("tov:copies", checkId);
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ ok: false });

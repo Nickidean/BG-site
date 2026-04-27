@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getStore } from "@netlify/blobs";
+import { redis } from "@/lib/redis";
 
 export async function GET(req: NextRequest) {
   const password = req.nextUrl.searchParams.get("password");
@@ -7,38 +7,28 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
   }
 
-  const checkStore = getStore("tov-checks");
-  const copyStore = getStore("tov-copies");
-
-  const { blobs: allChecks } = await checkStore.list();
-  const { blobs: allCopies } = await copyStore.list();
-
-  const copiedIds = new Set(allCopies.map((b) => b.key));
-
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
-  // Keys are prefixed with unix timestamp so string sort = chronological
-  const sorted = [...allChecks].sort((a, b) => b.key.localeCompare(a.key));
+  const [total, todayCount, recentRaw, totalCopied, copiedIds] = await Promise.all([
+    redis.zcard("tov:checks"),
+    redis.zcount("tov:checks", todayStart.getTime(), "+inf"),
+    redis.zrevrange("tov:checks", 0, 49),
+    redis.scard("tov:copies"),
+    redis.smembers("tov:copies"),
+  ]);
 
-  const todayCount = allChecks.filter((b) => {
-    const ts = parseInt(b.key.split("_")[0]);
-    return ts >= todayStart.getTime();
-  }).length;
+  const copiedSet = new Set(copiedIds as string[]);
 
-  const recent = await Promise.all(
-    sorted.slice(0, 50).map(async (b) => {
-      const data = await checkStore.get(b.key, { type: "json" });
-      return { ...(data as object), copied: copiedIds.has(b.key) };
-    })
-  );
+  const recent = (recentRaw as string[]).map((raw) => {
+    const entry = JSON.parse(raw);
+    return { ...entry, copied: copiedSet.has(entry.id) };
+  });
 
   return NextResponse.json({
-    total: allChecks.length,
+    total,
     today: todayCount,
-    copyRate: allChecks.length > 0
-      ? Math.round((allCopies.length / allChecks.length) * 100)
-      : 0,
+    copyRate: total > 0 ? Math.round(((totalCopied as number) / (total as number)) * 100) : 0,
     recent,
   });
 }
