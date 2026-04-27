@@ -244,7 +244,7 @@ export default function Home() {
     <div
       className="min-h-screen relative flex flex-col"
       style={{
-        backgroundImage: "url('/bg-texture.jpg')",
+        backgroundImage: "url('/bg-texture.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
