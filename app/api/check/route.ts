@@ -82,6 +82,7 @@ ${copy}
     const message = await client.messages.create({
       model: "claude-sonnet-4-20250514",
       max_tokens: 2048,
+      temperature: 0,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
     });
