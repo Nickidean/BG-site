@@ -250,15 +250,13 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Dark overlay for readability */}
-      <div className="fixed inset-0 bg-[#003d6b]/75 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col min-h-screen items-center justify-center px-6 py-12">
         {/* Header */}
         <header className="w-full max-w-2xl mb-6">
-          <div className="flex items-center gap-4">
-            <img src="/bg-logo.png" alt="British Gas" className="h-10 w-auto object-contain flex-shrink-0" />
+          <div className="flex items-center gap-3">
+            <img src="/bg-flame.png" alt="British Gas" className="w-10 h-10 object-contain flex-shrink-0" />
             <div>
               <h1 className="text-white font-bold text-lg leading-tight">Copy Checker</h1>
               <p className="text-white/60 text-xs">British Gas brand guidelines</p>
