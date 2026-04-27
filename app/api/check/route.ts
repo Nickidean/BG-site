@@ -42,6 +42,11 @@ First identify each distinct element in the copy. Use these labels:
 
 When reviewing issues, specify which element is affected (e.g. "Heading is passive", "CTA lacks specificity").
 
+REWRITE RULES — CRITICAL:
+- Only rewrite what is already there. Do NOT add facts, claims, features, services, prices, or details that do not appear in the original copy.
+- If the original does not mention engineers, surveys, specific timescales, or any other detail — do not invent them.
+- Your job is to improve tone and clarity, not to expand the content. Every sentence in the rewrite must be traceable back to a sentence in the original.
+
 Return ONLY valid JSON:
 {
   "overallScore": <1-10>,
