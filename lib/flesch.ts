@@ -3,7 +3,6 @@ function countSyllables(word: string): number {
   if (!original) return 0;
 
   // Acronyms/abbreviations (all-caps, ≤6 letters): each letter is one syllable
-  // e.g. EV → 2, CTA → 3, kWh is mixed-case so falls through to normal logic
   if (original.length <= 6 && original === original.toUpperCase()) {
     return original.length;
   }
@@ -17,17 +16,18 @@ function countSyllables(word: string): number {
 }
 
 export interface FleschResult {
-  score: number;
-  age: number;
+  score: number;          // SMOG grade level
+  age: number;            // estimated reading age (grade + 5)
   avgSentenceLength: number;
+  polysyllableCount: number;
 }
 
 export function calcFlesch(text: string): FleschResult {
-  // Strip footnote asterisks before processing so "£185.*" doesn't corrupt sentence detection
+  // Strip footnote asterisks before processing
   const normalized = text.replace(/\*+/g, " ");
 
-  // Split on . or ! followed by any whitespace/end, but ? only at line-end or end-of-string.
-  // This prevents brand names like "Which?" from creating false sentence breaks mid-sentence.
+  // Split on . or ! followed by whitespace/end; ? only at line-end or end-of-string
+  // to avoid false breaks on brand names like "Which?"
   const sentences = normalized
     .split(/[.!]+(?=\s|$)|[?]+(?=\n|$)/)
     .map((s) => s.trim())
@@ -36,26 +36,23 @@ export function calcFlesch(text: string): FleschResult {
   const words = normalized.split(/\s+/).filter((w) => w.replace(/[^a-zA-Z]/g, "").length > 0);
 
   if (sentences.length === 0 || words.length === 0) {
-    return { score: 0, age: 0, avgSentenceLength: 0 };
+    return { score: 0, age: 0, avgSentenceLength: 0, polysyllableCount: 0 };
   }
 
-  const syllableCount = words.reduce((sum, w) => sum + countSyllables(w), 0);
+  // SMOG: count every word with 3+ syllables
+  const polysyllableCount = words.filter((w) => countSyllables(w) >= 3).length;
   const avgSentenceLen = words.length / sentences.length;
-  const avgSyllablesPerWord = syllableCount / words.length;
 
-  // Flesch Reading Ease
-  const score = Math.max(
-    0,
-    Math.min(100, 206.835 - 1.015 * avgSentenceLen - 84.6 * avgSyllablesPerWord)
-  );
-
-  // Flesch-Kincaid Grade Level → approximate reading age (grade + 5)
-  const gradeLevel = 0.39 * avgSentenceLen + 11.8 * avgSyllablesPerWord - 15.59;
-  const age = Math.max(5, Math.round(gradeLevel + 5));
+  // SMOG Grade = 3 + √(polysyllables × 30/sentences)
+  // Scale to 30-sentence baseline for texts shorter than 30 sentences
+  const adjustedPoly = polysyllableCount * (30 / Math.min(sentences.length, 30));
+  const smogGrade = 3 + Math.sqrt(adjustedPoly);
+  const age = Math.max(5, Math.round(smogGrade + 5));
 
   return {
-    score: Math.round(score * 10) / 10,
+    score: Math.round(smogGrade * 10) / 10,
     age,
     avgSentenceLength: Math.round(avgSentenceLen * 10) / 10,
+    polysyllableCount,
   };
 }

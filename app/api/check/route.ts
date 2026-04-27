@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     }
 
     const userMessage = `${contentType ? `Content type: ${contentType}\n` : ""}Audience: ${audience || "General customers"}
-Readability: Flesch Reading Ease score ${fleschScore} (reading age ~${fleschAge}, average sentence length ${avgSentenceLength} words)
+Readability: SMOG grade ${fleschScore} (reading age ~${fleschAge}, average sentence length ${avgSentenceLength} words)
 
 Copy to review:
 ---

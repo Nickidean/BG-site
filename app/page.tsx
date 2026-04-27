@@ -336,8 +336,13 @@ export default function Home() {
                 {/* Reading age */}
                 <div>
                   <h3 className="font-semibold text-gray-800 mb-1">Reading age</h3>
-                  <p className="text-gray-600 leading-relaxed">Calculated using the Flesch-Kincaid formula — it measures average sentence length and average syllables per word. Shorter sentences and simpler words = lower reading age. We aim for around age 9 for most British Gas copy.</p>
-                  <p className="text-gray-400 text-xs mt-2 leading-relaxed">Note: the formula measures structure, not complexity of ideas. Technical terms or brand jargon can make copy feel harder to read than the score suggests.</p>
+                  <p className="text-gray-600 leading-relaxed mb-2">Calculated using the <strong>SMOG index</strong> (Simple Measure of Gobbledygook). Unlike other readability formulas that average syllables across all words, SMOG counts every word with 3 or more syllables individually. That means words like <em>installations</em> (4), <em>assessment</em> (3), and <em>rigorous</em> (3) each directly raise the score — they can't be hidden by surrounding simple words.</p>
+                  <div className="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-xs text-gray-600 font-mono">
+                    SMOG grade = 3 + √(polysyllabic words × 30 ÷ sentences)<br />
+                    Reading age = SMOG grade + 5
+                  </div>
+                  <p className="text-gray-600 leading-relaxed mt-2">We aim for a reading age of around 9 for most British Gas copy.</p>
+                  <p className="text-gray-400 text-xs mt-2 leading-relaxed">Note: SMOG is most accurate with 10+ sentences. For very short copy — a single headline or CTA — treat the score as a rough guide. It also can't detect conceptual complexity, so jargon like <em>kWh</em> (1 syllable) won't be flagged even though customers may not know what it means.</p>
                 </div>
 
               </div>
