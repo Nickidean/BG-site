@@ -27,6 +27,9 @@ interface CheckResult {
   workingScore: number;
   issues: Issue[];
   rewriteSections: RewriteSection[];
+  rewriteOverallScore?: number;
+  rewriteWarmScore?: number;
+  rewriteWorkingScore?: number;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -196,6 +199,8 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
+  const rewriteText = result?.rewriteSections?.map((s) => s.text).join("\n\n") ?? "";
+  const rewriteFlesch = rewriteText.length > 20 ? calcFlesch(rewriteText) : null;
   const canSubmit = copy.trim().length > 20 && !loading;
 
   const handleCheck = useCallback(async () => {
@@ -462,21 +467,105 @@ export default function Home() {
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <CollapsibleSection title="Suggested rewrite">
                   <div className="pt-4 space-y-3">
-                    {result.rewriteSections.map((section, i) => (
-                      <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* Before */}
+                      <div className="flex flex-col rounded-xl border border-gray-200 overflow-hidden">
                         <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
-                          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
-                            {section.label}
-                          </span>
+                          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Before</span>
                         </div>
-                        <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                          {section.text}
+                        <div className="px-4 py-3 bg-white text-sm text-gray-500 leading-relaxed whitespace-pre-wrap flex-1">
+                          {copy}
+                        </div>
+                        <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs">
+                          <div className="flex justify-between gap-2">
+                            <span className="text-gray-400">Score</span>
+                            <span className={`font-semibold ${scoreColour(result.overallScore).text}`}>{result.overallScore}/10</span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span className="text-gray-400">Reading age</span>
+                            <span className="font-medium text-gray-600">~{flesch?.age ?? "—"}</span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span className="text-gray-400">Warm</span>
+                            <span className="font-medium text-gray-600">{result.warmScore}/10</span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span className="text-gray-400">Avg sentence</span>
+                            <span className="font-medium text-gray-600">{flesch?.avgSentenceLength ?? "—"}w</span>
+                          </div>
+                          <div className="flex justify-between gap-2">
+                            <span className="text-gray-400">Working</span>
+                            <span className="font-medium text-gray-600">{result.workingScore}/10</span>
+                          </div>
                         </div>
                       </div>
-                    ))}
+
+                      {/* After */}
+                      <div className="flex flex-col rounded-xl border border-[#1D9E75]/40 overflow-hidden">
+                        <div className="px-4 py-2 bg-[#1D9E75]/8 border-b border-[#1D9E75]/20">
+                          <span className="text-xs font-bold uppercase tracking-widest text-[#1D9E75]">After</span>
+                        </div>
+                        <div className="px-4 py-3 bg-white text-sm text-gray-700 leading-relaxed flex-1 space-y-3">
+                          {result.rewriteSections.map((section, i) => (
+                            <div key={i}>
+                              {result.rewriteSections.length > 1 && (
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">{section.label}</span>
+                              )}
+                              <p className="whitespace-pre-wrap">{section.text}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="px-4 py-3 bg-[#1D9E75]/5 border-t border-[#1D9E75]/10 grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs">
+                          {(() => {
+                            const rScore = result.rewriteOverallScore ?? result.overallScore;
+                            const rWarm = result.rewriteWarmScore ?? result.warmScore;
+                            const rWorking = result.rewriteWorkingScore ?? result.workingScore;
+                            const rAge = rewriteFlesch?.age;
+                            const rSentLen = rewriteFlesch?.avgSentenceLength;
+                            const better = (val: number, ref: number, lowerIsBetter = false) =>
+                              lowerIsBetter ? val < ref : val > ref;
+                            return (
+                              <>
+                                <div className="flex justify-between gap-2">
+                                  <span className="text-gray-400">Score</span>
+                                  <span className={`font-semibold ${better(rScore, result.overallScore) ? "text-[#1D9E75]" : scoreColour(rScore).text}`}>
+                                    {rScore}/10{better(rScore, result.overallScore) && " ↑"}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-2">
+                                  <span className="text-gray-400">Reading age</span>
+                                  <span className={`font-medium ${rAge !== undefined && flesch && better(rAge, flesch.age, true) ? "text-[#1D9E75]" : "text-gray-600"}`}>
+                                    ~{rAge ?? "—"}{rAge !== undefined && flesch && better(rAge, flesch.age, true) && " ↑"}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-2">
+                                  <span className="text-gray-400">Warm</span>
+                                  <span className={`font-medium ${better(rWarm, result.warmScore) ? "text-[#1D9E75]" : "text-gray-600"}`}>
+                                    {rWarm}/10{better(rWarm, result.warmScore) && " ↑"}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-2">
+                                  <span className="text-gray-400">Avg sentence</span>
+                                  <span className={`font-medium ${rSentLen !== undefined && flesch && better(rSentLen, flesch.avgSentenceLength, true) ? "text-[#1D9E75]" : "text-gray-600"}`}>
+                                    {rSentLen ?? "—"}w{rSentLen !== undefined && flesch && better(rSentLen, flesch.avgSentenceLength, true) && " ↑"}
+                                  </span>
+                                </div>
+                                <div className="flex justify-between gap-2">
+                                  <span className="text-gray-400">Working</span>
+                                  <span className={`font-medium ${better(rWorking, result.workingScore) ? "text-[#1D9E75]" : "text-gray-600"}`}>
+                                    {rWorking}/10{better(rWorking, result.workingScore) && " ↑"}
+                                  </span>
+                                </div>
+                              </>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+
                     <button
                       onClick={handleCopyRewrite}
-                      className="mt-1 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
+                      className="flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
                     >
                       {copied ? (
                         <>

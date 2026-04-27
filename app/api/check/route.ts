@@ -50,7 +50,10 @@ Return ONLY valid JSON:
   "warmScore": <1-10>,
   "workingScore": <1-10>,
   "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional rewrite of that specific phrase>" }],
-  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text for this element>" }]
+  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text for this element>" }],
+  "rewriteOverallScore": <1-10 projected score if rewriteSections were submitted>,
+  "rewriteWarmScore": <1-10 projected warm score for the rewrite>,
+  "rewriteWorkingScore": <1-10 projected working score for the rewrite>
 }
 Max 5 issues. Most important first. rewriteSections must preserve the same order and structure as the original copy. If the copy is a single block with no distinct elements, return one section with label "Body".`;
 
