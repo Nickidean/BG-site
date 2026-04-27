@@ -241,277 +241,287 @@ export default function Home() {
   const tipCount = result?.issues.filter((i) => i.type === "tip").length ?? 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-[#0085CA] text-white">
-        <div className="max-w-4xl mx-auto px-6 py-5 flex items-center gap-4">
-          {/* BG logo mark */}
-          <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-black text-sm">BG</span>
-          </div>
-          <div>
-            <h1 className="text-xl font-bold leading-tight">Copy Checker</h1>
-            <p className="text-blue-100 text-sm">British Gas brand guidelines</p>
-          </div>
-        </div>
-      </header>
+    <div
+      className="min-h-screen relative flex flex-col"
+      style={{
+        background: "linear-gradient(135deg, #003d6b 0%, #0085CA 50%, #00a8e8 100%)",
+      }}
+    >
+      {/* Dark overlay for readability */}
+      <div className="fixed inset-0 bg-[#003d6b]/60 pointer-events-none" />
+      {/* Grain overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.08]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px",
+        }}
+      />
 
-      <main className="max-w-4xl mx-auto px-6 py-8 space-y-6">
-
-        {/* Input card */}
-        <div className="card p-6 space-y-5">
-          {/* Selectors row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Content */}
+      <div className="relative z-10 flex flex-col min-h-screen items-center justify-center px-6 py-12">
+        {/* Header */}
+        <header className="w-full max-w-2xl mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+              <img src="/bg-flame.png" alt="British Gas" className="w-10 h-10 object-contain" style={{ mixBlendMode: "screen" }} />
+            </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                Content type <span className="text-[#A32D2D]">*</span>
-              </label>
-              <div className="relative">
-                <select
-                  className="select-field pr-10"
-                  value={contentType}
-                  onChange={(e) => setContentType(e.target.value)}
-                >
-                  <option value="">Select a type…</option>
-                  {CONTENT_TYPES.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
-                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Audience</label>
-              <div className="relative">
-                <select
-                  className="select-field pr-10"
-                  value={audience}
-                  onChange={(e) => setAudience(e.target.value)}
-                >
-                  {AUDIENCES.map((a) => (
-                    <option key={a} value={a}>{a}</option>
-                  ))}
-                </select>
-                <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </div>
+              <h1 className="text-white font-bold text-lg leading-tight">Copy Checker</h1>
+              <p className="text-white/60 text-xs">British Gas brand guidelines</p>
             </div>
           </div>
+        </header>
 
-          {/* Textarea */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">Copy to check</label>
-            <textarea
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none
-                         focus:outline-none focus:ring-2 focus:ring-[#0085CA] focus:border-transparent
-                         transition-all duration-150 min-h-[180px]"
-              placeholder="Paste your copy here…"
-              value={copy}
-              onChange={(e) => setCopy(e.target.value)}
-            />
-            <div className="flex items-center justify-between mt-1.5">
-              <div className="flex gap-3 text-xs text-gray-400">
-                {flesch && copy.trim().length > 20 && (
-                  <>
-                    <span>Reading age: ~{flesch.age}</span>
-                    <span>·</span>
-                    <span>Avg sentence: {flesch.avgSentenceLength} words</span>
-                    <span>·</span>
-                    <span className={flesch.avgSentenceLength > 15 ? "text-[#BA7517] font-medium" : "text-[#1D9E75] font-medium"}>
-                      {flesch.avgSentenceLength > 15 ? "Sentences too long" : "Sentence length OK"}
-                    </span>
-                  </>
-                )}
-              </div>
-              <span className={`text-xs ${copy.length > 5000 ? "text-[#A32D2D]" : "text-gray-400"}`}>
-                {copy.length} chars
-              </span>
-            </div>
-          </div>
+        <main className="w-full max-w-2xl space-y-4">
 
-          {/* Submit */}
-          <div className="flex items-center gap-4">
-            <button className="btn-primary flex items-center gap-2" onClick={handleCheck} disabled={!canSubmit}>
-              {loading ? (
-                <>
-                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          {/* Input card */}
+          <div className="bg-white rounded-3xl shadow-2xl p-7 space-y-5">
+            {/* Selectors row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Content type <span className="text-[#A32D2D]">*</span>
+                </label>
+                <div className="relative">
+                  <select
+                    className="select-field pr-10"
+                    value={contentType}
+                    onChange={(e) => setContentType(e.target.value)}
+                  >
+                    <option value="">Select a type…</option>
+                    {CONTENT_TYPES.map((t) => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
-                  Checking…
-                </>
-              ) : (
-                "Check copy"
-              )}
-            </button>
-            {!contentType && (
-              <span className="text-xs text-gray-400">Select a content type to continue</span>
-            )}
-            {contentType && copy.trim().length <= 20 && (
-              <span className="text-xs text-gray-400">Add more copy to check (min 20 chars)</span>
-            )}
-          </div>
-        </div>
+                </div>
+              </div>
 
-        {/* Error banner */}
-        {error && (
-          <div className="card px-6 py-4 border-[#A32D2D]/30 bg-[#A32D2D]/5 text-[#A32D2D] text-sm flex items-start gap-3">
-            <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Audience</label>
+                <div className="relative">
+                  <select
+                    className="select-field pr-10"
+                    value={audience}
+                    onChange={(e) => setAudience(e.target.value)}
+                  >
+                    {AUDIENCES.map((a) => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </select>
+                  <svg className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Textarea */}
             <div>
-              <strong className="font-semibold">Error: </strong>{error}
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Copy to check</label>
+              <textarea
+                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none
+                           focus:outline-none focus:ring-2 focus:ring-[#0085CA] focus:border-transparent
+                           transition-all duration-150 min-h-[180px]"
+                placeholder="Paste your copy here…"
+                value={copy}
+                onChange={(e) => setCopy(e.target.value)}
+              />
+              <div className="flex items-center justify-between mt-1.5">
+                <div className="flex gap-3 text-xs text-gray-400">
+                  {flesch && copy.trim().length > 20 && (
+                    <>
+                      <span>Reading age: ~{flesch.age}</span>
+                      <span>·</span>
+                      <span>Avg sentence: {flesch.avgSentenceLength} words</span>
+                      <span>·</span>
+                      <span className={flesch.avgSentenceLength > 15 ? "text-[#BA7517] font-medium" : "text-[#1D9E75] font-medium"}>
+                        {flesch.avgSentenceLength > 15 ? "Sentences too long" : "Sentence length OK"}
+                      </span>
+                    </>
+                  )}
+                </div>
+                <span className={`text-xs ${copy.length > 5000 ? "text-[#A32D2D]" : "text-gray-400"}`}>
+                  {copy.length} chars
+                </span>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <div className="flex items-center gap-4">
+              <button className="btn-primary flex items-center gap-2" onClick={handleCheck} disabled={!canSubmit}>
+                {loading ? (
+                  <>
+                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    Checking…
+                  </>
+                ) : (
+                  "Check copy"
+                )}
+              </button>
+              {!contentType && (
+                <span className="text-xs text-gray-400">Select a content type to continue</span>
+              )}
+              {contentType && copy.trim().length <= 20 && (
+                <span className="text-xs text-gray-400">Add more copy to check (min 20 chars)</span>
+              )}
             </div>
           </div>
-        )}
 
-        {/* ── Results ──────────────────────────────────────────────────────── */}
-        {result && (
-          <div className="space-y-4">
+          {/* Error banner */}
+          {error && (
+            <div className="bg-white rounded-2xl px-6 py-4 border border-[#A32D2D]/30 text-[#A32D2D] text-sm flex items-start gap-3 shadow-lg">
+              <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <strong className="font-semibold">Error: </strong>{error}
+              </div>
+            </div>
+          )}
 
-            {/* 1. Overall panel — open by default */}
-            <div className="card p-6">
-              <div className="flex items-start gap-5">
-                <ScoreBadge score={result.overallScore} size="lg" />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 flex-wrap">
+          {/* ── Results ──────────────────────────────────────────────────────── */}
+          {result && (
+            <div className="space-y-3">
+
+              {/* 1. Overall panel */}
+              <div className="bg-white rounded-3xl shadow-2xl p-6">
+                <div className="flex items-start gap-5">
+                  <ScoreBadge score={result.overallScore} size="lg" />
+                  <div className="flex-1 min-w-0">
                     <h2 className={`text-xl font-bold ${scoreColour(result.overallScore).text}`}>
                       {result.verdict}
                     </h2>
-                  </div>
-                  <p className="text-gray-600 text-sm mt-2 leading-relaxed">{result.summary}</p>
-                  <div className="flex gap-2 mt-3 flex-wrap">
-                    {errorCount > 0 && (
-                      <span className="pill-error">{errorCount} error{errorCount !== 1 ? "s" : ""}</span>
-                    )}
-                    {warnCount > 0 && (
-                      <span className="pill-warn">{warnCount} warning{warnCount !== 1 ? "s" : ""}</span>
-                    )}
-                    {tipCount > 0 && (
-                      <span className="pill-tip">{tipCount} tip{tipCount !== 1 ? "s" : ""}</span>
-                    )}
-                    {errorCount === 0 && warnCount === 0 && tipCount === 0 && (
-                      <span className="pill-tip">No issues found</span>
-                    )}
+                    <p className="text-gray-600 text-sm mt-2 leading-relaxed">{result.summary}</p>
+                    <div className="flex gap-2 mt-3 flex-wrap">
+                      {errorCount > 0 && <span className="pill-error">{errorCount} error{errorCount !== 1 ? "s" : ""}</span>}
+                      {warnCount > 0 && <span className="pill-warn">{warnCount} warning{warnCount !== 1 ? "s" : ""}</span>}
+                      {tipCount > 0 && <span className="pill-tip">{tipCount} tip{tipCount !== 1 ? "s" : ""}</span>}
+                      {errorCount === 0 && warnCount === 0 && tipCount === 0 && <span className="pill-tip">No issues found</span>}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* 2. Readability & tone */}
-            <CollapsibleSection title="Readability & tone">
-              <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <div className={`text-3xl font-black ${flesch && flesch.age <= 11 ? "text-[#1D9E75]" : flesch && flesch.age <= 14 ? "text-[#BA7517]" : "text-[#A32D2D]"}`}>
-                    ~{flesch?.age ?? result.overallScore}
+              {/* 2. Readability & tone */}
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <CollapsibleSection title="Readability & tone">
+                  <div className="pt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="bg-gray-50 rounded-xl p-4 text-center">
+                      <div className={`text-3xl font-black ${flesch && flesch.age <= 11 ? "text-[#1D9E75]" : flesch && flesch.age <= 14 ? "text-[#BA7517]" : "text-[#A32D2D]"}`}>
+                        ~{flesch?.age ?? result.overallScore}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">Reading age</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Target: ~9</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-xl p-4 text-center">
+                      <div className={`text-3xl font-black ${flesch && flesch.avgSentenceLength <= 15 ? "text-[#1D9E75]" : "text-[#BA7517]"}`}>
+                        {flesch?.avgSentenceLength ?? "—"}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">Avg sentence length</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Target: ≤15 words</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-xl p-4 text-center">
+                      <div className={`text-3xl font-black ${scoreColour(result.overallScore).text}`}>
+                        {result.overallScore}/10
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">Brand fit score</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Overall</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Reading age</div>
-                  <div className="text-xs text-gray-400 mt-0.5">Target: ~9</div>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <div className={`text-3xl font-black ${flesch && flesch.avgSentenceLength <= 15 ? "text-[#1D9E75]" : "text-[#BA7517]"}`}>
-                    {flesch?.avgSentenceLength ?? "—"}
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">Avg sentence length</div>
-                  <div className="text-xs text-gray-400 mt-0.5">Target: ≤15 words</div>
-                </div>
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                  <div className={`text-3xl font-black ${scoreColour(result.overallScore).text}`}>
-                    {result.overallScore}/10
-                  </div>
-                  <div className="text-xs text-gray-500 mt-1">Brand fit score</div>
-                  <div className="text-xs text-gray-400 mt-0.5">Overall</div>
-                </div>
+                  <ToneBar warmScore={result.warmScore} workingScore={result.workingScore} contentType={contentType} />
+                </CollapsibleSection>
               </div>
 
-              <ToneBar
-                warmScore={result.warmScore}
-                workingScore={result.workingScore}
-                contentType={contentType}
-              />
-            </CollapsibleSection>
-
-            {/* 3. Findings */}
-            <CollapsibleSection title={`Findings (${result.issues.length})`}>
-              {result.issues.length === 0 ? (
-                <p className="text-sm text-gray-500 pt-4">No issues found — great work!</p>
-              ) : (
-                <ul className="space-y-3 pt-4">
-                  {result.issues.map((issue, i) => {
-                    const c = issueColour(issue.type);
-                    return (
-                      <li key={i} className={`rounded-xl border p-4 ${c.bg} ${c.border}`}>
-                        <div className="flex items-start gap-3">
-                          <span className={issue.type === "error" ? "pill-error" : issue.type === "warn" ? "pill-warn" : "pill-tip"}>
-                            {issue.type}
-                          </span>
-                          <div className="flex-1 min-w-0">
-                            <p className={`font-semibold text-sm ${c.text}`}>{issue.title}</p>
-                            <p className="text-gray-600 text-sm mt-1 leading-relaxed">{issue.detail}</p>
-                            {issue.suggestion && (
-                              <div className="mt-2 p-3 bg-white/60 rounded-lg border border-white/80">
-                                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Suggested: </span>
-                                <span className="text-sm text-gray-700 italic">"{issue.suggestion}"</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </CollapsibleSection>
-
-            {/* 4. Suggested rewrite */}
-            <CollapsibleSection title="Suggested rewrite">
-              <div className="pt-4 space-y-3">
-                {result.rewriteSections.map((section, i) => (
-                  <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
-                    <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
-                      <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {section.label}
-                      </span>
-                    </div>
-                    <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                      {section.text}
-                    </div>
-                  </div>
-                ))}
-                <button
-                  onClick={handleCopyRewrite}
-                  className="mt-1 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
-                >
-                  {copied ? (
-                    <>
-                      <svg className="w-4 h-4 text-[#1D9E75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-[#1D9E75]">Copied!</span>
-                    </>
+              {/* 3. Findings */}
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <CollapsibleSection title={`Findings (${result.issues.length})`}>
+                  {result.issues.length === 0 ? (
+                    <p className="text-sm text-gray-500 pt-4">No issues found — great work!</p>
                   ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                      Copy rewrite
-                    </>
+                    <ul className="space-y-3 pt-4">
+                      {result.issues.map((issue, i) => {
+                        const c = issueColour(issue.type);
+                        return (
+                          <li key={i} className={`rounded-xl border p-4 ${c.bg} ${c.border}`}>
+                            <div className="flex items-start gap-3">
+                              <span className={issue.type === "error" ? "pill-error" : issue.type === "warn" ? "pill-warn" : "pill-tip"}>
+                                {issue.type}
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <p className={`font-semibold text-sm ${c.text}`}>{issue.title}</p>
+                                <p className="text-gray-600 text-sm mt-1 leading-relaxed">{issue.detail}</p>
+                                {issue.suggestion && (
+                                  <div className="mt-2 p-3 bg-white/60 rounded-lg border border-white/80">
+                                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Suggested: </span>
+                                    <span className="text-sm text-gray-700 italic">"{issue.suggestion}"</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   )}
-                </button>
+                </CollapsibleSection>
               </div>
-            </CollapsibleSection>
 
-          </div>
-        )}
-      </main>
+              {/* 4. Suggested rewrite */}
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <CollapsibleSection title="Suggested rewrite">
+                  <div className="pt-4 space-y-3">
+                    {result.rewriteSections.map((section, i) => (
+                      <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
+                        <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
+                          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                            {section.label}
+                          </span>
+                        </div>
+                        <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          {section.text}
+                        </div>
+                      </div>
+                    ))}
+                    <button
+                      onClick={handleCopyRewrite}
+                      className="mt-1 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
+                    >
+                      {copied ? (
+                        <>
+                          <svg className="w-4 h-4 text-[#1D9E75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span className="text-[#1D9E75]">Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          Copy rewrite
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </CollapsibleSection>
+              </div>
 
-      <footer className="max-w-4xl mx-auto px-6 py-8 text-center text-xs text-gray-400">
-        British Gas internal tool · not for external use
-      </footer>
+            </div>
+          )}
+        </main>
+
+        <footer className="w-full max-w-2xl mt-6 text-center text-white/30 text-xs">
+          British Gas internal tool · not for external use
+        </footer>
+      </div>
     </div>
   );
 }
