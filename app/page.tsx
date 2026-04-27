@@ -264,8 +264,8 @@ export default function Home() {
         {/* Header */}
         <header className="w-full max-w-2xl mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0 border border-white/20">
-              <span className="text-white font-black text-sm">BG</span>
+            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
+              <img src="/bg-flame.png" alt="British Gas" className="w-10 h-10 object-contain" style={{ mixBlendMode: "screen" }} />
             </div>
             <div>
               <h1 className="text-white font-bold text-lg leading-tight">Copy Checker</h1>
