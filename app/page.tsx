@@ -595,7 +595,7 @@ export default function Home() {
 
         <footer className="w-full max-w-2xl mt-4 text-center text-xs space-y-1">
           <p className="text-white/30">British Gas internal tool · not for external use</p>
-          <p className="text-white/60 font-medium">Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="hover:text-white underline transition-colors">Let Nick know</a></p>
+          <p className="text-white/60 font-medium">Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="hover:text-white underline transition-colors">nick.peasant@britishgas.co.uk</a></p>
         </footer>
       </div>
     </div>
