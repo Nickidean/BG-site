@@ -14,6 +14,11 @@ interface Issue {
   suggestion?: string;
 }
 
+interface RewriteSection {
+  label: string;
+  text: string;
+}
+
 interface CheckResult {
   overallScore: number;
   verdict: string;
@@ -21,7 +26,7 @@ interface CheckResult {
   warmScore: number;
   workingScore: number;
   issues: Issue[];
-  rewrite: string;
+  rewriteSections: RewriteSection[];
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -224,8 +229,9 @@ export default function Home() {
   }, [canSubmit, copy, contentType, audience, flesch]);
 
   const handleCopyRewrite = async () => {
-    if (!result?.rewrite) return;
-    await navigator.clipboard.writeText(result.rewrite);
+    if (!result?.rewriteSections?.length) return;
+    const plain = result.rewriteSections.map((s) => s.text).join("\n\n");
+    await navigator.clipboard.writeText(plain);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -463,13 +469,22 @@ export default function Home() {
 
             {/* 4. Suggested rewrite */}
             <CollapsibleSection title="Suggested rewrite">
-              <div className="pt-4">
-                <div className="bg-gray-50 rounded-xl p-5 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap border border-gray-200">
-                  {result.rewrite}
-                </div>
+              <div className="pt-4 space-y-3">
+                {result.rewriteSections.map((section, i) => (
+                  <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
+                    <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
+                      <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                        {section.label}
+                      </span>
+                    </div>
+                    <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                      {section.text}
+                    </div>
+                  </div>
+                ))}
                 <button
                   onClick={handleCopyRewrite}
-                  className="mt-3 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
+                  className="mt-1 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
                 >
                   {copied ? (
                     <>
