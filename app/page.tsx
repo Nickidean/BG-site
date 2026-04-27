@@ -244,29 +244,21 @@ export default function Home() {
     <div
       className="min-h-screen relative flex flex-col"
       style={{
-        background: "linear-gradient(135deg, #003d6b 0%, #0085CA 50%, #00a8e8 100%)",
+        backgroundImage: "url('/bg-texture.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Dark overlay for readability */}
-      <div className="fixed inset-0 bg-[#003d6b]/60 pointer-events-none" />
-      {/* Grain overlay */}
-      <div
-        className="fixed inset-0 pointer-events-none opacity-[0.08]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px",
-        }}
-      />
+      <div className="fixed inset-0 bg-[#003d6b]/75 pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col min-h-screen items-center justify-center px-6 py-12">
         {/* Header */}
         <header className="w-full max-w-2xl mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-              <img src="/bg-flame.png" alt="British Gas" className="w-10 h-10 object-contain" style={{ mixBlendMode: "screen" }} />
-            </div>
+          <div className="flex items-center gap-4">
+            <img src="/bg-logo.png" alt="British Gas" className="h-10 w-auto object-contain flex-shrink-0" />
             <div>
               <h1 className="text-white font-bold text-lg leading-tight">Copy Checker</h1>
               <p className="text-white/60 text-xs">British Gas brand guidelines</p>
