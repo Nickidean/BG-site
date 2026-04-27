@@ -263,10 +263,10 @@ export default function Home() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col min-h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen items-center justify-center px-6 py-12">
         {/* Header */}
-        <header className="py-8 px-6">
-          <div className="max-w-2xl mx-auto flex items-center gap-3">
+        <header className="w-full max-w-2xl mb-6">
+          <div className="flex items-center gap-3">
             <div className="w-9 h-9 bg-white/15 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0 border border-white/20">
               <span className="text-white font-black text-sm">BG</span>
             </div>
@@ -277,7 +277,7 @@ export default function Home() {
           </div>
         </header>
 
-        <main className="flex-1 max-w-2xl w-full mx-auto px-6 pb-12 space-y-4">
+        <main className="w-full max-w-2xl space-y-4">
 
           {/* Input card */}
           <div className="bg-white rounded-3xl shadow-2xl p-7 space-y-5">
@@ -521,7 +521,7 @@ export default function Home() {
           )}
         </main>
 
-        <footer className="relative z-10 text-center py-6 text-white/30 text-xs">
+        <footer className="w-full max-w-2xl mt-6 text-center text-white/30 text-xs">
           British Gas internal tool · not for external use
         </footer>
       </div>
