@@ -244,10 +244,7 @@ export default function Home() {
     <div
       className="min-h-screen relative flex flex-col"
       style={{
-        backgroundImage: "url('/bg-texture.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
+        background: "linear-gradient(135deg, #003d6b 0%, #0085CA 50%, #00a8e8 100%)",
       }}
     >
       {/* Dark overlay for readability */}
