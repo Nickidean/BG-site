@@ -502,7 +502,7 @@ export default function Home() {
         {/* How does this work — footnote */}
         <div className="w-full max-w-2xl mt-4">
           <details className="group">
-            <summary className="cursor-pointer text-white/40 text-xs hover:text-white/70 transition-colors select-none list-none flex items-center gap-1.5 justify-center">
+            <summary className="cursor-pointer text-white/60 text-xs font-medium hover:text-white transition-colors select-none list-none flex items-center gap-1.5 justify-center">
               <svg className="w-3 h-3 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -593,8 +593,9 @@ export default function Home() {
           </details>
         </div>
 
-        <footer className="w-full max-w-2xl mt-4 text-center text-white/30 text-xs">
-          British Gas internal tool · not for external use
+        <footer className="w-full max-w-2xl mt-4 text-center text-white/30 text-xs space-y-1">
+          <p>British Gas internal tool · not for external use</p>
+          <p>Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="text-white/50 hover:text-white underline transition-colors">Let Nick know</a></p>
         </footer>
       </div>
     </div>
