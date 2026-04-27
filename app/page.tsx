@@ -593,9 +593,9 @@ export default function Home() {
           </details>
         </div>
 
-        <footer className="w-full max-w-2xl mt-4 text-center text-white/30 text-xs space-y-1">
-          <p>British Gas internal tool · not for external use</p>
-          <p>Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="text-white/50 hover:text-white underline transition-colors">Let Nick know</a></p>
+        <footer className="w-full max-w-2xl mt-4 text-center text-xs space-y-1">
+          <p className="text-white/30">British Gas internal tool · not for external use</p>
+          <p className="text-white/60 font-medium">Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="hover:text-white underline transition-colors">Let Nick know</a></p>
         </footer>
       </div>
     </div>
