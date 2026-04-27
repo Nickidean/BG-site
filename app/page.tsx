@@ -259,6 +259,91 @@ export default function Home() {
 
         <main className="w-full max-w-2xl space-y-4">
 
+          {/* How does this work? */}
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <CollapsibleSection title="How do we review your copy?">
+              <div className="pt-4 space-y-6 text-sm">
+
+                {/* Overall score */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">Overall score (1–10)</h3>
+                  <p className="text-gray-600 leading-relaxed">Your copy is reviewed by AI against British Gas tone of voice guidelines. The score reflects how well it balances warmth, usefulness, and clear writing — 7+ is on-brand, 5–6 needs work, below 5 has significant issues.</p>
+                </div>
+
+                {/* Warm */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">Warm score (1–10)</h3>
+                  <p className="text-gray-600 leading-relaxed mb-3">Warm copy sounds like a real person talking. Think contractions, direct language, and the occasional grounded British humour rooted in home life.</p>
+                  <div className="space-y-2">
+                    <div className="rounded-lg border border-[#1D9E75]/30 bg-[#1D9E75]/5 px-4 py-3">
+                      <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
+                      <p className="text-gray-700 italic">"Great. Your Gas Safety Check's all booked in. We'll see you then."</p>
+                      <p className="text-gray-500 text-xs mt-1">"Nothing says Happy New Year like a meter reading."</p>
+                    </div>
+                    <div className="rounded-lg border border-[#A32D2D]/20 bg-[#A32D2D]/5 px-4 py-3">
+                      <p className="text-xs font-bold uppercase tracking-widest text-[#A32D2D] mb-1">Too cold</p>
+                      <p className="text-gray-700 italic">"Your Gas Safety Check has been successfully booked."</p>
+                      <p className="text-gray-500 text-xs mt-1">Faceless and corporate — no sense of a person behind it.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Working */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">Working score (1–10)</h3>
+                  <p className="text-gray-600 leading-relaxed mb-3">Working copy takes things off the customer's hands. It's specific, action-led, and tells them exactly what happens next — not vague reassurance.</p>
+                  <div className="space-y-2">
+                    <div className="rounded-lg border border-[#1D9E75]/30 bg-[#1D9E75]/5 px-4 py-3">
+                      <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
+                      <p className="text-gray-700 italic">"Right, let's get that sorted."</p>
+                      <p className="text-gray-500 text-xs mt-1">"Your engineer is on the way and will be with you by 12pm."</p>
+                    </div>
+                    <div className="rounded-lg border border-[#A32D2D]/20 bg-[#A32D2D]/5 px-4 py-3">
+                      <p className="text-xs font-bold uppercase tracking-widest text-[#A32D2D] mb-1">Too passive</p>
+                      <p className="text-gray-700 italic">"If you're having issues, we're here to help."</p>
+                      <p className="text-gray-500 text-xs mt-1">Vague and uncommitted — doesn't tell the customer what actually happens.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tone targets */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-2">Tone target by content type</h3>
+                  <div className="rounded-xl border border-gray-200 overflow-hidden text-xs">
+                    <div className="grid grid-cols-3 bg-gray-100 px-4 py-2 font-semibold text-gray-500 uppercase tracking-wider">
+                      <span>Content type</span><span className="text-center">Warm</span><span className="text-center">Working</span>
+                    </div>
+                    {[
+                      ["Marketing / campaign",       "80%", "20%"],
+                      ["Social media",               "80%", "20%"],
+                      ["Sales web page",             "60%", "40%"],
+                      ["Email or letter",            "50%", "50%"],
+                      ["Onboarding / confirmation",  "50%", "50%"],
+                      ["Help & support",             "30%", "70%"],
+                      ["Customer journey",           "20%", "80%"],
+                      ["Debt or important comms",    "20%", "80%"],
+                      ["Error message",              "10%", "90%"],
+                    ].map(([type, warm, working]) => (
+                      <div key={type} className="grid grid-cols-3 px-4 py-2 border-t border-gray-100 text-gray-600">
+                        <span>{type}</span>
+                        <span className="text-center text-[#0085CA] font-medium">{warm}</span>
+                        <span className="text-center text-[#1D9E75] font-medium">{working}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Reading age */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-1">Reading age</h3>
+                  <p className="text-gray-600 leading-relaxed">Calculated using the Flesch-Kincaid formula — it measures average sentence length and average syllables per word. Shorter sentences and simpler words = lower reading age. We aim for around age 9 for most British Gas copy.</p>
+                  <p className="text-gray-400 text-xs mt-2 leading-relaxed">Note: the formula measures structure, not complexity of ideas. Technical terms or brand jargon can make copy feel harder to read than the score suggests.</p>
+                </div>
+
+              </div>
+            </CollapsibleSection>
+          </div>
+
           {/* Input card */}
           <div className="bg-white rounded-3xl shadow-2xl p-7 space-y-5">
             {/* Selectors row */}
