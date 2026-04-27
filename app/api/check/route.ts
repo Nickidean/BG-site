@@ -42,6 +42,14 @@ Identify each distinct element in the copy when flagging issues. Use these label
 
 When reviewing issues, specify which element is affected (e.g. "Heading is passive", "CTA lacks specificity").
 
+REWRITE RULES — STRICTLY ENFORCED:
+You must produce a suggested rewrite, but it is a tone edit only — not a content edit.
+- Rewrite each sentence from the original. Do NOT add new sentences, new facts, new services, new claims, or any information not explicitly present in the original.
+- Every sentence in the rewrite must have a direct corresponding sentence in the original. If you cannot find one, do not write it.
+- You may only: change word choices, add contractions, switch to active voice, adjust phrasing for warmth or clarity.
+- Do not increase the length significantly. The rewrite should be roughly the same number of sentences as the original.
+- Legal text: include it unchanged. Do not rewrite legal copy.
+
 Return ONLY valid JSON:
 {
   "overallScore": <1-10>,
@@ -49,9 +57,10 @@ Return ONLY valid JSON:
   "summary": "<2 sentences: what's working and the single most important fix>",
   "warmScore": <1-10>,
   "workingScore": <1-10>,
-  "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional: a single improved phrase — must use only words/ideas already in the original, do not add new facts>" }]
+  "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional: a single improved phrase — must use only words/ideas already in the original, do not add new facts>" }],
+  "rewriteSections": [{ "label": "<Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text — same facts, improved tone>" }]
 }
-Max 5 issues. Most important first.`;
+Max 5 issues. Most important first. rewriteSections must mirror the structure of the original. If the copy is a single block, return one section labelled "Body".`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,7 +81,7 @@ ${copy}
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
+      max_tokens: 2048,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
     });
