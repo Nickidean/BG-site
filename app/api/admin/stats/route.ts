@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const [total, todayCount, recentRaw, totalCopied, copiedIds] = await Promise.all([
     redis.zcard("tov:checks"),
     redis.zcount("tov:checks", todayStart.getTime(), "+inf"),
-    redis.zrevrange("tov:checks", 0, 49),
+    redis.zrange("tov:checks", 0, 49, { rev: true }),
     redis.scard("tov:copies"),
     redis.smembers("tov:copies"),
   ]);
