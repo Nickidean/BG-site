@@ -1,6 +1,14 @@
 function countSyllables(word: string): number {
-  const w = word.toLowerCase().replace(/[^a-z]/g, "");
-  if (!w) return 0;
+  const original = word.replace(/[^a-zA-Z]/g, "");
+  if (!original) return 0;
+
+  // Acronyms/abbreviations (all-caps, ≤6 letters): each letter is one syllable
+  // e.g. EV → 2, CTA → 3, kWh is mixed-case so falls through to normal logic
+  if (original.length <= 6 && original === original.toUpperCase()) {
+    return original.length;
+  }
+
+  const w = original.toLowerCase();
   if (w.length <= 3) return 1;
 
   const cleaned = w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, "").replace(/^y/, "");
@@ -15,12 +23,17 @@ export interface FleschResult {
 }
 
 export function calcFlesch(text: string): FleschResult {
-  const sentences = text
-    .split(/[.!?]+/)
+  // Strip footnote asterisks before processing so "£185.*" doesn't corrupt sentence detection
+  const normalized = text.replace(/\*+/g, " ");
+
+  // Only split on . ! ? when followed by whitespace or end-of-string.
+  // This prevents false splits on decimal points (6.75, 3.3) and similar patterns.
+  const sentences = normalized
+    .split(/[.!?]+(?=\s|$)/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
-  const words = text.split(/\s+/).filter((w) => w.replace(/[^a-zA-Z]/g, "").length > 0);
+  const words = normalized.split(/\s+/).filter((w) => w.replace(/[^a-zA-Z]/g, "").length > 0);
 
   if (sentences.length === 0 || words.length === 0) {
     return { score: 0, age: 0, avgSentenceLength: 0 };
