@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { logRequest } from "@/lib/redis";
+import { randomUUID } from "crypto";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -91,7 +93,20 @@ ${copy}
       return NextResponse.json({ error: "Failed to parse AI response", raw }, { status: 502 });
     }
 
-    return NextResponse.json(result);
+    const requestId = randomUUID();
+    await logRequest({
+      id: requestId,
+      timestamp: new Date().toISOString(),
+      contentType,
+      audience: audience || "General customers",
+      inputLength: copy.length,
+      overallScore: result.overallScore ?? 0,
+      warmScore: result.warmScore ?? 0,
+      workingScore: result.workingScore ?? 0,
+      verdict: result.verdict ?? "",
+    });
+
+    return NextResponse.json({ ...result, requestId });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
