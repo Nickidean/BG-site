@@ -26,10 +26,10 @@ export function calcFlesch(text: string): FleschResult {
   // Strip footnote asterisks before processing so "£185.*" doesn't corrupt sentence detection
   const normalized = text.replace(/\*+/g, " ");
 
-  // Only split on . ! ? when followed by whitespace or end-of-string.
-  // This prevents false splits on decimal points (6.75, 3.3) and similar patterns.
+  // Split on . or ! followed by any whitespace/end, but ? only at line-end or end-of-string.
+  // This prevents brand names like "Which?" from creating false sentence breaks mid-sentence.
   const sentences = normalized
-    .split(/[.!?]+(?=\s|$)/)
+    .split(/[.!]+(?=\s|$)|[?]+(?=\n|$)/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
 
