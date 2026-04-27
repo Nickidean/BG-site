@@ -31,21 +31,16 @@ TONE BALANCE BY TYPE:
 WRITING RULES: contractions, active voice, second person (you/your), present tense, short sentences, short paragraphs. Avoid: passive voice, jargon, corporate speak, exclamation mark overuse, ALL CAPS.
 
 COPY STRUCTURE DETECTION:
-First identify each distinct element in the copy. Use these labels:
+Identify each distinct element in the copy when flagging issues. Use these labels:
 - Heading: The main title or H1. Should be short (≤8 words), benefit-led, punchy, no full stop.
 - Subheading: Secondary title or H2. Expands on the heading with one specific detail.
 - Body: Main paragraph copy. Applies all tone of voice rules.
 - CTA: Call to action button or link text. Must be action-led, specific, imperative verb. E.g. 'Get a quote', not 'Click here'.
 - Intro: Opening line or standfirst that sets context before body copy.
 - Sign-off: Closing line, sign-off, or next-steps sentence.
-- Legal: Disclaimer or legal text — flag issues but do not rewrite legal content.
+- Legal: Disclaimer or legal text — flag issues but do not suggest rewrites of legal content.
 
 When reviewing issues, specify which element is affected (e.g. "Heading is passive", "CTA lacks specificity").
-
-REWRITE RULES — CRITICAL:
-- Only rewrite what is already there. Do NOT add facts, claims, features, services, prices, or details that do not appear in the original copy.
-- If the original does not mention engineers, surveys, specific timescales, or any other detail — do not invent them.
-- Your job is to improve tone and clarity, not to expand the content. Every sentence in the rewrite must be traceable back to a sentence in the original.
 
 Return ONLY valid JSON:
 {
@@ -54,13 +49,9 @@ Return ONLY valid JSON:
   "summary": "<2 sentences: what's working and the single most important fix>",
   "warmScore": <1-10>,
   "workingScore": <1-10>,
-  "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional rewrite of that specific phrase>" }],
-  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text for this element>" }],
-  "rewriteOverallScore": <1-10 projected score if rewriteSections were submitted>,
-  "rewriteWarmScore": <1-10 projected warm score for the rewrite>,
-  "rewriteWorkingScore": <1-10 projected working score for the rewrite>
+  "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional: a single improved phrase — must use only words/ideas already in the original, do not add new facts>" }]
 }
-Max 5 issues. Most important first. rewriteSections must preserve the same order and structure as the original copy. If the copy is a single block with no distinct elements, return one section with label "Body".`;
+Max 5 issues. Most important first.`;
 
 export async function POST(req: NextRequest) {
   try {
@@ -81,14 +72,13 @@ ${copy}
 
     const message = await client.messages.create({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 2048,
+      max_tokens: 1024,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
     });
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
 
-    // Strip any markdown code fences if the model wraps the JSON
     const jsonStr = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
 
     let result;

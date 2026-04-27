@@ -14,11 +14,6 @@ interface Issue {
   suggestion?: string;
 }
 
-interface RewriteSection {
-  label: string;
-  text: string;
-}
-
 interface CheckResult {
   overallScore: number;
   verdict: string;
@@ -26,10 +21,6 @@ interface CheckResult {
   warmScore: number;
   workingScore: number;
   issues: Issue[];
-  rewriteSections: RewriteSection[];
-  rewriteOverallScore?: number;
-  rewriteWarmScore?: number;
-  rewriteWorkingScore?: number;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -196,11 +187,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CheckResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
-  const rewriteText = result?.rewriteSections?.map((s) => s.text).join("\n\n") ?? "";
-  const rewriteFlesch = rewriteText.length > 20 ? calcFlesch(rewriteText) : null;
   const canSubmit = copy.trim().length > 20 && !loading;
 
   const handleCheck = useCallback(async () => {
@@ -232,18 +220,6 @@ export default function Home() {
       setLoading(false);
     }
   }, [canSubmit, copy, contentType, audience, flesch]);
-
-  const handleCopyRewrite = async () => {
-    if (!result?.rewriteSections?.length) return;
-    const plain = result.rewriteSections.map((s) => s.text).join("\n\n");
-    await navigator.clipboard.writeText(plain);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const errorCount = result?.issues.filter((i) => i.type === "error").length ?? 0;
-  const warnCount = result?.issues.filter((i) => i.type === "warn").length ?? 0;
-  const tipCount = result?.issues.filter((i) => i.type === "tip").length ?? 0;
 
   return (
     <div
@@ -390,10 +366,10 @@ export default function Home() {
                     </h2>
                     <p className="text-gray-600 text-sm mt-2 leading-relaxed">{result.summary}</p>
                     <div className="flex gap-2 mt-3 flex-wrap">
-                      {errorCount > 0 && <span className="pill-error">{errorCount} error{errorCount !== 1 ? "s" : ""}</span>}
-                      {warnCount > 0 && <span className="pill-warn">{warnCount} warning{warnCount !== 1 ? "s" : ""}</span>}
-                      {tipCount > 0 && <span className="pill-tip">{tipCount} tip{tipCount !== 1 ? "s" : ""}</span>}
-                      {errorCount === 0 && warnCount === 0 && tipCount === 0 && <span className="pill-tip">No issues found</span>}
+                      {result.issues.filter(i => i.type === "error").length > 0 && <span className="pill-error">{result.issues.filter(i => i.type === "error").length} error{result.issues.filter(i => i.type === "error").length !== 1 ? "s" : ""}</span>}
+                      {result.issues.filter(i => i.type === "warn").length > 0 && <span className="pill-warn">{result.issues.filter(i => i.type === "warn").length} warning{result.issues.filter(i => i.type === "warn").length !== 1 ? "s" : ""}</span>}
+                      {result.issues.filter(i => i.type === "tip").length > 0 && <span className="pill-tip">{result.issues.filter(i => i.type === "tip").length} tip{result.issues.filter(i => i.type === "tip").length !== 1 ? "s" : ""}</span>}
+                      {result.issues.length === 0 && <span className="pill-tip">No issues found</span>}
                     </div>
                   </div>
                 </div>
@@ -460,130 +436,6 @@ export default function Home() {
                       })}
                     </ul>
                   )}
-                </CollapsibleSection>
-              </div>
-
-              {/* 4. Suggested rewrite */}
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <CollapsibleSection title="Suggested rewrite">
-                  <div className="pt-4 space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {/* Before */}
-                      <div className="flex flex-col rounded-xl border border-gray-200 overflow-hidden">
-                        <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
-                          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">Before</span>
-                        </div>
-                        <div className="px-4 py-3 bg-white text-sm text-gray-500 leading-relaxed whitespace-pre-wrap flex-1">
-                          {copy}
-                        </div>
-                        <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs">
-                          <div className="flex justify-between gap-2">
-                            <span className="text-gray-400">Score</span>
-                            <span className={`font-semibold ${scoreColour(result.overallScore).text}`}>{result.overallScore}/10</span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span className="text-gray-400">Reading age</span>
-                            <span className="font-medium text-gray-600">~{flesch?.age ?? "—"}</span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span className="text-gray-400">Warm</span>
-                            <span className="font-medium text-gray-600">{result.warmScore}/10</span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span className="text-gray-400">Avg sentence</span>
-                            <span className="font-medium text-gray-600">{flesch?.avgSentenceLength ?? "—"}w</span>
-                          </div>
-                          <div className="flex justify-between gap-2">
-                            <span className="text-gray-400">Working</span>
-                            <span className="font-medium text-gray-600">{result.workingScore}/10</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* After */}
-                      <div className="flex flex-col rounded-xl border border-[#1D9E75]/40 overflow-hidden">
-                        <div className="px-4 py-2 bg-[#1D9E75]/8 border-b border-[#1D9E75]/20">
-                          <span className="text-xs font-bold uppercase tracking-widest text-[#1D9E75]">After</span>
-                        </div>
-                        <div className="px-4 py-3 bg-white text-sm text-gray-700 leading-relaxed flex-1 space-y-3">
-                          {result.rewriteSections.map((section, i) => (
-                            <div key={i}>
-                              {result.rewriteSections.length > 1 && (
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-0.5">{section.label}</span>
-                              )}
-                              <p className="whitespace-pre-wrap">{section.text}</p>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="px-4 py-3 bg-[#1D9E75]/5 border-t border-[#1D9E75]/10 grid grid-cols-2 gap-x-6 gap-y-1.5 text-xs">
-                          {(() => {
-                            const rScore = result.rewriteOverallScore ?? result.overallScore;
-                            const rWarm = result.rewriteWarmScore ?? result.warmScore;
-                            const rWorking = result.rewriteWorkingScore ?? result.workingScore;
-                            const rAge = rewriteFlesch?.age;
-                            const rSentLen = rewriteFlesch?.avgSentenceLength;
-                            const better = (val: number, ref: number, lowerIsBetter = false) =>
-                              lowerIsBetter ? val < ref : val > ref;
-                            return (
-                              <>
-                                <div className="flex justify-between gap-2">
-                                  <span className="text-gray-400">Score</span>
-                                  <span className={`font-semibold ${better(rScore, result.overallScore) ? "text-[#1D9E75]" : scoreColour(rScore).text}`}>
-                                    {rScore}/10{better(rScore, result.overallScore) && " ↑"}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between gap-2">
-                                  <span className="text-gray-400">Reading age</span>
-                                  <span className={`font-medium ${rAge !== undefined && flesch && better(rAge, flesch.age, true) ? "text-[#1D9E75]" : "text-gray-600"}`}>
-                                    ~{rAge ?? "—"}{rAge !== undefined && flesch && better(rAge, flesch.age, true) && " ↑"}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between gap-2">
-                                  <span className="text-gray-400">Warm</span>
-                                  <span className={`font-medium ${better(rWarm, result.warmScore) ? "text-[#1D9E75]" : "text-gray-600"}`}>
-                                    {rWarm}/10{better(rWarm, result.warmScore) && " ↑"}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between gap-2">
-                                  <span className="text-gray-400">Avg sentence</span>
-                                  <span className={`font-medium ${rSentLen !== undefined && flesch && better(rSentLen, flesch.avgSentenceLength, true) ? "text-[#1D9E75]" : "text-gray-600"}`}>
-                                    {rSentLen ?? "—"}w{rSentLen !== undefined && flesch && better(rSentLen, flesch.avgSentenceLength, true) && " ↑"}
-                                  </span>
-                                </div>
-                                <div className="flex justify-between gap-2">
-                                  <span className="text-gray-400">Working</span>
-                                  <span className={`font-medium ${better(rWorking, result.workingScore) ? "text-[#1D9E75]" : "text-gray-600"}`}>
-                                    {rWorking}/10{better(rWorking, result.workingScore) && " ↑"}
-                                  </span>
-                                </div>
-                              </>
-                            );
-                          })()}
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={handleCopyRewrite}
-                      className="flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
-                    >
-                      {copied ? (
-                        <>
-                          <svg className="w-4 h-4 text-[#1D9E75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                          </svg>
-                          <span className="text-[#1D9E75]">Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                          Copy rewrite
-                        </>
-                      )}
-                    </button>
-                  </div>
                 </CollapsibleSection>
               </div>
 
