@@ -49,10 +49,12 @@ Return ONLY valid JSON:
   "summary": "<2 sentences: what's working and the single most important fix>",
   "warmScore": <1-10>,
   "workingScore": <1-10>,
+  "rewriteWarmScore": <1-10, expected warm score of the rewritten copy>,
+  "rewriteWorkingScore": <1-10, expected working score of the rewritten copy>,
   "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional rewrite of that specific phrase>" }],
-  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text for this element>" }]
+  "rewriteSections": [{ "label": "<element type e.g. Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "original": "<verbatim original text for this element, exactly as it appears in the copy>", "text": "<rewritten text for this element>" }]
 }
-Max 5 issues. Most important first. rewriteSections must preserve the same order and structure as the original copy. If the copy is a single block with no distinct elements, return one section with label "Body".`;
+Max 5 issues. Most important first. rewriteSections must preserve the same order and structure as the original copy. If the copy is a single block with no distinct elements, return one section with label "Body". Always populate "original" with the exact source text for each section.`;
 
 export async function POST(req: NextRequest) {
   try {

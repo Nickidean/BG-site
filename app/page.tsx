@@ -16,6 +16,7 @@ interface Issue {
 
 interface RewriteSection {
   label: string;
+  original?: string;
   text: string;
 }
 
@@ -25,6 +26,8 @@ interface CheckResult {
   summary: string;
   warmScore: number;
   workingScore: number;
+  rewriteWarmScore?: number;
+  rewriteWorkingScore?: number;
   issues: Issue[];
   rewriteSections: RewriteSection[];
 }
@@ -184,6 +187,34 @@ function ToneBar({
   );
 }
 
+function StatDelta({
+  label,
+  before,
+  after,
+  improved,
+}: {
+  label: string;
+  before: string;
+  after: string;
+  improved: boolean;
+}) {
+  const same = before === after;
+  return (
+    <div className="text-center">
+      <div className="text-xs text-gray-400 mb-1.5 font-medium">{label}</div>
+      <div className="flex items-center justify-center gap-1.5">
+        <span className="text-sm text-gray-400 line-through">{before}</span>
+        <svg className="w-3 h-3 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+        <span className={`text-sm font-semibold ${same ? "text-gray-500" : improved ? "text-[#1D9E75]" : "text-[#BA7517]"}`}>
+          {after}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function Home() {
@@ -197,6 +228,9 @@ export default function Home() {
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
   const canSubmit = contentType !== "" && copy.trim().length > 20 && !loading;
+
+  const rewriteText = result?.rewriteSections?.map((s) => s.text).join("\n\n") ?? "";
+  const rewriteFlesch = rewriteText.length > 20 ? calcFlesch(rewriteText) : null;
 
   const handleCheck = useCallback(async () => {
     if (!canSubmit) return;
@@ -469,19 +503,76 @@ export default function Home() {
               {/* 4. Suggested rewrite */}
               <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <CollapsibleSection title="Suggested rewrite">
-                  <div className="pt-4 space-y-3">
-                    {result.rewriteSections.map((section, i) => (
-                      <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
-                        <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
-                          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
-                            {section.label}
-                          </span>
-                        </div>
-                        <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                          {section.text}
-                        </div>
+                  <div className="pt-4 space-y-4">
+
+                    {/* Stat improvements */}
+                    {(rewriteFlesch || result.rewriteWarmScore !== undefined || result.rewriteWorkingScore !== undefined) && (
+                      <div className="grid grid-cols-3 gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                        {rewriteFlesch && flesch && (
+                          <StatDelta
+                            label="Reading age"
+                            before={`~${flesch.age}`}
+                            after={`~${rewriteFlesch.age}`}
+                            improved={rewriteFlesch.age < flesch.age}
+                          />
+                        )}
+                        {result.rewriteWarmScore !== undefined && (
+                          <StatDelta
+                            label="Warm"
+                            before={`${result.warmScore}/10`}
+                            after={`${result.rewriteWarmScore}/10`}
+                            improved={result.rewriteWarmScore > result.warmScore}
+                          />
+                        )}
+                        {result.rewriteWorkingScore !== undefined && (
+                          <StatDelta
+                            label="Working"
+                            before={`${result.workingScore}/10`}
+                            after={`${result.rewriteWorkingScore}/10`}
+                            improved={result.rewriteWorkingScore > result.workingScore}
+                          />
+                        )}
                       </div>
-                    ))}
+                    )}
+
+                    {/* Before / After sections */}
+                    {result.rewriteSections.map((section, i) => {
+                      const hasOriginal = !!(section.original?.trim());
+                      return (
+                        <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
+                          <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+                              {section.label}
+                            </span>
+                          </div>
+                          {hasOriginal ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2">
+                              <div className="border-b sm:border-b-0 sm:border-r border-gray-200">
+                                <div className="px-3 py-1.5 bg-gray-50 border-b border-gray-200">
+                                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Before</span>
+                                </div>
+                                <div className="px-4 py-3 bg-gray-50 text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">
+                                  {section.original}
+                                </div>
+                              </div>
+                              <div>
+                                <div className="px-3 py-1.5 bg-[#E8F5F0] border-b border-[#C5E8DC]">
+                                  <span className="text-xs font-semibold text-[#1D9E75] uppercase tracking-wider">After</span>
+                                </div>
+                                <div className="px-4 py-3 bg-[#F3FBF8] text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                                  {section.text}
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                              {section.text}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+
                     <button
                       onClick={handleCopyRewrite}
                       className="mt-1 flex items-center gap-2 text-sm font-medium text-[#0085CA] hover:text-[#006ba3] transition-colors"
