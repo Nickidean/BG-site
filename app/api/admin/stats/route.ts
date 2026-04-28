@@ -18,14 +18,14 @@ export async function GET(req: NextRequest) {
     const [total, todayCount, recentRaw, totalCopied, copiedIds] = await Promise.all([
       redis.zcard("tov:checks"),
       redis.zcount("tov:checks", todayStart.getTime(), "+inf"),
-      redis.zrange("tov:checks", 0, 49, { rev: true }),
+      redis.zrange("tov:checks", -50, -1),
       redis.scard("tov:copies"),
       redis.smembers("tov:copies"),
     ]);
 
     const copiedSet = new Set(copiedIds as string[]);
 
-    const recent = (recentRaw as string[]).flatMap((raw) => {
+    const recent = [...(recentRaw as string[])].reverse().flatMap((raw) => {
       try {
         const entry = JSON.parse(raw);
         return [{ ...entry, copied: copiedSet.has(entry.id) }];
