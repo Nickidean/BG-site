@@ -108,6 +108,7 @@ ${copy}
     const checkId = `${Date.now()}_${crypto.randomUUID().replace(/-/g, "")}`;
     (async () => {
       try {
+        if (!redis) return;
         await redis.zadd("tov:checks", {
           score: Date.now(),
           member: JSON.stringify({
