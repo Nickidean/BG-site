@@ -75,7 +75,7 @@ ${copy}
 ---`;
 
     const message = await client.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 2048,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
@@ -83,8 +83,12 @@ ${copy}
 
     const raw = message.content[0].type === "text" ? message.content[0].text : "";
 
-    // Strip any markdown code fences if the model wraps the JSON
-    const jsonStr = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "").trim();
+    // Extract JSON: try stripping code fences, then fall back to finding the first {...} block
+    let jsonStr = raw.replace(/^[\s\S]*?```(?:json)?\s*/i, "").replace(/\s*```[\s\S]*$/i, "").trim();
+    if (!jsonStr.startsWith("{")) {
+      const match = raw.match(/\{[\s\S]*\}/);
+      jsonStr = match ? match[0] : "";
+    }
 
     let result;
     try {
