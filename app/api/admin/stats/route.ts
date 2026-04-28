@@ -25,9 +25,13 @@ export async function GET(req: NextRequest) {
 
     const copiedSet = new Set(copiedIds as string[]);
 
-    const recent = (recentRaw as string[]).map((raw) => {
-      const entry = JSON.parse(raw);
-      return { ...entry, copied: copiedSet.has(entry.id) };
+    const recent = (recentRaw as string[]).flatMap((raw) => {
+      try {
+        const entry = JSON.parse(raw);
+        return [{ ...entry, copied: copiedSet.has(entry.id) }];
+      } catch {
+        return [];
+      }
     });
 
     return NextResponse.json({
