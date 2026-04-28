@@ -4,7 +4,7 @@ import { redis } from "@/lib/redis";
 export async function POST(req: NextRequest) {
   try {
     const { checkId } = await req.json();
-    if (!checkId) return NextResponse.json({ ok: false });
+    if (!checkId || !redis) return NextResponse.json({ ok: false });
     await redis.sadd("tov:copies", checkId);
     return NextResponse.json({ ok: true });
   } catch {
