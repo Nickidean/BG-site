@@ -16,6 +16,7 @@ interface Issue {
 
 interface RewriteSection {
   label: string;
+  original?: string;
   text: string;
 }
 
@@ -545,9 +546,22 @@ export default function Home() {
                           <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
                             <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{section.label}</span>
                           </div>
-                          <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                            {section.text}
-                          </div>
+                          {section.original ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-gray-200">
+                              <div className="px-4 py-3">
+                                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Before</p>
+                                <p className="text-sm text-gray-400 leading-relaxed whitespace-pre-wrap">{section.original}</p>
+                              </div>
+                              <div className="px-4 py-3 bg-[#0085CA]/5">
+                                <p className="text-xs font-semibold text-[#0085CA] uppercase tracking-widest mb-2">After</p>
+                                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{section.text}</p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="px-4 py-3 bg-gray-50 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                              {section.text}
+                            </div>
+                          )}
                         </div>
                       ))}
                       <button
