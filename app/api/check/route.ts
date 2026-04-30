@@ -116,7 +116,7 @@ ${copy}
             timestamp: new Date().toISOString(),
             contentType: contentType || "",
             audience: audience || "General customers",
-            copyPreview: copy.slice(0, 400),
+            copyPreview: copy,
             copyLength: copy.length,
             score: result.overallScore,
           }),
