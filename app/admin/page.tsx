@@ -40,6 +40,7 @@ export default function AdminPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const fetchStats = async () => {
     setLoading(true);
@@ -135,8 +136,13 @@ export default function AdminPage() {
                         <td className="px-4 py-3 text-gray-600 whitespace-nowrap text-xs">
                           {entry.contentType || <span className="text-gray-300">—</span>}
                         </td>
-                        <td className="px-4 py-3 text-gray-700 max-w-xs">
-                          <span className="line-clamp-2">{entry.copyPreview}</span>
+                        <td
+                          className="px-4 py-3 text-gray-700 max-w-sm cursor-pointer"
+                          onClick={() => setExpandedId(expandedId === entry.id ? null : entry.id)}
+                        >
+                          <span className={expandedId === entry.id ? "whitespace-pre-wrap" : "line-clamp-2"}>
+                            {entry.copyPreview}
+                          </span>
                           <span className="text-xs text-gray-400 ml-1">({entry.copyLength} chars)</span>
                         </td>
                         <td className="px-4 py-3 text-center">
