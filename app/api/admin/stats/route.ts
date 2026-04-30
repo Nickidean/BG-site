@@ -25,10 +25,11 @@ export async function GET(req: NextRequest) {
 
     const copiedSet = new Set(copiedIds as string[]);
 
-    const recent = [...(recentRaw as string[])].reverse().flatMap((raw) => {
+    const recent = [...(recentRaw as unknown[])].reverse().flatMap((raw) => {
       try {
-        const entry = JSON.parse(raw);
-        return [{ ...entry, copied: copiedSet.has(entry.id) }];
+        const entry = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (!entry || typeof entry !== "object") return [];
+        return [{ ...entry, copied: copiedSet.has((entry as { id: string }).id) }];
       } catch {
         return [];
       }
