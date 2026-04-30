@@ -195,6 +195,10 @@ export default function Home() {
   const [result, setResult] = useState<CheckResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [refineContext, setRefineContext] = useState("");
+  const [refining, setRefining] = useState(false);
+  const [refinedSections, setRefinedSections] = useState<RewriteSection[] | null>(null);
+  const [refineError, setRefineError] = useState<string | null>(null);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
   const canSubmit = copy.trim().length > 20 && !loading;
@@ -204,6 +208,9 @@ export default function Home() {
     setLoading(true);
     setError(null);
     setResult(null);
+    setRefinedSections(null);
+    setRefineContext("");
+    setRefineError(null);
 
     try {
       const res = await fetch("/api/check", {
@@ -228,6 +235,32 @@ export default function Home() {
       setLoading(false);
     }
   }, [canSubmit, copy, contentType, audience, flesch]);
+
+  const handleRefine = useCallback(async () => {
+    if (!result?.rewriteSections || !refineContext.trim()) return;
+    setRefining(true);
+    setRefineError(null);
+    try {
+      const res = await fetch("/api/refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          copy,
+          contentType,
+          audience,
+          currentRewrite: refinedSections ?? result.rewriteSections,
+          context: refineContext,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Request failed");
+      if (data.rewriteSections) setRefinedSections(data.rewriteSections);
+    } catch (e: unknown) {
+      setRefineError(e instanceof Error ? e.message : "Something went wrong");
+    } finally {
+      setRefining(false);
+    }
+  }, [result, refineContext, refinedSections, copy, contentType, audience]);
 
   const handleCopyRewrite = async () => {
     if (!result?.rewriteSections?.length) return;
@@ -467,8 +500,11 @@ export default function Home() {
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                   <CollapsibleSection title="Suggested rewrite">
                     <div className="pt-4 space-y-3">
-                      <p className="text-xs text-gray-400 italic">Tone edits only — no new facts have been added.</p>
-                      {result.rewriteSections.map((section, i) => (
+                      <p className="text-xs text-gray-400 italic">
+                        Tone edits only — no new facts have been added.
+                        {refinedSections && <span className="ml-2 text-[#0085CA] font-medium">Refined</span>}
+                      </p>
+                      {(refinedSections ?? result.rewriteSections).map((section, i) => (
                         <div key={i} className="rounded-xl border border-gray-200 overflow-hidden">
                           <div className="px-4 py-2 bg-gray-100 border-b border-gray-200">
                             <span className="text-xs font-bold uppercase tracking-widest text-gray-400">{section.label}</span>
@@ -498,6 +534,42 @@ export default function Home() {
                           </>
                         )}
                       </button>
+
+                      {/* Refine rewrite with additional context */}
+                      <div className="border-t border-gray-100 pt-4 mt-2 space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Need to clarify something? Add context for a revised rewrite
+                        </label>
+                        <textarea
+                          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm resize-none
+                                     focus:outline-none focus:ring-2 focus:ring-[#0085CA] focus:border-transparent
+                                     transition-all duration-150 min-h-[80px]"
+                          placeholder="e.g. The price must stay as £29.99. The CTA should mention calling us on 0800 048 0202."
+                          value={refineContext}
+                          onChange={(e) => setRefineContext(e.target.value)}
+                        />
+                        {refineError && (
+                          <p className="text-xs text-[#A32D2D]">{refineError}</p>
+                        )}
+                        <button
+                          onClick={handleRefine}
+                          disabled={!refineContext.trim() || refining}
+                          className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-xl bg-gray-100 text-gray-700
+                                     hover:bg-gray-200 transition-colors disabled:opacity-40"
+                        >
+                          {refining ? (
+                            <>
+                              <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                              </svg>
+                              Refining…
+                            </>
+                          ) : (
+                            "Refine rewrite"
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </CollapsibleSection>
                 </div>
