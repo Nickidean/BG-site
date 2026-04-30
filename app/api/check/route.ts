@@ -59,9 +59,9 @@ Return ONLY valid JSON:
   "warmScore": <1-10>,
   "workingScore": <1-10>,
   "issues": [{ "type": "error|warn|tip", "title": "<max 5 words>", "detail": "<quote the copy, max 2 sentences>", "suggestion": "<optional: a single improved phrase — must use only words/ideas already in the original, do not add new facts>" }],
-  "rewriteSections": [{ "label": "<Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "text": "<rewritten text — same facts, improved tone>" }]
+  "rewriteSections": [{ "label": "<Heading|Subheading|Body|CTA|Intro|Sign-off|Legal>", "original": "<the exact verbatim text from the original copy for this section>", "text": "<rewritten text — same facts, improved tone>" }]
 }
-Max 5 issues. Most important first. rewriteSections must mirror the structure of the original. If the copy is a single block, return one section labelled "Body".`;
+Max 5 issues. Most important first. rewriteSections must mirror the structure of the original. If the copy is a single block, return one section labelled "Body". The "original" field must be copied verbatim from the input — do not paraphrase.`;
 
 export async function POST(req: NextRequest) {
   try {

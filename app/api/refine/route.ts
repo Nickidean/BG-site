@@ -63,6 +63,16 @@ Please revise the rewrite taking this context into account.`;
       return NextResponse.json({ error: "Failed to parse AI response", raw }, { status: 502 });
     }
 
+    // Preserve the original verbatim text from the previous rewrite for side-by-side display
+    if (Array.isArray(result.rewriteSections) && Array.isArray(currentRewrite)) {
+      const originalByLabel = Object.fromEntries(
+        currentRewrite.map((s: { label: string; original?: string }) => [s.label, s.original])
+      );
+      result.rewriteSections = result.rewriteSections.map(
+        (s: { label: string; text: string }) => ({ ...s, original: originalByLabel[s.label] })
+      );
+    }
+
     return NextResponse.json(result);
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
