@@ -185,6 +185,41 @@ function ToneBar({
   );
 }
 
+// ── Drawer ────────────────────────────────────────────────────────────────────
+
+function Drawer({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={onClose}
+      />
+      {/* Panel */}
+      <div
+        className={`fixed top-0 right-0 z-50 h-full w-full max-w-md flex flex-col
+                    bg-[#003d6b] shadow-2xl transition-transform duration-300 ease-in-out
+                    ${open ? "translate-x-0" : "translate-x-full"}`}
+      >
+        <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 flex-shrink-0">
+          <button
+            onClick={onClose}
+            className="ml-auto text-white/50 hover:text-white transition-colors"
+            aria-label="Close"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <div className="overflow-y-auto flex-1 px-6 py-6">
+          {children}
+        </div>
+      </div>
+    </>
+  );
+}
+
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function Home() {
@@ -199,6 +234,7 @@ export default function Home() {
   const [refining, setRefining] = useState(false);
   const [refinedSections, setRefinedSections] = useState<RewriteSection[] | null>(null);
   const [refineError, setRefineError] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState<null | "score" | "feedback">(null);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
   const canSubmit = copy.trim().length > 20 && !loading;
@@ -579,105 +615,122 @@ export default function Home() {
           )}
         </main>
 
-        {/* How does this work — footnote */}
-        <div className="w-full max-w-2xl mt-4">
-          <details className="group">
-            <summary className="cursor-pointer text-white/60 text-xs font-medium hover:text-white transition-colors select-none list-none flex items-center gap-1.5 justify-center">
-              <svg className="w-3 h-3 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-              How do we review your copy?
-            </summary>
-
-            <div className="mt-3 bg-white rounded-2xl shadow-xl overflow-hidden">
-              <div className="px-6 py-5 space-y-6 text-sm">
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Overall score (1–10)</h3>
-                  <p className="text-gray-600 leading-relaxed">Your copy is reviewed by AI against British Gas tone of voice guidelines. The score reflects how well it balances warmth, usefulness, and clear writing — 7+ is on-brand, 5–6 needs work, below 5 has significant issues.</p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Warm score (1–10)</h3>
-                  <p className="text-gray-600 leading-relaxed mb-3">Warm copy sounds like a real person talking. Think contractions, direct language, and the occasional grounded British humour rooted in home life.</p>
-                  <div className="space-y-2">
-                    <div className="rounded-lg border border-[#1D9E75]/30 bg-[#1D9E75]/5 px-4 py-3">
-                      <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
-                      <p className="text-gray-700 italic">"Great. Your Gas Safety Check's all booked in. We'll see you then."</p>
-                      <p className="text-gray-500 text-xs mt-1">"Nothing says Happy New Year like a meter reading."</p>
-                    </div>
-                    <div className="rounded-lg border border-[#A32D2D]/20 bg-[#A32D2D]/5 px-4 py-3">
-                      <p className="text-xs font-bold uppercase tracking-widest text-[#A32D2D] mb-1">Too cold</p>
-                      <p className="text-gray-700 italic">"Your Gas Safety Check has been successfully booked."</p>
-                      <p className="text-gray-500 text-xs mt-1">Faceless and corporate — no sense of a person behind it.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Working score (1–10)</h3>
-                  <p className="text-gray-600 leading-relaxed mb-3">Working copy takes things off the customer's hands. It's specific, action-led, and tells them exactly what happens next — not vague reassurance.</p>
-                  <div className="space-y-2">
-                    <div className="rounded-lg border border-[#1D9E75]/30 bg-[#1D9E75]/5 px-4 py-3">
-                      <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
-                      <p className="text-gray-700 italic">"Right, let's get that sorted."</p>
-                      <p className="text-gray-500 text-xs mt-1">"Your engineer is on the way and will be with you by 12pm."</p>
-                    </div>
-                    <div className="rounded-lg border border-[#A32D2D]/20 bg-[#A32D2D]/5 px-4 py-3">
-                      <p className="text-xs font-bold uppercase tracking-widest text-[#A32D2D] mb-1">Too passive</p>
-                      <p className="text-gray-700 italic">"If you're having issues, we're here to help."</p>
-                      <p className="text-gray-500 text-xs mt-1">Vague and uncommitted — doesn't tell the customer what actually happens.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-2">Tone target by content type</h3>
-                  <div className="rounded-xl border border-gray-200 overflow-hidden text-xs">
-                    <div className="grid grid-cols-3 bg-gray-100 px-4 py-2 font-semibold text-gray-500 uppercase tracking-wider">
-                      <span>Content type</span><span className="text-center">Warm</span><span className="text-center">Working</span>
-                    </div>
-                    {[
-                      ["Marketing / campaign",      "80%", "20%"],
-                      ["Social media",              "80%", "20%"],
-                      ["Sales web page",            "60%", "40%"],
-                      ["Email or letter",           "50%", "50%"],
-                      ["Onboarding / confirmation", "50%", "50%"],
-                      ["Help & support",            "30%", "70%"],
-                      ["Customer journey",          "20%", "80%"],
-                      ["Debt or important comms",   "20%", "80%"],
-                      ["Error message",             "10%", "90%"],
-                    ].map(([type, warm, working]) => (
-                      <div key={type} className="grid grid-cols-3 px-4 py-2 border-t border-gray-100 text-gray-600">
-                        <span>{type}</span>
-                        <span className="text-center text-[#0085CA] font-medium">{warm}</span>
-                        <span className="text-center text-[#1D9E75] font-medium">{working}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">Reading age</h3>
-                  <p className="text-gray-600 leading-relaxed mb-2">Calculated using the <strong>SMOG index</strong> (Simple Measure of Gobbledygook). Unlike other readability formulas that average syllables across all words, SMOG counts every word with 3 or more syllables individually. That means words like <em>installations</em> (4), <em>assessment</em> (3), and <em>rigorous</em> (3) each directly raise the score — they can't be hidden by surrounding simple words.</p>
-                  <div className="rounded-lg bg-gray-50 border border-gray-200 px-4 py-3 text-xs text-gray-600 font-mono">
-                    SMOG grade = 3 + √(polysyllabic words × 30 ÷ sentences)<br />
-                    Reading age = SMOG grade + 5
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mt-2">We aim for a reading age of around 9 for most British Gas copy.</p>
-                  <p className="text-gray-400 text-xs mt-2 leading-relaxed">Note: SMOG is most accurate with 10+ sentences. For very short copy — a single headline or CTA — treat the score as a rough guide. It also can't detect conceptual complexity, so jargon like <em>kWh</em> (1 syllable) won't be flagged even though customers may not know what it means.</p>
-                </div>
-
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <footer className="w-full max-w-2xl mt-4 text-center text-xs space-y-1">
-          <p className="text-white/30">British Gas internal tool · not for external use</p>
-          <p className="text-white/60 font-medium">Have feedback? <a href="mailto:nick.peasant@britishgas.co.uk" className="hover:text-white underline transition-colors">nick.peasant@britishgas.co.uk</a></p>
+        <footer className="w-full max-w-2xl mt-6 flex items-center justify-center gap-6">
+          <button
+            onClick={() => setDrawerOpen("score")}
+            className="text-white/60 text-xs font-medium hover:text-white transition-colors underline underline-offset-2"
+          >
+            How is the score calculated?
+          </button>
+          <span className="text-white/20 text-xs">·</span>
+          <button
+            onClick={() => setDrawerOpen("feedback")}
+            className="text-white/60 text-xs font-medium hover:text-white transition-colors underline underline-offset-2"
+          >
+            Any feedback?
+          </button>
         </footer>
       </div>
+
+      {/* Score explanation drawer */}
+      <Drawer open={drawerOpen === "score"} onClose={() => setDrawerOpen(null)}>
+        <div className="space-y-7 text-sm">
+          <div>
+            <h2 className="text-white font-bold text-lg mb-4">How is the score calculated?</h2>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-1">Overall score (1–10)</h3>
+            <p className="text-white/70 leading-relaxed">Your copy is reviewed by AI against British Gas tone of voice guidelines. The score reflects how well it balances warmth, usefulness, and clear writing — 7+ is on-brand, 5–6 needs work, below 5 has significant issues.</p>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-2">Warm score (1–10)</h3>
+            <p className="text-white/70 leading-relaxed mb-3">Warm copy sounds like a real person talking. Think contractions, direct language, and the occasional grounded British humour rooted in home life.</p>
+            <div className="space-y-2">
+              <div className="rounded-lg border border-[#1D9E75]/40 bg-[#1D9E75]/10 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
+                <p className="text-white/80 italic text-xs">"Great. Your Gas Safety Check's all booked in. We'll see you then."</p>
+                <p className="text-white/50 text-xs mt-1">"Nothing says Happy New Year like a meter reading."</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-1">Too cold</p>
+                <p className="text-white/80 italic text-xs">"Your Gas Safety Check has been successfully booked."</p>
+                <p className="text-white/50 text-xs mt-1">Faceless and corporate — no sense of a person behind it.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-2">Working score (1–10)</h3>
+            <p className="text-white/70 leading-relaxed mb-3">Working copy takes things off the customer's hands. It's specific, action-led, and tells them exactly what happens next — not vague reassurance.</p>
+            <div className="space-y-2">
+              <div className="rounded-lg border border-[#1D9E75]/40 bg-[#1D9E75]/10 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-widest text-[#1D9E75] mb-1">Good</p>
+                <p className="text-white/80 italic text-xs">"Right, let's get that sorted."</p>
+                <p className="text-white/50 text-xs mt-1">"Your engineer is on the way and will be with you by 12pm."</p>
+              </div>
+              <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+                <p className="text-xs font-bold uppercase tracking-widest text-white/40 mb-1">Too passive</p>
+                <p className="text-white/80 italic text-xs">"If you're having issues, we're here to help."</p>
+                <p className="text-white/50 text-xs mt-1">Vague and uncommitted — doesn't tell the customer what actually happens.</p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-3">Tone target by content type</h3>
+            <div className="rounded-xl border border-white/10 overflow-hidden text-xs">
+              <div className="grid grid-cols-3 bg-white/10 px-4 py-2 font-semibold text-white/50 uppercase tracking-wider">
+                <span>Content type</span><span className="text-center">Warm</span><span className="text-center">Working</span>
+              </div>
+              {[
+                ["Marketing / campaign",      "80%", "20%"],
+                ["Social media",              "80%", "20%"],
+                ["Sales web page",            "60%", "40%"],
+                ["Email or letter",           "50%", "50%"],
+                ["Onboarding / confirmation", "50%", "50%"],
+                ["Help & support",            "30%", "70%"],
+                ["Customer journey",          "20%", "80%"],
+                ["Debt or important comms",   "20%", "80%"],
+                ["Error message",             "10%", "90%"],
+              ].map(([type, warm, working]) => (
+                <div key={type} className="grid grid-cols-3 px-4 py-2 border-t border-white/10 text-white/70">
+                  <span>{type}</span>
+                  <span className="text-center text-[#0085CA] font-medium">{warm}</span>
+                  <span className="text-center text-[#1D9E75] font-medium">{working}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-white font-semibold mb-2">Reading age</h3>
+            <p className="text-white/70 leading-relaxed mb-2">Calculated using the <strong className="text-white/90">SMOG index</strong> (Simple Measure of Gobbledygook). SMOG counts every word with 3+ syllables individually — words like <em>installations</em>, <em>assessment</em>, and <em>rigorous</em> each directly raise the score.</p>
+            <div className="rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-xs text-white/60 font-mono">
+              SMOG grade = 3 + √(polysyllabic words × 30 ÷ sentences)<br />
+              Reading age = SMOG grade + 5
+            </div>
+            <p className="text-white/60 leading-relaxed mt-2 text-xs">We aim for a reading age of around 9 for most British Gas copy. Note: SMOG is most accurate with 10+ sentences — treat it as a rough guide for very short copy.</p>
+          </div>
+        </div>
+      </Drawer>
+
+      {/* Feedback drawer */}
+      <Drawer open={drawerOpen === "feedback"} onClose={() => setDrawerOpen(null)}>
+        <div className="space-y-5 text-sm">
+          <h2 className="text-white font-bold text-lg">Any feedback?</h2>
+          <p className="text-white/70 leading-relaxed">We'd love to hear what's working, what's not, or any ideas for making this tool more useful.</p>
+          <p className="text-white/70 leading-relaxed">Drop a note to:</p>
+          <a
+            href="mailto:nick.peasant@britishgas.co.uk"
+            className="block rounded-xl border border-white/20 bg-white/10 px-5 py-4 text-white font-medium hover:bg-white/15 transition-colors"
+          >
+            nick.peasant@britishgas.co.uk
+          </a>
+          <p className="text-white/40 text-xs leading-relaxed">Useful things to share: copy types you check most, cases where the score felt off, features you wish it had.</p>
+        </div>
+      </Drawer>
     </div>
   );
 }
