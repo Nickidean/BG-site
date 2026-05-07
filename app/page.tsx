@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { calcFlesch } from "@/lib/flesch";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -236,6 +236,10 @@ export default function Home() {
   const [refinedSections, setRefinedSections] = useState<RewriteSection[] | null>(null);
   const [refineError, setRefineError] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState<null | "score" | "feedback">(null);
+  const [extracting, setExtracting] = useState(false);
+  const [extractError, setExtractError] = useState<string | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const flesch = copy.length > 0 ? calcFlesch(copy) : null;
   const canSubmit = copy.trim().length > 20 && !loading;
@@ -298,6 +302,38 @@ export default function Home() {
       setRefining(false);
     }
   }, [result, refineContext, refinedSections, copy, contentType, audience]);
+
+  const handleScreenshotUpload = useCallback(async (file: File) => {
+    if (!file) return;
+    setExtractError(null);
+    setExtracting(true);
+
+    const previewUrl = URL.createObjectURL(file);
+    setScreenshotPreview(previewUrl);
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+
+      const res = await fetch("/api/extract-screenshot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64: base64, mimeType: file.type }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Extraction failed");
+
+      setCopy(data.extractedText);
+      setResult(null);
+      setRefinedSections(null);
+      setRefineContext("");
+    } catch (e: unknown) {
+      setExtractError(e instanceof Error ? e.message : "Could not extract text from image");
+    } finally {
+      setExtracting(false);
+    }
+  }, []);
 
   const handleCopyRewrite = async () => {
     if (!result?.rewriteSections?.length) return;
@@ -410,6 +446,82 @@ export default function Home() {
                   {copy.length} chars
                 </span>
               </div>
+            </div>
+
+            {/* Screenshot upload — Research preview */}
+            <div className="border border-dashed border-gray-200 rounded-2xl p-4 space-y-3 bg-gray-50/50">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-600">Upload a screenshot</span>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#0085CA]/10 text-[#0085CA] border border-[#0085CA]/20">
+                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.347.347A3.75 3.75 0 0112 19.5a3.75 3.75 0 01-2.653-1.097l-.346-.347z" />
+                  </svg>
+                  Research preview
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Upload a screenshot of any page or design and we&apos;ll extract the copy automatically.
+              </p>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleScreenshotUpload(file);
+                  e.target.value = "";
+                }}
+              />
+
+              {screenshotPreview ? (
+                <div className="flex items-center gap-3">
+                  <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 bg-white">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={screenshotPreview} alt="Screenshot preview" className="w-full h-full object-cover" />
+                    {extracting && (
+                      <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                        <svg className="animate-spin w-5 h-5 text-[#0085CA]" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    {extracting ? (
+                      <p className="text-sm text-gray-500">Extracting copy from screenshot…</p>
+                    ) : extractError ? (
+                      <p className="text-sm text-[#A32D2D]">{extractError}</p>
+                    ) : (
+                      <p className="text-sm text-[#1D9E75] font-medium">Copy extracted — review below and check when ready</p>
+                    )}
+                    <button
+                      onClick={() => {
+                        setScreenshotPreview(null);
+                        setExtractError(null);
+                        fileInputRef.current?.click();
+                      }}
+                      className="text-xs text-gray-400 hover:text-gray-600 transition-colors mt-1 underline underline-offset-2"
+                    >
+                      Upload a different screenshot
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={extracting}
+                  className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl border border-gray-200
+                             bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors disabled:opacity-40"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Choose screenshot
+                </button>
+              )}
             </div>
 
             {/* Submit */}
