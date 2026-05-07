@@ -313,7 +313,12 @@ export default function Home() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 8192) {
+        binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+      }
+      const base64 = btoa(binary);
 
       const res = await fetch("/api/extract-screenshot", {
         method: "POST",
