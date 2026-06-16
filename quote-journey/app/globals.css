@@ -6,19 +6,13 @@ body {
   margin: 0;
   background: #0b1f3a;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #fff;
 }
 
 .tariff-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-}
-
-@media (min-width: 768px) {
-  .tariff-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
 }
 
 .nav-link {
@@ -28,6 +22,22 @@ body {
   font-weight: 500;
 }
 
-@media (max-width: 640px) {
+/* Help me choose: bottom sheet on mobile, right drawer on desktop */
+.help-drawer-desktop { display: none; }
+.help-drawer-mobile  { display: block; }
+
+@media (min-width: 768px) {
+  .tariff-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .help-drawer-desktop { display: block; }
+  .help-drawer-mobile  { display: none; }
+
+  nav { display: flex !important; }
+}
+
+@media (max-width: 767px) {
   nav { display: none !important; }
 }
