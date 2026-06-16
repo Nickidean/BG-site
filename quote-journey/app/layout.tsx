@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   description: "Get a quote for your energy tariff",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
