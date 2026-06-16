@@ -53,19 +53,20 @@ body {
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
-  /* Nav buttons lock to bottom */
+  /* Nav buttons lock to bottom — extra padding clears Safari browser chrome (~83px) */
   .nav-buttons-sticky {
     position: sticky;
     bottom: 0;
     z-index: 20;
     background: #0b1f3a;
     border-top: 1px solid rgba(255,255,255,0.08);
-    padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
+    /* calc: safe area for notch + fixed buffer to clear Safari toolbar */
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 90px);
   }
 
   /* Extra bottom padding so content doesn't hide behind sticky bar */
   .step-content {
-    padding-bottom: 120px;
+    padding-bottom: 180px;
   }
 }
 
