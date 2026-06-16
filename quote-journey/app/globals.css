@@ -22,11 +22,10 @@ body {
   font-weight: 500;
 }
 
-/* Help me choose: bottom sheet on mobile, right drawer on desktop */
 .help-drawer-desktop { display: none; }
 .help-drawer-mobile  { display: block; }
 
-/* Progress bar and nav buttons — normal flow on desktop */
+/* Desktop defaults — normal flow */
 .progress-sticky {
   padding: 20px 0 0;
 }
@@ -39,34 +38,39 @@ body {
   align-items: flex-start;
 }
 
-/* ── Mobile overrides ── */
+/* ── Mobile ── */
 @media (max-width: 767px) {
   nav { display: none !important; }
 
-  /* Progress bar locks to top */
+  /* Progress bar: fixed to top of viewport, below the nav header */
   .progress-sticky {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 88px; /* nav utility bar ~28px + main nav 64px */
+    left: 0;
+    right: 0;
     z-index: 20;
     background: #0b1f3a;
-    padding: 14px 0 10px;
+    padding: 14px 16px 10px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
 
-  /* Nav buttons lock to bottom — extra padding clears Safari browser chrome (~83px) */
+  /* Nav buttons: fixed to bottom of viewport, always above browser chrome */
   .nav-buttons-sticky {
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 20;
     background: #0b1f3a;
     border-top: 1px solid rgba(255,255,255,0.08);
-    /* calc: safe area for notch + fixed buffer to clear Safari toolbar */
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 90px);
+    padding: 12px 16px;
+    padding-bottom: max(env(safe-area-inset-bottom, 12px), 12px);
   }
 
-  /* Extra bottom padding so content doesn't hide behind sticky bar */
+  /* Push content down/up so it isn't hidden behind fixed bars */
   .step-content {
-    padding-bottom: 180px;
+    padding-top: 80px;  /* clears fixed progress bar */
+    padding-bottom: 120px; /* clears fixed nav buttons */
   }
 }
 
