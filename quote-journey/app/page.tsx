@@ -469,14 +469,18 @@ export default function QuoteJourney() {
   function handleSelectTariff(t: TariffType) { setSelectedTariff(t); setStep(5); }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#0b1f3a", display: "flex", flexDirection: "column" }}>
-      <Nav />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {step === 1 && <Step1 onNext={() => setStep(2)} />}
-        {step === 2 && <Step2 fuel={fuel} setFuel={setFuel} smartDevices={smartDevices} setSmartDevices={setSmartDevices} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
-        {step === 3 && <Step3 elec={elec} setElec={setElec} gas={gas} setGas={setGas} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
-        {step === 4 && <Step4 elec={elec} gas={gas} onBack={() => setStep(3)} onSelectTariff={handleSelectTariff} />}
-        {step === 5 && selectedTariff && <Confirmation tariff={selectedTariff} />}
+    /* Outer shell — extends full viewport width, darker bg shows as gutters on wide screens */
+    <div style={{ minHeight: "100vh", background: "#04101f", display: "flex", justifyContent: "center" }}>
+      {/* Inner container — capped at 1440px, takes the page background */}
+      <div style={{ width: "100%", maxWidth: 1440, background: "#0b1f3a", display: "flex", flexDirection: "column", position: "relative" }}>
+        <Nav />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+          {step === 1 && <Step1 onNext={() => setStep(2)} />}
+          {step === 2 && <Step2 fuel={fuel} setFuel={setFuel} smartDevices={smartDevices} setSmartDevices={setSmartDevices} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
+          {step === 3 && <Step3 elec={elec} setElec={setElec} gas={gas} setGas={setGas} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
+          {step === 4 && <Step4 elec={elec} gas={gas} onBack={() => setStep(3)} onSelectTariff={handleSelectTariff} />}
+          {step === 5 && selectedTariff && <Confirmation tariff={selectedTariff} />}
+        </div>
       </div>
     </div>
   );
