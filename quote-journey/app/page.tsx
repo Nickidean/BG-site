@@ -238,6 +238,7 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
           name="Fix & Fall tariff" price="£103.28"
           description="Your rate's fixed, but if prices fall, yours will too. That's peace of mind with a bonus upside."
           duration="12 months" exitFee="£75 per fuel"
+          recommended
           ratesOpen={allRatesOpen}
           onToggleRates={() => setAllRatesOpen(o => !o)}
           onSelect={() => onSelectTariff("fix")}
@@ -271,12 +272,17 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
   );
 }
 
-function TariffCard({ name, price, description, duration, exitFee, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+function TariffCard({ name, price, description, duration, exitFee, recommended, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
   name: string; price: string; description: string; duration?: string; exitFee: string;
-  ratesOpen: boolean; onToggleRates: () => void; onSelect: () => void; ratesPanel: React.ReactNode;
+  recommended?: boolean; ratesOpen: boolean; onToggleRates: () => void; onSelect: () => void; ratesPanel: React.ReactNode;
 }) {
   return (
-    <div style={{ background: "rgba(10,30,80,0.6)", border: "1.5px solid #2a5bc4", borderRadius: 16, padding: "32px 28px 24px", display: "flex", flexDirection: "column", backdropFilter: "blur(8px)" }}>
+    <div style={{ background: "rgba(10,30,80,0.6)", border: recommended ? `1.5px solid ${CTA}` : "1.5px solid #2a5bc4", borderRadius: 16, padding: "32px 28px 24px", display: "flex", flexDirection: "column", backdropFilter: "blur(8px)", position: "relative" }}>
+      {recommended && (
+        <div style={{ position: "absolute", top: -13, left: "50%", transform: "translateX(-50%)", background: CTA, color: "#0b1f3a", fontSize: 11, fontWeight: 800, padding: "4px 16px", borderRadius: 20, whiteSpace: "nowrap", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+          Recommended
+        </div>
+      )}
       <div style={{ color: "#60a5fa", fontSize: 16, fontWeight: 600, marginBottom: 10, textAlign: "center" }}>{name}</div>
       <div style={{ fontSize: 54, fontWeight: 900, color: "#fff", textAlign: "center", lineHeight: 1, letterSpacing: "-1px" }}>{price}</div>
       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", textAlign: "center", marginBottom: 20, marginTop: 4 }}>Monthly estimate</div>
@@ -413,19 +419,32 @@ function StepShell({ step, title, onBack, onNext, children }: {
   step: number; title: string; onBack: () => void; onNext: () => void; children: React.ReactNode;
 }) {
   return (
-    <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 16px 60px" }}>
-      <div style={{ width: "100%", maxWidth: 540 }}>
-        <ProgressBar step={step} />
-        <div style={{ textAlign: "center", color: "rgba(255,255,255,0.55)", fontSize: 13, marginBottom: 8 }}>Step {step} of 4</div>
-        <div style={{ background: "#1a4fd6", borderRadius: 20, padding: "28px 28px 24px" }}>
-          <div style={{ textAlign: "center", color: "#fff", fontSize: 24, fontWeight: 700, marginBottom: 24 }}>{title}</div>
-          {children}
-          <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-            <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
-            <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
-          </div>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      {/* Progress bar — sticky at top on mobile */}
+      <div className="progress-sticky">
+        <div style={{ maxWidth: 540, margin: "0 auto", width: "100%", padding: "0 16px" }}>
+          <ProgressBar step={step} />
+          <div style={{ textAlign: "center", color: "rgba(255,255,255,0.55)", fontSize: 13, marginBottom: 8 }}>Step {step} of 4</div>
         </div>
-        <TrustpilotBadge />
+      </div>
+
+      {/* Scrollable content */}
+      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "24px 16px 100px" }} className="step-content">
+        <div style={{ width: "100%", maxWidth: 540 }}>
+          <div style={{ background: "#1a4fd6", borderRadius: 20, padding: "28px 28px 24px" }}>
+            <div style={{ textAlign: "center", color: "#fff", fontSize: 24, fontWeight: 700, marginBottom: 24 }}>{title}</div>
+            {children}
+          </div>
+          <TrustpilotBadge />
+        </div>
+      </div>
+
+      {/* Nav buttons — sticky at bottom on mobile, inline on desktop */}
+      <div className="nav-buttons-sticky">
+        <div style={{ maxWidth: 540, margin: "0 auto", width: "100%", padding: "12px 16px", display: "flex", gap: 10 }}>
+          <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
+          <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
+        </div>
       </div>
     </div>
   );

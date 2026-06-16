@@ -26,6 +26,50 @@ body {
 .help-drawer-desktop { display: none; }
 .help-drawer-mobile  { display: block; }
 
+/* Progress bar and nav buttons — normal flow on desktop */
+.progress-sticky {
+  padding: 20px 0 0;
+}
+
+.nav-buttons-sticky {
+  padding-bottom: 24px;
+}
+
+.step-content {
+  align-items: flex-start;
+}
+
+/* ── Mobile overrides ── */
+@media (max-width: 767px) {
+  nav { display: none !important; }
+
+  /* Progress bar locks to top */
+  .progress-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #0b1f3a;
+    padding: 14px 0 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Nav buttons lock to bottom */
+  .nav-buttons-sticky {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    background: #0b1f3a;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-bottom: env(safe-area-inset-bottom, 12px);
+  }
+
+  /* Extra bottom padding so content doesn't hide behind sticky bar */
+  .step-content {
+    padding-bottom: 120px;
+  }
+}
+
+/* ── Desktop ── */
 @media (min-width: 768px) {
   .tariff-grid {
     grid-template-columns: 1fr 1fr;
@@ -35,9 +79,8 @@ body {
   .help-drawer-desktop { display: block; }
   .help-drawer-mobile  { display: none; }
 
-  nav { display: flex !important; }
-}
-
-@media (max-width: 767px) {
-  nav { display: none !important; }
+  .step-content {
+    align-items: center;
+    padding-bottom: 60px;
+  }
 }
