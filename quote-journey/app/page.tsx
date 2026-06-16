@@ -16,17 +16,16 @@ const CTA = "#AAFF1F";
 function Nav() {
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 50 }}>
-      <div style={{ background: "#060f1e", padding: "8px 24px", display: "flex", gap: 24 }}>
+      <div style={{ background: "#001029", padding: "8px 32px", display: "flex", gap: 24 }}>
         {["Offers", "Business", "Landlord", "Accessibility toolbar"].map((l) => (
-          <a key={l} href="#" style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, textDecoration: "none" }}>{l}</a>
+          <a key={l} href="#" style={{ color: "#83B5FF", fontSize: 12, textDecoration: "none" }}>{l}</a>
         ))}
       </div>
-      <div style={{ background: "#0b1f3a", padding: "0 24px", display: "flex", alignItems: "center", height: 64, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginRight: 32, flexShrink: 0 }}>
-          <Image src="/bg-flame.png" alt="" width={32} height={32} style={{ objectFit: "contain" }} />
-          <span style={{ color: "#fff", fontWeight: 700, fontSize: 16 }}>British Gas</span>
+      <div style={{ background: "#0b1f3a", padding: "0 32px", display: "flex", alignItems: "center", height: 64, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <Image src="/bg-logo.png" alt="British Gas" width={120} height={40} style={{ objectFit: "contain" }} />
         </div>
-        <nav style={{ display: "flex", gap: 28, flex: 1 }}>
+        <nav style={{ display: "flex", gap: 28, flex: 1, justifyContent: "center" }}>
           {["Energy", "Products", "Servicing", "Repairs", "Cover", "Help"].map((l) => (
             <a key={l} href="#" className="nav-link">{l}</a>
           ))}
@@ -469,10 +468,8 @@ export default function QuoteJourney() {
   function handleSelectTariff(t: TariffType) { setSelectedTariff(t); setStep(5); }
 
   return (
-    /* Outer shell — extends full viewport width, darker bg shows as gutters on wide screens */
-    <div style={{ minHeight: "100vh", background: "#04101f", display: "flex", justifyContent: "center" }}>
-      {/* Inner container — capped at 1440px, takes the page background */}
-      <div style={{ width: "100%", maxWidth: 1440, background: "#0b1f3a", display: "flex", flexDirection: "column", position: "relative" }}>
+    <div style={{ minHeight: "100vh", background: "#001029", display: "flex", justifyContent: "center", padding: "0" }}>
+      <div style={{ width: "100%", maxWidth: 1440, background: "#0b1f3a", display: "flex", flexDirection: "column", position: "relative", borderRadius: "0 0 48px 48px", overflow: "hidden" }}>
         <Nav />
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           {step === 1 && <Step1 onNext={() => setStep(2)} />}
