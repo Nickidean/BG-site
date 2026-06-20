@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { calcFlesch } from "@/lib/flesch";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -224,6 +224,12 @@ function Drawer({ open, onClose, children }: { open: boolean; onClose: () => voi
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  useEffect(() => {
+    if (window.location.hostname.includes('coachkudos')) {
+      window.location.replace('/kudos');
+    }
+  }, []);
+
   const [copy, setCopy] = useState("");
   const [contentType, setContentType] = useState("");
   const [audience, setAudience] = useState("General customers");
