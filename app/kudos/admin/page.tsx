@@ -309,7 +309,7 @@ export default function AdminPage() {
                     onChange={e => setNewName(e.target.value)}
                     required
                     placeholder="e.g. Dave Smith"
-                    className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                    className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
                   />
                 </div>
                 <div>
@@ -320,7 +320,7 @@ export default function AdminPage() {
                     required
                     inputMode="numeric"
                     placeholder="e.g. 1234"
-                    className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                    className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
                   />
                 </div>
               </div>

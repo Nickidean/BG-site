@@ -217,7 +217,7 @@ export default function GivePage() {
               rows={3}
               placeholder="e.g. Always first to set up cones on a freezing morning, without being asked."
               required
-              className="w-full bg-transparent text-white placeholder-white/30 text-sm resize-none focus:outline-none"
+              className="w-full bg-transparent text-white placeholder-white/30 text-base resize-none focus:outline-none"
             />
             <p className="text-green-400/50 text-xs text-right mt-1">{note.length}/500</p>
           </div>
@@ -251,7 +251,7 @@ export default function GivePage() {
                     value={currentPin}
                     onChange={e => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
                   />
                 </div>
                 <div>
@@ -262,7 +262,7 @@ export default function GivePage() {
                     value={newPin}
                     onChange={e => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
                   />
                 </div>
                 <div>
@@ -273,7 +273,7 @@ export default function GivePage() {
                     value={confirmPin}
                     onChange={e => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
                   />
                 </div>
                 {pinError && <p className="text-red-300 text-sm">{pinError}</p>}

@@ -95,6 +95,14 @@ export default function MinePage() {
 
       {/* List */}
       <div className="space-y-3">
+        {tab === 'given' && (
+          <Link
+            href="/kudos/give"
+            className="flex items-center justify-center gap-2 w-full bg-green-500 hover:bg-green-400 text-white font-semibold py-3 rounded-xl transition-colors text-sm"
+          >
+            🏆 Give kudos
+          </Link>
+        )}
         {displayed.length === 0 ? (
           <div className="text-center text-green-300/60 py-12 text-sm">
             {tab === 'received' ? 'No kudos received yet — they\'re coming!' : 'You haven\'t given any kudos yet.'}
