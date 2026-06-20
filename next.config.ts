@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
+    if (process.env.SITE_ID !== "coachkudos") return [];
     return [
       {
         source: "/",
-        has: [{ type: "host", value: "coachkudos.netlify.app" }],
         destination: "/kudos",
         permanent: false,
       },
