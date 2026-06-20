@@ -84,7 +84,11 @@ export default function AdminPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id }),
     });
-    setData(prev => prev ? { ...prev, recognitions: prev.recognitions.filter(r => r.id !== id) } : prev);
+    // Re-fetch everything so the leaderboard updates too
+    const params = new URLSearchParams();
+    if (filterCoach) params.set('coach', filterCoach);
+    const adminRes = await fetch(`/api/kudos/admin?${params}`).then(r => r.json());
+    if (adminRes.recognitions) setData(adminRes);
   }
 
   async function handleLogout() {
