@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
-    if (process.env.SITE_ID !== "coachkudos") return [];
+    if (process.env.APP_NAME !== "coachkudos") return [];
     return [
       {
         source: "/",
