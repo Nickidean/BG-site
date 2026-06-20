@@ -90,6 +90,7 @@ export default function GivePage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
+          <p className="text-green-400 text-xs font-medium">Bridport Youth Football Club</p>
           <h1 className="text-xl font-bold">👋 Hey, {me.name}</h1>
           <p className="text-green-300 text-sm">
             {remaining > 0

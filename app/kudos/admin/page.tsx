@@ -174,8 +174,9 @@ export default function AdminPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
+          <p className="text-green-400 text-xs font-medium">Bridport Youth Football Club</p>
           <h1 className="text-xl font-bold">Admin Dashboard</h1>
-          <p className="text-green-300 text-sm">Coach Kudos — {me.name}</p>
+          <p className="text-green-300 text-sm">{me.name}</p>
         </div>
         <button onClick={handleLogout} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Log out</button>
       </div>

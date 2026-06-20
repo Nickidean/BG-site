@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Coach Kudos',
+  title: 'Coach Kudos — Bridport Youth Football Club',
   description: 'Recognise the coaches who go the extra mile.',
 };
 
