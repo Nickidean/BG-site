@@ -30,6 +30,14 @@ export default function GivePage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  const [showPinChange, setShowPinChange] = useState(false);
+  const [currentPin, setCurrentPin] = useState('');
+  const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [pinSuccess, setPinSuccess] = useState(false);
+  const [pinLoading, setPinLoading] = useState(false);
+
   useEffect(() => {
     Promise.all([
       fetch('/api/kudos/me').then(r => r.json()),
@@ -79,6 +87,29 @@ export default function GivePage() {
     router.push('/kudos');
   }
 
+  async function handlePinChange(e: React.FormEvent) {
+    e.preventDefault();
+    setPinError('');
+    if (newPin !== confirmPin) { setPinError('New PINs do not match'); return; }
+    setPinLoading(true);
+    try {
+      const res = await fetch('/api/kudos/me-pin', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPin, newPin }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setPinError(data.error || 'Failed to change PIN'); return; }
+      setPinSuccess(true);
+      setCurrentPin(''); setNewPin(''); setConfirmPin('');
+      setTimeout(() => { setPinSuccess(false); setShowPinChange(false); }, 2000);
+    } catch {
+      setPinError('Something went wrong');
+    } finally {
+      setPinLoading(false);
+    }
+  }
+
   if (loading) return <LoadingScreen />;
   if (!me) return null;
 
@@ -100,6 +131,7 @@ export default function GivePage() {
         </div>
         <div className="flex items-center gap-3">
           <Link href="/kudos/mine" className="text-green-300 hover:text-white text-sm transition-colors">My kudos</Link>
+          <button onClick={() => setShowPinChange(true)} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Change PIN</button>
           <button onClick={handleLogout} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Log out</button>
         </div>
       </div>
@@ -200,6 +232,71 @@ export default function GivePage() {
             {submitting ? 'Sending…' : '🏆 Give kudos'}
           </button>
         </form>
+      )}
+
+      {/* Change PIN modal */}
+      {showPinChange && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-green-900 border border-white/20 rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <h2 className="font-bold text-lg mb-4">Change your PIN</h2>
+            {pinSuccess ? (
+              <p className="text-green-300 text-center py-4">✓ PIN changed successfully!</p>
+            ) : (
+              <form onSubmit={handlePinChange} className="space-y-3">
+                <div>
+                  <label className="block text-xs text-green-300 mb-1">Current PIN</label>
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    value={currentPin}
+                    onChange={e => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-green-300 mb-1">New PIN (4–6 digits)</label>
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    value={newPin}
+                    onChange={e => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-green-300 mb-1">Confirm new PIN</label>
+                  <input
+                    type="password"
+                    inputMode="numeric"
+                    value={confirmPin}
+                    onChange={e => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    required
+                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center"
+                  />
+                </div>
+                {pinError && <p className="text-red-300 text-sm">{pinError}</p>}
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => { setShowPinChange(false); setPinError(''); setCurrentPin(''); setNewPin(''); setConfirmPin(''); }}
+                    className="flex-1 bg-white/10 hover:bg-white/20 text-white py-2 rounded-lg text-sm transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={pinLoading}
+                    className="flex-1 bg-green-500 hover:bg-green-400 disabled:opacity-50 text-white font-semibold py-2 rounded-lg text-sm transition-colors"
+                  >
+                    {pinLoading ? 'Saving…' : 'Save PIN'}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
