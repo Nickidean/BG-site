@@ -27,6 +27,9 @@ export const CATEGORIES = [
   { value: 'above-and-beyond', label: 'Going Above & Beyond' },
   { value: 'matchday', label: 'Matchday' },
   { value: 'support', label: 'Support & Mentoring' },
+  { value: 'tournament', label: 'Tournament' },
+  { value: 'fundraising', label: 'Fundraising' },
+  { value: 'other', label: 'Other' },
 ];
 
 export const MONTHLY_LIMIT = 3;

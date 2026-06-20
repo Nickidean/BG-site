@@ -77,6 +77,16 @@ export default function AdminPage() {
       .finally(() => setLoading(false));
   }, [fetchData, router]);
 
+  async function handleDeleteRecognition(id: string) {
+    if (!confirm('Remove this recognition? This cannot be undone.')) return;
+    await fetch('/api/kudos/recognitions', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id }),
+    });
+    setData(prev => prev ? { ...prev, recognitions: prev.recognitions.filter(r => r.id !== id) } : prev);
+  }
+
   async function handleLogout() {
     await fetch('/api/kudos/auth', { method: 'DELETE' });
     router.push('/kudos');
@@ -222,7 +232,15 @@ export default function AdminPage() {
                       <span className="text-white/50 mx-1">→</span>
                       <span className="text-green-300">{r.recipientNames.join(' & ')}</span>
                     </div>
-                    <span className="text-xs text-green-400/60 shrink-0">{fmtDate(r.createdAt)}</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-xs text-green-400/60">{fmtDate(r.createdAt)}</span>
+                      <button
+                        onClick={() => handleDeleteRecognition(r.id)}
+                        className="text-xs text-red-300 hover:text-red-200 bg-white/10 hover:bg-red-500/20 px-2 py-0.5 rounded-lg transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
                   <span className="inline-block text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full mb-2 border border-green-500/30">{catLabel(r.category)}</span>
                   <p className="text-sm text-white/80">"{r.note}"</p>

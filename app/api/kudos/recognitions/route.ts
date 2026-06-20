@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
-import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth } from '@/lib/kudos/db';
+import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition } from '@/lib/kudos/db';
 import { postToWhatsApp } from '@/lib/kudos/whatsapp';
 import { MONTHLY_LIMIT } from '@/lib/kudos/types';
 import type { Recognition } from '@/lib/kudos/types';
@@ -75,4 +75,21 @@ export async function POST(req: NextRequest) {
   await postToWhatsApp(recognition);
 
   return NextResponse.json({ ok: true, id: recognition.id });
+}
+
+export async function DELETE(req: NextRequest) {
+  const coachId = await getAuthedCoachId(req);
+  if (!coachId) return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 });
+
+  const isAdmin = coachId === '__admin__' || (await (async () => {
+    const c = await getCoach(coachId);
+    return c?.role === 'admin' && c.active;
+  })());
+  if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  const { id } = await req.json();
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+
+  await deleteRecognition(id);
+  return NextResponse.json({ ok: true });
 }

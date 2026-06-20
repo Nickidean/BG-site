@@ -44,6 +44,12 @@ async function fetchRecognitionsByIds(ids: string[]): Promise<Recognition[]> {
     .map(v => (typeof v === 'string' ? JSON.parse(v) : (v as Recognition)));
 }
 
+export async function deleteRecognition(id: string): Promise<void> {
+  if (!redis) return;
+  await redis.del(recKey(id));
+  await redis.zrem(RECOGNITIONS_KEY, id);
+}
+
 export async function getAllRecognitions(limit = 500): Promise<Recognition[]> {
   if (!redis) return [];
   const ids = (await redis.zrange(RECOGNITIONS_KEY, 0, -1)) as string[];

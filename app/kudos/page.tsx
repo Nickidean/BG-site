@@ -136,7 +136,7 @@ export default function KudosLoginPage() {
         </div>
 
         <p className="text-center text-green-400/60 text-xs mt-6">
-          Forgot your PIN? Ask your club admin to reset it.
+          Forgot your PIN? Just message Nick.
         </p>
       </div>
     </div>
