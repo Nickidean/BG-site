@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCoaches } from '@/lib/kudos/db';
 import { createSession, deleteSession, getTokenFromRequest } from '@/lib/kudos/auth';
 
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+
 export async function POST(req: NextRequest) {
   try {
     const { coachId, pin } = await req.json();
@@ -44,5 +46,3 @@ export async function DELETE(req: NextRequest) {
   res.cookies.delete('kudos_session');
   return res;
 }
-
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
