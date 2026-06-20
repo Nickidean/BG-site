@@ -1,16 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  async redirects() {
-    if (process.env.APP_NAME !== "coachkudos") return [];
-    return [
-      {
-        source: "/",
-        destination: "/kudos",
-        permanent: false,
-      },
-    ];
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
