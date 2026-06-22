@@ -90,6 +90,15 @@ export default function KudosLoginPage() {
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-white/20">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
+              <label className="block text-sm font-medium text-green-200 mb-1">Your club</label>
+              <input
+                readOnly
+                value="Bridport Youth Football Club"
+                className="w-full rounded-lg bg-white/5 border border-white/10 text-white/60 px-3 py-2.5 text-base cursor-default select-none focus:outline-none"
+              />
+            </div>
+
+            <div>
               <label className="block text-sm font-medium text-green-200 mb-1">Who are you?</label>
               {loadingCoaches ? (
                 <div className="w-full rounded-lg bg-white/10 h-11 animate-pulse" />
