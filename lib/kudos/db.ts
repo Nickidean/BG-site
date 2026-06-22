@@ -50,6 +50,15 @@ export async function deleteRecognition(id: string): Promise<void> {
   await redis.zrem(RECOGNITIONS_KEY, id);
 }
 
+export async function deleteAllRecognitions(): Promise<void> {
+  if (!redis) return;
+  const ids = (await redis.zrange(RECOGNITIONS_KEY, 0, -1)) as string[];
+  if (ids.length) {
+    await Promise.all(ids.map(id => redis!.del(recKey(id))));
+    await redis.del(RECOGNITIONS_KEY);
+  }
+}
+
 export async function getAllRecognitions(limit = 500): Promise<Recognition[]> {
   if (!redis) return [];
   const ids = (await redis.zrange(RECOGNITIONS_KEY, 0, -1)) as string[];

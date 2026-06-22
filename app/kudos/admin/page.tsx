@@ -84,6 +84,19 @@ export default function AdminPage() {
       .finally(() => setLoading(false));
   }, [fetchData, router]);
 
+  async function handleDeleteAll() {
+    if (!confirm(`Remove ALL ${data?.recognitions.length} recognitions? This cannot be undone.`)) return;
+    await fetch('/api/kudos/recognitions', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+    const params = new URLSearchParams();
+    if (filterCoach) params.set('coach', filterCoach);
+    const adminRes = await fetch(`/api/kudos/admin?${params}`).then(r => r.json());
+    if (adminRes.recognitions) setData(adminRes);
+  }
+
   async function handleDeleteRecognition(id: string) {
     if (!confirm('Remove this recognition? This cannot be undone.')) return;
     await fetch('/api/kudos/recognitions', {
@@ -268,6 +281,13 @@ export default function AdminPage() {
               className="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm rounded-lg px-4 py-2 transition-colors whitespace-nowrap"
             >
               Export CSV
+            </button>
+            <button
+              onClick={handleDeleteAll}
+              disabled={!data?.recognitions.length}
+              className="bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 text-red-300 hover:text-red-200 text-sm rounded-lg px-4 py-2 transition-colors whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Remove all
             </button>
           </div>
 

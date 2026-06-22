@@ -34,6 +34,16 @@ export function PinInput({ value, onChange, label }: PinInputProps) {
               const val = e.target.value.replace(/\D/g, '');
               update(i, val.slice(-1));
             }}
+            onPaste={e => {
+              if (i !== 0) return;
+              e.preventDefault();
+              const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+              if (!pasted) return;
+              const next = Array.from({ length: 6 }, (_, idx) => pasted[idx] || '');
+              onChange(next.join(''));
+              const lastFilled = Math.min(pasted.length - 1, 5);
+              setTimeout(() => refs.current[lastFilled]?.focus(), 0);
+            }}
             onKeyDown={e => {
               if (e.key === 'Backspace' && !digit && i > 0) {
                 update(i - 1, '');
