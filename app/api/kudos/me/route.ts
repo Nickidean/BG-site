@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
   // Env-var admin
   if (coachId === '__admin__') {
-    return NextResponse.json({ id: '__admin__', name: 'Admin', role: 'admin', givenThisMonth: 0, remainingThisMonth: MONTHLY_LIMIT });
+    return NextResponse.json({ id: '__admin__', name: 'Admin', role: 'admin', isEnvAdmin: true, givenThisMonth: 0, remainingThisMonth: MONTHLY_LIMIT });
   }
 
   const coach = await getCoach(coachId);

@@ -24,7 +24,7 @@ export default function KudosLoginPage() {
       .then(r => r.json())
       .then(data => {
         if (data.id) {
-          router.replace(data.role === 'admin' ? '/kudos/admin' : '/kudos/give');
+          router.replace('/kudos/give');
         }
       })
       .catch(() => {});
@@ -56,7 +56,7 @@ export default function KudosLoginPage() {
         setError(data.error || 'Login failed');
         return;
       }
-      router.push(data.role === 'admin' ? '/kudos/admin' : '/kudos/give');
+      router.push('/kudos/give');
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {

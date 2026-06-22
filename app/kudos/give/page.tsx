@@ -10,6 +10,7 @@ interface Me {
   id: string;
   name: string;
   role: string;
+  isEnvAdmin?: boolean;
   givenThisMonth: number;
   remainingThisMonth: number;
   hasEmail: boolean;
@@ -47,7 +48,7 @@ export default function GivePage() {
       fetch('/api/kudos/coaches').then(r => r.json()),
     ]).then(([meData, coachesData]) => {
       if (!meData.id) { router.replace('/kudos'); return; }
-      if (meData.role === 'admin') { router.replace('/kudos/admin'); return; }
+      if (meData.isEnvAdmin) { router.replace('/kudos/admin'); return; }
       setMe(meData);
       if (!meData.hasEmail) setShowEmailPrompt(true);
       if (Array.isArray(coachesData)) setCoaches(coachesData);
@@ -163,6 +164,14 @@ export default function GivePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {me.role === 'admin' && (
+            <Link
+              href="/kudos/admin"
+              className="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
+            >
+              {"Chairman's View"}
+            </Link>
+          )}
           <Link
             href="/kudos/mine"
             className="bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
