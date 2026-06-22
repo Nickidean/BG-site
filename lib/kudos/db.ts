@@ -1,6 +1,22 @@
 import { redis } from '@/lib/redis';
 import type { Coach, Recognition } from './types';
 
+const monthKey = () => {
+  const d = new Date();
+  return `kudos:monthly-thanks:${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+};
+
+export async function getMonthlyThanksSent(): Promise<boolean> {
+  if (!redis) return false;
+  return !!(await redis.get(monthKey()));
+}
+
+export async function setMonthlyThanksSent(): Promise<void> {
+  if (!redis) return;
+  // Expire after 35 days so it auto-clears after the month
+  await redis.set(monthKey(), '1', { ex: 60 * 60 * 24 * 35 });
+}
+
 const COACHES_KEY = 'kudos:coaches';
 const RECOGNITIONS_KEY = 'kudos:recognitions';
 

@@ -164,7 +164,7 @@ export default function GivePage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {me.role === 'admin' && (
+          {(me.role === 'admin' || me.role === 'chairman') && (
             <Link
               href="/kudos/admin"
               className="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"

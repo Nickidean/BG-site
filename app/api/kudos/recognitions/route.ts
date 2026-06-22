@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
 import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition, deleteAllRecognitions, boostRecognition } from '@/lib/kudos/db';
 import { postToWhatsApp } from '@/lib/kudos/whatsapp';
-import { sendKudosEmail, sendBoostEmail } from '@/lib/kudos/email';
-import { MONTHLY_LIMIT } from '@/lib/kudos/types';
+import { sendKudosEmail, sendBoostEmail, sendAllKudosGivenEmail } from '@/lib/kudos/email';
+import { MONTHLY_LIMIT, isAdminRole } from '@/lib/kudos/types';
 import type { Recognition } from '@/lib/kudos/types';
 import { randomUUID } from 'crypto';
 
@@ -84,6 +84,14 @@ export async function POST(req: NextRequest) {
   console.log('[kudos/email] Recipient emails found:', recipientEmails);
   await sendKudosEmail(recognition, recipientEmails);
 
+  // If the giver has now used all their kudos this month, thank them
+  const newTotal = given + 1;
+  if (newTotal >= MONTHLY_LIMIT && coach.email) {
+    const chairman = coaches.find(c => c.role === 'chairman' && c.active);
+    const chairmanName = chairman?.name ?? 'The Chairman';
+    await sendAllKudosGivenEmail(coach.name, coach.email, chairmanName, MONTHLY_LIMIT);
+  }
+
   return NextResponse.json({ ok: true, id: recognition.id, debug: { recipientEmails, resendConfigured: !!process.env.RESEND_API_KEY } });
 }
 
@@ -93,7 +101,7 @@ export async function PATCH(req: NextRequest) {
 
   const isAdmin = coachId === '__admin__' || (await (async () => {
     const c = await getCoach(coachId);
-    return c?.role === 'admin' && c.active;
+    return isAdminRole(c?.role ?? '') && c!.active;
   })());
   if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 

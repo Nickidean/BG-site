@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
 import { getCoach, getAllRecognitions, getCoaches } from '@/lib/kudos/db';
 import type { Recognition } from '@/lib/kudos/types';
+import { isAdminRole } from '@/lib/kudos/types';
 
 async function requireAdmin(req: NextRequest): Promise<string | null> {
   const token = getTokenFromRequest(req.headers.get('cookie'));
@@ -10,7 +11,7 @@ async function requireAdmin(req: NextRequest): Promise<string | null> {
   if (!coachId) return null;
   if (coachId === '__admin__') return coachId;
   const coach = await getCoach(coachId);
-  if (coach?.role === 'admin' && coach.active) return coachId;
+  if (isAdminRole(coach?.role ?? '') && coach!.active) return coachId;
   return null;
 }
 

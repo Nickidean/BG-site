@@ -1,4 +1,8 @@
-export type Role = 'coach' | 'admin';
+export type Role = 'coach' | 'admin' | 'chairman';
+
+export function isAdminRole(role: Role | string): boolean {
+  return role === 'admin' || role === 'chairman';
+}
 
 export interface Coach {
   id: string;

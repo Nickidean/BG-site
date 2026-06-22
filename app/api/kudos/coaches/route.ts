@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
 import { getCoaches, getCoach, saveCoach, deleteCoach } from '@/lib/kudos/db';
 import type { Coach } from '@/lib/kudos/types';
+import { isAdminRole } from '@/lib/kudos/types';
 import { randomUUID } from 'crypto';
 
 async function getAuthedCoachId(req: NextRequest): Promise<string | null> {
@@ -19,16 +20,14 @@ export async function GET(req: NextRequest) {
 
   // Non-admins only get the list (no PINs)
   if (coachId === '__admin__') {
-    const coach = null; // env admin
-    const isAdmin = true;
-    return NextResponse.json(active.map(c => ({ id: c.id, name: c.name, role: c.role, pin: c.pin, createdAt: c.createdAt })));
+    return NextResponse.json(active.map(c => ({ id: c.id, name: c.name, role: c.role, pin: c.pin, email: c.email, createdAt: c.createdAt })));
   }
 
   const coach = await getCoach(coachId);
   if (!coach) return NextResponse.json({ error: 'Not found' }, { status: 401 });
 
-  if (coach.role === 'admin') {
-    return NextResponse.json(active.map(c => ({ id: c.id, name: c.name, role: c.role, pin: c.pin, createdAt: c.createdAt })));
+  if (isAdminRole(coach.role)) {
+    return NextResponse.json(active.map(c => ({ id: c.id, name: c.name, role: c.role, pin: c.pin, email: c.email, createdAt: c.createdAt })));
   }
 
   // Regular coaches just get name+id for giving recognitions
@@ -100,5 +99,5 @@ export async function DELETE(req: NextRequest) {
 
 async function isAdminCoach(id: string): Promise<boolean> {
   const coach = await getCoach(id);
-  return coach?.role === 'admin' && coach.active;
+  return isAdminRole(coach?.role ?? '') && coach!.active;
 }

@@ -3,10 +3,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { CATEGORIES, MONTHLY_LIMIT } from '@/lib/kudos/types';
+import { CATEGORIES, MONTHLY_LIMIT, isAdminRole } from '@/lib/kudos/types';
 import type { Recognition, Boost } from '@/lib/kudos/types';
 
-interface Me { id: string; name: string; role: string; }
+interface Me { id: string; name: string; role: string; isEnvAdmin?: boolean; }
 
 interface CoachSummary {
   id: string;
@@ -54,7 +54,7 @@ export default function AdminPage() {
   // Add coach form
   const [newName, setNewName] = useState('');
   const [newPin, setNewPin] = useState('');
-  const [newRole, setNewRole] = useState<'coach' | 'admin'>('coach');
+  const [newRole, setNewRole] = useState<'coach' | 'admin' | 'chairman'>('coach');
   const [newEmail, setNewEmail] = useState('');
   const [addError, setAddError] = useState('');
   const [addLoading, setAddLoading] = useState(false);
@@ -68,6 +68,10 @@ export default function AdminPage() {
   const [boostId, setBoostId] = useState<string | null>(null);
   const [boostComment, setBoostComment] = useState('');
   const [boostLoading, setBoostLoading] = useState(false);
+
+  // Monthly thanks
+  const [monthlyThanksSent, setMonthlyThanksSent] = useState(false);
+  const [monthlyThanksLoading, setMonthlyThanksLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
     const params = new URLSearchParams();
@@ -83,13 +87,28 @@ export default function AdminPage() {
   useEffect(() => {
     fetchData().then(({ meRes, adminRes, coachRes }) => {
       if (!meRes.id) { router.replace('/kudos'); return; }
-      if (meRes.role !== 'admin') { router.replace('/kudos/give'); return; }
+      if (!isAdminRole(meRes.role) && meRes.id !== '__admin__') { router.replace('/kudos/give'); return; }
       setMe(meRes);
       if (adminRes.recognitions) setData(adminRes);
       if (Array.isArray(coachRes)) setCoaches(coachRes);
     }).catch(() => router.replace('/kudos'))
       .finally(() => setLoading(false));
+
+    fetch('/api/kudos/monthly-thanks').then(r => r.json()).then(d => setMonthlyThanksSent(!!d.sent)).catch(() => {});
   }, [fetchData, router]);
+
+  async function handleSendMonthlyThanks() {
+    if (!confirm('Send a monthly thank-you email to all coaches? This can only be sent once per month.')) return;
+    setMonthlyThanksLoading(true);
+    try {
+      const res = await fetch('/api/kudos/monthly-thanks', { method: 'POST' });
+      const d = await res.json();
+      if (res.ok) setMonthlyThanksSent(true);
+      else alert(d.error || 'Failed to send');
+    } finally {
+      setMonthlyThanksLoading(false);
+    }
+  }
 
   async function handleBoost(id: string) {
     if (!boostComment.trim()) return;
@@ -290,6 +309,25 @@ export default function AdminPage() {
         <StatCard label="This month" value={String(data.recognitions.filter(r => r.createdAt >= monthStart).length)} />
         <StatCard label="Active coaches" value={String(coaches.length)} />
       </div>
+
+      {/* Monthly thanks — chairman only */}
+      {(me.role === 'chairman' || me.id === '__admin__') && (
+        <div className={`rounded-2xl p-4 border mb-6 flex items-center justify-between gap-4 ${monthlyThanksSent ? 'bg-green-500/10 border-green-500/20' : 'bg-white/10 border-white/20'}`}>
+          <div>
+            <p className="font-semibold text-sm">Monthly thank-you to all coaches</p>
+            <p className="text-green-300/70 text-xs mt-0.5">
+              {monthlyThanksSent ? '✓ Sent this month' : 'Email every coach to thank them for their efforts this month'}
+            </p>
+          </div>
+          <button
+            onClick={handleSendMonthlyThanks}
+            disabled={monthlyThanksSent || monthlyThanksLoading}
+            className="bg-green-500 hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
+          >
+            {monthlyThanksLoading ? 'Sending…' : monthlyThanksSent ? 'Sent ✓' : 'Send thanks'}
+          </button>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex bg-white/10 rounded-xl p-1 mb-6 gap-1">
@@ -562,6 +600,7 @@ export default function AdminPage() {
                 >
                   <option value="coach" className="bg-green-900">Coach</option>
                   <option value="admin" className="bg-green-900">Admin</option>
+                  <option value="chairman" className="bg-green-900">Chairman</option>
                 </select>
               </div>
               {addError && <p className="text-red-300 text-sm">{addError}</p>}
@@ -601,6 +640,7 @@ export default function AdminPage() {
                     <div>
                       <span className="font-medium text-sm">{c.name}</span>
                       {c.role === 'admin' && <span className="ml-2 text-xs text-green-400/70 bg-green-500/10 px-1.5 py-0.5 rounded">admin</span>}
+                      {c.role === 'chairman' && <span className="ml-2 text-xs text-yellow-300/80 bg-yellow-500/10 px-1.5 py-0.5 rounded">chairman</span>}
                       <p className="text-xs text-green-400/50 mt-0.5">PIN: {c.pin}</p>
                     </div>
                     <div className="flex gap-2">
