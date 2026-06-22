@@ -185,6 +185,12 @@ export default function GivePage() {
                   Change PIN
                 </button>
                 <button
+                  onClick={() => { setShowEmailPrompt(true); setShowMenu(false); }}
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-white/10 transition-colors"
+                >
+                  Update email
+                </button>
+                <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-3 text-sm hover:bg-white/10 transition-colors text-red-300"
                 >
