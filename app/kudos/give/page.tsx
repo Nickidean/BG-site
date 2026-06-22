@@ -27,6 +27,7 @@ export default function GivePage() {
   const [category, setCategory] = useState('');
   const [note, setNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [successNames, setSuccessNames] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -70,6 +71,8 @@ export default function GivePage() {
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Failed to send'); return; }
+      const names = coaches.filter(c => selectedIds.includes(c.id)).map(c => c.name.split(' ')[0]);
+      setSuccessNames(names);
       setSuccess(true);
       setMe(prev => prev ? { ...prev, givenThisMonth: prev.givenThisMonth + 1, remainingThisMonth: prev.remainingThisMonth - 1 } : prev);
       setSelectedIds([]);
@@ -175,7 +178,7 @@ export default function GivePage() {
 
       {success && (
         <div className="bg-green-500/20 border border-green-400/30 text-green-200 rounded-xl px-4 py-3 mb-5 text-sm text-center">
-          🎉 Kudos sent! It's been posted to the WhatsApp group.
+          🎉 Kudos emailed to {successNames.length > 1 ? successNames.slice(0, -1).join(', ') + ' & ' + successNames.slice(-1) : successNames[0]} — thank you for taking the time to make {"someone's"} day.
         </div>
       )}
 
