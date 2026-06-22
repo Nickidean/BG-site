@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CATEGORIES, MONTHLY_LIMIT } from '@/lib/kudos/types';
+import { PinInput } from '../components/PinInput';
 
 interface Me {
   id: string;
@@ -271,40 +272,10 @@ export default function GivePage() {
             {pinSuccess ? (
               <p className="text-green-300 text-center py-4">✓ PIN changed successfully!</p>
             ) : (
-              <form onSubmit={handlePinChange} className="space-y-3">
-                <div>
-                  <label className="block text-xs text-green-300 mb-1">Current PIN</label>
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    value={currentPin}
-                    onChange={e => setCurrentPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-green-300 mb-1">New PIN (4–6 digits)</label>
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    value={newPin}
-                    onChange={e => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-green-300 mb-1">Confirm new PIN</label>
-                  <input
-                    type="password"
-                    inputMode="numeric"
-                    value={confirmPin}
-                    onChange={e => setConfirmPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    required
-                    className="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 tracking-widest text-center text-base"
-                  />
-                </div>
+              <form onSubmit={handlePinChange} className="space-y-4">
+                <PinInput value={currentPin} onChange={setCurrentPin} label="Current PIN" />
+                <PinInput value={newPin} onChange={setNewPin} label="New PIN" />
+                <PinInput value={confirmPin} onChange={setConfirmPin} label="Confirm new PIN" />
                 {pinError && <p className="text-red-300 text-sm">{pinError}</p>}
                 <div className="flex gap-2 pt-1">
                   <button

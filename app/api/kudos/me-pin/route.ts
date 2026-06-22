@@ -15,7 +15,7 @@ export async function PATCH(req: NextRequest) {
   const { currentPin, newPin } = await req.json();
   if (!currentPin || !newPin) return NextResponse.json({ error: 'currentPin and newPin required' }, { status: 400 });
   if (coach.pin !== currentPin) return NextResponse.json({ error: 'Current PIN is incorrect' }, { status: 401 });
-  if (!/^\d{4,6}$/.test(newPin)) return NextResponse.json({ error: 'New PIN must be 4–6 digits' }, { status: 400 });
+  if (!/^\d{6}$/.test(newPin)) return NextResponse.json({ error: 'New PIN must be 6 digits' }, { status: 400 });
   if (newPin === currentPin) return NextResponse.json({ error: 'New PIN must be different' }, { status: 400 });
 
   coach.pin = newPin;

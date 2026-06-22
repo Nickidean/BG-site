@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
   const { name, pin, role = 'coach', email } = await req.json();
   if (!name || !pin) return NextResponse.json({ error: 'name and pin required' }, { status: 400 });
-  if (!/^\d{4,6}$/.test(pin)) return NextResponse.json({ error: 'PIN must be 4–6 digits' }, { status: 400 });
+  if (!/^\d{6}$/.test(pin)) return NextResponse.json({ error: 'PIN must be 6 digits' }, { status: 400 });
 
   const coach: Coach = {
     id: randomUUID(),
@@ -74,7 +74,7 @@ export async function PATCH(req: NextRequest) {
 
   if (name !== undefined) coach.name = name.trim();
   if (pin !== undefined) {
-    if (!/^\d{4,6}$/.test(pin)) return NextResponse.json({ error: 'PIN must be 4–6 digits' }, { status: 400 });
+    if (!/^\d{6}$/.test(pin)) return NextResponse.json({ error: 'PIN must be 6 digits' }, { status: 400 });
     coach.pin = pin;
   }
   if (role !== undefined) coach.role = role;

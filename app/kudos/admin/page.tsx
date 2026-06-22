@@ -314,7 +314,7 @@ export default function AdminPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs text-green-300 mb-1">PIN (4–6 digits)</label>
+                  <label className="block text-xs text-green-300 mb-1">PIN (6 digits)</label>
                   <input
                     value={newPin}
                     onChange={e => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
