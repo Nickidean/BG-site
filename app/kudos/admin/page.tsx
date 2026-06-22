@@ -26,6 +26,7 @@ interface CoachFull {
   name: string;
   role: string;
   pin: string;
+  email?: string;
   createdAt: number;
 }
 
@@ -566,8 +567,21 @@ export default function AdminPage() {
 
           {/* Coach list */}
           <div className="bg-white/10 rounded-2xl border border-white/20 overflow-hidden">
-            <div className="p-4 border-b border-white/10">
+            <div className="p-4 border-b border-white/10 flex items-center justify-between">
               <h2 className="font-semibold">Active coaches ({coaches.length})</h2>
+              <button
+                onClick={() => {
+                  const rows = [['Name', 'PIN', 'Email', 'Role'], ...coaches.map(c => [c.name, c.pin, c.email ?? '', c.role])];
+                  const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+                  const a = document.createElement('a');
+                  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+                  a.download = 'bridport-yfc-coaches.csv';
+                  a.click();
+                }}
+                className="text-xs bg-white/10 hover:bg-white/20 border border-white/20 text-white px-3 py-1.5 rounded-lg transition-colors"
+              >
+                Download all PINs
+              </button>
             </div>
             <div className="divide-y divide-white/5">
               {coaches.map(c => (
