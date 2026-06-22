@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { CATEGORIES, MONTHLY_LIMIT } from '@/lib/kudos/types';
 import type { Recognition, Boost } from '@/lib/kudos/types';
 
@@ -270,7 +271,17 @@ export default function AdminPage() {
           <h1 className="text-xl font-bold">{"Chairman's View"}</h1>
           <p className="text-green-300 text-sm">{me.name}</p>
         </div>
-        <button onClick={handleLogout} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Log out</button>
+        <div className="flex items-center gap-2">
+          {me.id !== '__admin__' && (
+            <Link
+              href="/kudos/give"
+              className="bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
+            >
+              Give kudos
+            </Link>
+          )}
+          <button onClick={handleLogout} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Log out</button>
+        </div>
       </div>
 
       {/* Quick stats */}

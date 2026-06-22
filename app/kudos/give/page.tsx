@@ -169,7 +169,7 @@ export default function GivePage() {
               href="/kudos/admin"
               className="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
             >
-              {"Chairman's View"}
+              Admin dashboard
             </Link>
           )}
           <Link
