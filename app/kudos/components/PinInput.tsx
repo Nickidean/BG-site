@@ -19,8 +19,8 @@ export function PinInput({ value, onChange, label }: PinInputProps) {
 
   return (
     <div>
-      {label && <label className="block text-sm font-medium text-green-200 mb-3 text-center">{label}</label>}
-      <div className="flex gap-2 justify-center">
+      {label && <label className="block text-sm font-medium text-green-200 mb-3">{label}</label>}
+      <div className="flex gap-2">
         {digits.map((digit, i) => (
           <input
             key={i}
