@@ -43,6 +43,12 @@ export default function AdminPage() {
   const [tab, setTab] = useState<AdminTab>('feed');
   const [filterCoach, setFilterCoach] = useState('');
 
+  // Bulk add
+  const [bulkNames, setBulkNames] = useState('');
+  const [bulkPreview, setBulkPreview] = useState<{ name: string; pin: string }[]>([]);
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const [bulkDone, setBulkDone] = useState(false);
+
   // Add coach form
   const [newName, setNewName] = useState('');
   const [newPin, setNewPin] = useState('');
@@ -90,6 +96,45 @@ export default function AdminPage() {
     if (filterCoach) params.set('coach', filterCoach);
     const adminRes = await fetch(`/api/kudos/admin?${params}`).then(r => r.json());
     if (adminRes.recognitions) setData(adminRes);
+  }
+
+  function generatePin() {
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  function handleBulkPreview() {
+    const names = bulkNames.split('\n').map(n => n.trim()).filter(Boolean);
+    setBulkPreview(names.map(name => ({ name, pin: generatePin() })));
+    setBulkDone(false);
+  }
+
+  async function handleBulkAdd() {
+    setBulkLoading(true);
+    try {
+      await Promise.all(bulkPreview.map(({ name, pin }) =>
+        fetch('/api/kudos/coaches', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, pin, role: 'coach' }),
+        })
+      ));
+      setBulkDone(true);
+      const updatedCoaches = await fetch('/api/kudos/coaches').then(r => r.json());
+      if (Array.isArray(updatedCoaches)) setCoaches(updatedCoaches);
+    } finally {
+      setBulkLoading(false);
+    }
+  }
+
+  function downloadBulkCSV() {
+    const rows = [['Name', 'PIN'], ...bulkPreview.map(c => [c.name, c.pin])];
+    const csv = rows.map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'bridport-yfc-coach-pins.csv';
+    a.click();
   }
 
   async function handleLogout() {
@@ -298,6 +343,76 @@ export default function AdminPage() {
       {/* COACHES TAB */}
       {tab === 'coaches' && (
         <div className="space-y-6">
+          {/* Bulk add */}
+          <div className="bg-white/10 rounded-2xl p-5 border border-white/20">
+            <h2 className="font-semibold mb-1">Bulk add coaches</h2>
+            <p className="text-green-300/70 text-xs mb-4">Paste one name per line — PINs are auto-generated. Download the list to share with coaches.</p>
+            {!bulkPreview.length ? (
+              <div className="space-y-3">
+                <textarea
+                  value={bulkNames}
+                  onChange={e => setBulkNames(e.target.value)}
+                  rows={6}
+                  placeholder={"Dave Smith\nSarah Jones\nMike Taylor"}
+                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-400 resize-none"
+                />
+                <button
+                  onClick={handleBulkPreview}
+                  disabled={!bulkNames.trim()}
+                  className="bg-green-500 hover:bg-green-400 disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors"
+                >
+                  Generate PINs
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="bg-white/5 rounded-xl overflow-hidden border border-white/10">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left p-3 text-green-300 font-medium">Name</th>
+                        <th className="text-left p-3 text-green-300 font-medium">PIN</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {bulkPreview.map((c, i) => (
+                        <tr key={i} className="border-b border-white/5 last:border-0">
+                          <td className="p-3">{c.name}</td>
+                          <td className="p-3 font-mono">{c.pin}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                {bulkDone ? (
+                  <div className="space-y-2">
+                    <p className="text-green-300 text-sm">✓ {bulkPreview.length} coaches added!</p>
+                    <div className="flex gap-2">
+                      <button onClick={downloadBulkCSV} className="bg-green-500 hover:bg-green-400 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+                        Download CSV
+                      </button>
+                      <button onClick={() => { setBulkPreview([]); setBulkNames(''); setBulkDone(false); }} className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-lg text-sm transition-colors">
+                        Add more
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex gap-2">
+                    <button onClick={handleBulkAdd} disabled={bulkLoading} className="bg-green-500 hover:bg-green-400 disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-colors">
+                      {bulkLoading ? 'Adding…' : `Add all ${bulkPreview.length} coaches`}
+                    </button>
+                    <button onClick={downloadBulkCSV} className="bg-white/10 hover:bg-white/20 text-white px-5 py-2 rounded-lg text-sm transition-colors">
+                      Download CSV
+                    </button>
+                    <button onClick={() => setBulkPreview([])} className="text-green-400/60 hover:text-green-300 text-sm transition-colors px-2">
+                      Back
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           {/* Add coach form */}
           <div className="bg-white/10 rounded-2xl p-5 border border-white/20">
             <h2 className="font-semibold mb-4">Add new coach</h2>

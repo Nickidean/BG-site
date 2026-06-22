@@ -12,6 +12,7 @@ interface Me {
   role: string;
   givenThisMonth: number;
   remainingThisMonth: number;
+  hasEmail: boolean;
 }
 
 interface CoachOption {
@@ -48,6 +49,7 @@ export default function GivePage() {
       if (!meData.id) { router.replace('/kudos'); return; }
       if (meData.role === 'admin') { router.replace('/kudos/admin'); return; }
       setMe(meData);
+      if (!meData.hasEmail) setShowEmailPrompt(true);
       if (Array.isArray(coachesData)) setCoaches(coachesData);
     }).catch(() => router.replace('/kudos'))
       .finally(() => setLoading(false));
@@ -86,6 +88,27 @@ export default function GivePage() {
     }
   }
 
+  async function handleSaveEmail(e: React.FormEvent) {
+    e.preventDefault();
+    setEmailError('');
+    setEmailSaving(true);
+    try {
+      const res = await fetch('/api/kudos/me-email', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setEmailError(data.error || 'Failed to save'); return; }
+      setShowEmailPrompt(false);
+      setMe(prev => prev ? { ...prev, hasEmail: true } : prev);
+    } catch {
+      setEmailError('Something went wrong');
+    } finally {
+      setEmailSaving(false);
+    }
+  }
+
   async function handleLogout() {
     await fetch('/api/kudos/auth', { method: 'DELETE' });
     router.push('/kudos');
@@ -115,6 +138,10 @@ export default function GivePage() {
   }
 
   const [showMenu, setShowMenu] = useState(false);
+  const [showEmailPrompt, setShowEmailPrompt] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [emailSaving, setEmailSaving] = useState(false);
+  const [emailError, setEmailError] = useState('');
 
   if (loading) return <LoadingScreen />;
   if (!me) return null;
@@ -265,6 +292,42 @@ export default function GivePage() {
             {submitting ? 'Sending…' : '🏆 Give kudos'}
           </button>
         </form>
+      )}
+
+      {/* Email prompt modal */}
+      {showEmailPrompt && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-green-900 border border-white/20 rounded-2xl p-6 w-full max-w-sm shadow-xl">
+            <div className="text-3xl text-center mb-3">📧</div>
+            <h2 className="font-bold text-lg mb-1 text-center">Add your email</h2>
+            <p className="text-green-300 text-sm text-center mb-5">{"So you know when you've been given kudos — we'll email you straight away."}</p>
+            <form onSubmit={handleSaveEmail} className="space-y-3">
+              <input
+                type="email"
+                value={emailInput}
+                onChange={e => setEmailInput(e.target.value)}
+                placeholder="your@email.com"
+                required
+                className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+              {emailError && <p className="text-red-300 text-sm">{emailError}</p>}
+              <button
+                type="submit"
+                disabled={emailSaving}
+                className="w-full bg-green-500 hover:bg-green-400 disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors"
+              >
+                {emailSaving ? 'Saving…' : 'Add email'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowEmailPrompt(false)}
+                className="w-full text-green-400/60 hover:text-green-300 text-sm py-1 transition-colors"
+              >
+                Maybe later
+              </button>
+            </form>
+          </div>
+        </div>
       )}
 
       {/* Change PIN modal */}

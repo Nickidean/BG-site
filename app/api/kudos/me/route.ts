@@ -26,5 +26,6 @@ export async function GET(req: NextRequest) {
     role: coach.role,
     givenThisMonth,
     remainingThisMonth: Math.max(0, MONTHLY_LIMIT - givenThisMonth),
+    hasEmail: !!coach.email,
   });
 }
