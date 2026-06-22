@@ -34,7 +34,7 @@ export function PinInput({ value, onChange, label }: PinInputProps) {
               const val = e.target.value.replace(/\D/g, '');
               update(i, val.slice(-1));
             }}
-            autoComplete="off"
+            autoComplete="one-time-code"
             onPaste={e => {
               if (i !== 0) return;
               e.preventDefault();
