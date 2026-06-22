@@ -10,6 +10,11 @@ export interface Coach {
   email?: string;
 }
 
+export interface Boost {
+  comment: string;
+  createdAt: number;
+}
+
 export interface Recognition {
   id: string;
   giverId: string;
@@ -19,6 +24,7 @@ export interface Recognition {
   category: string;
   note: string;
   createdAt: number;
+  boosts?: Boost[];
 }
 
 export const CATEGORIES = [

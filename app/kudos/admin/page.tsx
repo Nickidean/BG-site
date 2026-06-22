@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { CATEGORIES, MONTHLY_LIMIT } from '@/lib/kudos/types';
-import type { Recognition } from '@/lib/kudos/types';
+import type { Recognition, Boost } from '@/lib/kudos/types';
 
 interface Me { id: string; name: string; role: string; }
 
@@ -62,6 +62,11 @@ export default function AdminPage() {
   const [editId, setEditId] = useState<string | null>(null);
   const [editPin, setEditPin] = useState('');
 
+  // Boost recognition
+  const [boostId, setBoostId] = useState<string | null>(null);
+  const [boostComment, setBoostComment] = useState('');
+  const [boostLoading, setBoostLoading] = useState(false);
+
   const fetchData = useCallback(async () => {
     const params = new URLSearchParams();
     if (filterCoach) params.set('coach', filterCoach);
@@ -83,6 +88,29 @@ export default function AdminPage() {
     }).catch(() => router.replace('/kudos'))
       .finally(() => setLoading(false));
   }, [fetchData, router]);
+
+  async function handleBoost(id: string) {
+    if (!boostComment.trim()) return;
+    setBoostLoading(true);
+    try {
+      const res = await fetch('/api/kudos/recognitions', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, boostComment }),
+      });
+      const d = await res.json();
+      if (res.ok && d.recognition) {
+        setData(prev => prev ? {
+          ...prev,
+          recognitions: prev.recognitions.map(r => r.id === id ? d.recognition : r),
+        } : prev);
+        setBoostId(null);
+        setBoostComment('');
+      }
+    } finally {
+      setBoostLoading(false);
+    }
+  }
 
   async function handleDeleteAll() {
     if (!confirm(`Remove ALL ${data?.recognitions.length} recognitions? This cannot be undone.`)) return;
@@ -306,6 +334,12 @@ export default function AdminPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <span className="text-xs text-green-400/60">{fmtDate(r.createdAt)}</span>
                       <button
+                        onClick={() => { setBoostId(boostId === r.id ? null : r.id); setBoostComment(''); }}
+                        className="text-xs text-yellow-300 hover:text-yellow-200 bg-yellow-500/10 hover:bg-yellow-500/20 px-2 py-0.5 rounded-lg transition-colors"
+                      >
+                        ⭐ Boost
+                      </button>
+                      <button
                         onClick={() => handleDeleteRecognition(r.id)}
                         className="text-xs text-red-300 hover:text-red-200 bg-white/10 hover:bg-red-500/20 px-2 py-0.5 rounded-lg transition-colors"
                       >
@@ -315,6 +349,43 @@ export default function AdminPage() {
                   </div>
                   <span className="inline-block text-xs bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full mb-2 border border-green-500/30">{catLabel(r.category)}</span>
                   <p className="text-sm text-white/80">"{r.note}"</p>
+
+                  {/* Existing boosts */}
+                  {r.boosts?.map((b: Boost, i: number) => (
+                    <div key={i} className="mt-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-3 py-2">
+                      <p className="text-xs text-yellow-300 font-medium mb-1">⭐ Chairman's boost</p>
+                      <p className="text-sm text-white/80">"{b.comment}"</p>
+                    </div>
+                  ))}
+
+                  {/* Boost form */}
+                  {boostId === r.id && (
+                    <div className="mt-3 space-y-2">
+                      <textarea
+                        value={boostComment}
+                        onChange={e => setBoostComment(e.target.value)}
+                        rows={2}
+                        maxLength={300}
+                        placeholder="Add a note to boost this recognition — the recipient will be emailed."
+                        className="w-full bg-white/10 border border-yellow-500/30 text-white placeholder-white/30 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleBoost(r.id)}
+                          disabled={boostLoading || !boostComment.trim()}
+                          className="bg-yellow-500 hover:bg-yellow-400 disabled:opacity-50 text-white font-semibold px-4 py-1.5 rounded-lg text-sm transition-colors"
+                        >
+                          {boostLoading ? 'Sending…' : 'Send boost'}
+                        </button>
+                        <button
+                          onClick={() => { setBoostId(null); setBoostComment(''); }}
+                          className="text-white/50 hover:text-white text-sm px-2 transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))
             )}

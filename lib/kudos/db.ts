@@ -50,6 +50,16 @@ export async function deleteRecognition(id: string): Promise<void> {
   await redis.zrem(RECOGNITIONS_KEY, id);
 }
 
+export async function boostRecognition(id: string, comment: string): Promise<Recognition | null> {
+  if (!redis) return null;
+  const raw = await redis.get(recKey(id));
+  if (!raw) return null;
+  const rec: Recognition = typeof raw === 'string' ? JSON.parse(raw) : (raw as Recognition);
+  rec.boosts = [...(rec.boosts ?? []), { comment, createdAt: Date.now() }];
+  await redis.set(recKey(id), JSON.stringify(rec));
+  return rec;
+}
+
 export async function deleteAllRecognitions(): Promise<void> {
   if (!redis) return;
   const ids = (await redis.zrange(RECOGNITIONS_KEY, 0, -1)) as string[];

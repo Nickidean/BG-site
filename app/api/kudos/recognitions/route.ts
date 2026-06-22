@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
-import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition, deleteAllRecognitions } from '@/lib/kudos/db';
+import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition, deleteAllRecognitions, boostRecognition } from '@/lib/kudos/db';
 import { postToWhatsApp } from '@/lib/kudos/whatsapp';
-import { sendKudosEmail } from '@/lib/kudos/email';
+import { sendKudosEmail, sendBoostEmail } from '@/lib/kudos/email';
 import { MONTHLY_LIMIT } from '@/lib/kudos/types';
 import type { Recognition } from '@/lib/kudos/types';
 import { randomUUID } from 'crypto';
@@ -85,6 +85,36 @@ export async function POST(req: NextRequest) {
   await sendKudosEmail(recognition, recipientEmails);
 
   return NextResponse.json({ ok: true, id: recognition.id, debug: { recipientEmails, resendConfigured: !!process.env.RESEND_API_KEY } });
+}
+
+export async function PATCH(req: NextRequest) {
+  const coachId = await getAuthedCoachId(req);
+  if (!coachId) return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 });
+
+  const isAdmin = coachId === '__admin__' || (await (async () => {
+    const c = await getCoach(coachId);
+    return c?.role === 'admin' && c.active;
+  })());
+  if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
+  const { id, boostComment } = await req.json();
+  if (!id || !boostComment?.trim()) return NextResponse.json({ error: 'id and boostComment required' }, { status: 400 });
+
+  const updated = await boostRecognition(id, boostComment.trim());
+  if (!updated) return NextResponse.json({ error: 'Recognition not found' }, { status: 404 });
+
+  const boost = updated.boosts![updated.boosts!.length - 1];
+
+  // Email recipients
+  const { getCoaches } = await import('@/lib/kudos/db');
+  const coaches = await getCoaches();
+  const recipientEmails = coaches
+    .filter(c => updated.recipientIds.includes(c.id) && c.email)
+    .map(c => c.email as string);
+
+  await sendBoostEmail(updated, boost, recipientEmails);
+
+  return NextResponse.json({ ok: true, recognition: updated });
 }
 
 export async function DELETE(req: NextRequest) {
