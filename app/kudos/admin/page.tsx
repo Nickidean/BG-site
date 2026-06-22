@@ -47,6 +47,7 @@ export default function AdminPage() {
   const [newName, setNewName] = useState('');
   const [newPin, setNewPin] = useState('');
   const [newRole, setNewRole] = useState<'coach' | 'admin'>('coach');
+  const [newEmail, setNewEmail] = useState('');
   const [addError, setAddError] = useState('');
   const [addLoading, setAddLoading] = useState(false);
   const [addSuccess, setAddSuccess] = useState('');
@@ -104,12 +105,12 @@ export default function AdminPage() {
       const res = await fetch('/api/kudos/coaches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newName, pin: newPin, role: newRole }),
+        body: JSON.stringify({ name: newName, pin: newPin, role: newRole, email: newEmail }),
       });
       const d = await res.json();
       if (!res.ok) { setAddError(d.error || 'Failed'); return; }
       setAddSuccess(`${newName} added successfully`);
-      setNewName(''); setNewPin(''); setNewRole('coach');
+      setNewName(''); setNewPin(''); setNewRole('coach'); setNewEmail('');
       setTimeout(() => setAddSuccess(''), 4000);
       const updatedCoaches = await fetch('/api/kudos/coaches').then(r => r.json());
       if (Array.isArray(updatedCoaches)) setCoaches(updatedCoaches);
@@ -323,6 +324,16 @@ export default function AdminPage() {
                     className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-xs text-green-300 mb-1">Email <span className="text-green-400/50">(for kudos notifications)</span></label>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={e => setNewEmail(e.target.value)}
+                  placeholder="coach@example.com"
+                  className="w-full bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-2 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
+                />
               </div>
               <div>
                 <label className="block text-xs text-green-300 mb-1">Role</label>

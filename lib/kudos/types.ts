@@ -7,6 +7,7 @@ export interface Coach {
   role: Role;
   active: boolean;
   createdAt: number;
+  email?: string;
 }
 
 export interface Recognition {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
 import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition } from '@/lib/kudos/db';
 import { postToWhatsApp } from '@/lib/kudos/whatsapp';
+import { sendKudosEmail } from '@/lib/kudos/email';
 import { MONTHLY_LIMIT } from '@/lib/kudos/types';
 import type { Recognition } from '@/lib/kudos/types';
 import { randomUUID } from 'crypto';
@@ -73,6 +74,12 @@ export async function POST(req: NextRequest) {
 
   await saveRecognition(recognition);
   await postToWhatsApp(recognition);
+
+  // Send email notifications to recipients who have an email address
+  const recipientEmails = coaches
+    .filter(c => recognition.recipientIds.includes(c.id) && c.email)
+    .map(c => c.email as string);
+  await sendKudosEmail(recognition, recipientEmails);
 
   return NextResponse.json({ ok: true, id: recognition.id });
 }

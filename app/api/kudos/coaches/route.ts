@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   const isAdmin = coachId === '__admin__' || (await isAdminCoach(coachId));
   if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-  const { name, pin, role = 'coach' } = await req.json();
+  const { name, pin, role = 'coach', email } = await req.json();
   if (!name || !pin) return NextResponse.json({ error: 'name and pin required' }, { status: 400 });
   if (!/^\d{4,6}$/.test(pin)) return NextResponse.json({ error: 'PIN must be 4–6 digits' }, { status: 400 });
 
@@ -53,6 +53,7 @@ export async function POST(req: NextRequest) {
     role,
     active: true,
     createdAt: Date.now(),
+    ...(email ? { email: email.trim().toLowerCase() } : {}),
   };
   await saveCoach(coach);
   return NextResponse.json({ id: coach.id, name: coach.name, role: coach.role });
