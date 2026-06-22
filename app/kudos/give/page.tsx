@@ -110,6 +110,8 @@ export default function GivePage() {
     }
   }
 
+  const [showMenu, setShowMenu] = useState(false);
+
   if (loading) return <LoadingScreen />;
   if (!me) return null;
 
@@ -129,10 +131,37 @@ export default function GivePage() {
               : "You've used all your kudos this month"}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="/kudos/mine" className="text-green-300 hover:text-white text-sm transition-colors">My kudos</Link>
-          <button onClick={() => setShowPinChange(true)} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Change PIN</button>
-          <button onClick={handleLogout} className="text-green-400/60 hover:text-green-300 text-sm transition-colors">Log out</button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/kudos/mine"
+            className="bg-green-500 hover:bg-green-400 text-white font-semibold text-sm px-4 py-2 rounded-xl transition-colors whitespace-nowrap"
+          >
+            My kudos
+          </Link>
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(m => !m)}
+              className="w-9 h-9 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-colors text-white text-lg"
+            >
+              ···
+            </button>
+            {showMenu && (
+              <div className="absolute right-0 top-11 bg-green-900 border border-white/20 rounded-xl shadow-xl z-10 min-w-36 overflow-hidden">
+                <button
+                  onClick={() => { setShowPinChange(true); setShowMenu(false); }}
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-white/10 transition-colors"
+                >
+                  Change PIN
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-3 text-sm hover:bg-white/10 transition-colors text-red-300"
+                >
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
