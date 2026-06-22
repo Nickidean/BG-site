@@ -82,6 +82,7 @@ export default function KudosLoginPage() {
         <div className="text-center mb-10">
           <div className="text-5xl mb-3">🌟</div>
           <h1 className="text-3xl font-bold tracking-tight">Coach Kudos</h1>
+          <p className="text-green-300 mt-1 text-sm">Recognise the coaches who go the extra mile</p>
         </div>
 
         {/* Login card */}
