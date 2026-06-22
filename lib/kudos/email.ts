@@ -45,12 +45,13 @@ export async function sendKudosEmail(recognition: Recognition, recipientEmails: 
   `;
 
   try {
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: FROM_ADDRESS,
       to: recipientEmails,
       subject: `🏆 ${recognition.giverName} gave you kudos!`,
       html,
     });
+    console.log('[Email] Resend response:', JSON.stringify(result));
   } catch (err) {
     console.error('[Email] Failed to send kudos email:', err);
   }
