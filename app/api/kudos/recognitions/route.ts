@@ -79,9 +79,12 @@ export async function POST(req: NextRequest) {
   const recipientEmails = coaches
     .filter(c => recognition.recipientIds.includes(c.id) && c.email)
     .map(c => c.email as string);
+
+  console.log('[kudos/email] RESEND_API_KEY set:', !!process.env.RESEND_API_KEY);
+  console.log('[kudos/email] Recipient emails found:', recipientEmails);
   await sendKudosEmail(recognition, recipientEmails);
 
-  return NextResponse.json({ ok: true, id: recognition.id });
+  return NextResponse.json({ ok: true, id: recognition.id, debug: { recipientEmails, resendConfigured: !!process.env.RESEND_API_KEY } });
 }
 
 export async function DELETE(req: NextRequest) {
