@@ -76,6 +76,17 @@ export async function boostRecognition(id: string, comment: string): Promise<Rec
   return rec;
 }
 
+export async function deleteRecognitionsThisMonth(): Promise<number> {
+  if (!redis) return 0;
+  const now = new Date();
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const ids = (await redis.zrange(RECOGNITIONS_KEY, monthStart, '+inf', { byScore: true })) as string[];
+  if (!ids.length) return 0;
+  await Promise.all(ids.map(id => redis!.del(recKey(id))));
+  await redis.zremrangebyscore(RECOGNITIONS_KEY, monthStart, '+inf');
+  return ids.length;
+}
+
 export async function deleteAllRecognitions(): Promise<void> {
   if (!redis) return;
   const ids = (await redis.zrange(RECOGNITIONS_KEY, 0, -1)) as string[];

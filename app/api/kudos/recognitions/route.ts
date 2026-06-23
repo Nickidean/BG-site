@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
-import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition, deleteAllRecognitions, boostRecognition } from '@/lib/kudos/db';
+import { getCoach, getAllRecognitions, saveRecognition, countGivenThisMonth, deleteRecognition, deleteAllRecognitions, deleteRecognitionsThisMonth, boostRecognition } from '@/lib/kudos/db';
 import { postToWhatsApp } from '@/lib/kudos/whatsapp';
 import { sendKudosEmail, sendBoostEmail, sendAllKudosGivenEmail } from '@/lib/kudos/email';
 import { MONTHLY_LIMIT, isAdminRole } from '@/lib/kudos/types';
@@ -136,8 +136,11 @@ export async function DELETE(req: NextRequest) {
   if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const body = await req.json();
+  if (body.thisMonth) {
+    const count = await deleteRecognitionsThisMonth();
+    return NextResponse.json({ ok: true, deleted: count });
+  }
   if (!body.id) {
-    // Delete all recognitions
     await deleteAllRecognitions();
     return NextResponse.json({ ok: true, deleted: 'all' });
   }

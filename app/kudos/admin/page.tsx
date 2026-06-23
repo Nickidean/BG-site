@@ -136,6 +136,20 @@ export default function AdminPage() {
     }
   }
 
+  async function handleResetThisMonth() {
+    const thisMonthCount = data?.recognitions.filter(r => r.createdAt >= new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime()).length ?? 0;
+    if (!confirm(`Reset this month's kudos? This will remove ${thisMonthCount} recognition${thisMonthCount !== 1 ? 's' : ''} from this month so everyone can give again. History from previous months is kept.`)) return;
+    await fetch('/api/kudos/recognitions', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ thisMonth: true }),
+    });
+    const params = new URLSearchParams();
+    if (filterCoach) params.set('coach', filterCoach);
+    const adminRes = await fetch(`/api/kudos/admin?${params}`).then(r => r.json());
+    if (adminRes.recognitions) setData(adminRes);
+  }
+
   async function handleDeleteAll() {
     if (!confirm(`Remove ALL ${data?.recognitions.length} recognitions? This cannot be undone.`)) return;
     await fetch('/api/kudos/recognitions', {
@@ -381,6 +395,12 @@ export default function AdminPage() {
               className="bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm rounded-lg px-4 py-2 transition-colors whitespace-nowrap"
             >
               Export CSV
+            </button>
+            <button
+              onClick={handleResetThisMonth}
+              className="bg-yellow-500/20 hover:bg-yellow-500/40 border border-yellow-500/30 text-yellow-300 hover:text-yellow-200 text-sm rounded-lg px-4 py-2 transition-colors whitespace-nowrap"
+            >
+              Reset this month
             </button>
             <button
               onClick={handleDeleteAll}
