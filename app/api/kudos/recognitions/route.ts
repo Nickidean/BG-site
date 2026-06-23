@@ -131,7 +131,7 @@ export async function DELETE(req: NextRequest) {
 
   const isAdmin = coachId === '__admin__' || (await (async () => {
     const c = await getCoach(coachId);
-    return c?.role === 'admin' && c.active;
+    return isAdminRole(c?.role ?? '') && !!c?.active;
   })());
   if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
