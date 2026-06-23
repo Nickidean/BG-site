@@ -237,7 +237,8 @@ export default function GivePage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Coach selection */}
           <div className="bg-white/10 rounded-2xl p-4 border border-white/20">
-            <label className="block text-sm font-semibold text-green-200 mb-3">Who deserves the kudos?</label>
+            <label className="block text-sm font-semibold text-green-200 mb-0.5">Who deserves the kudos?</label>
+            <p className="text-green-400/60 text-xs mb-3">You can select more than one</p>
             <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
               {coaches.map(c => (
                 <button
