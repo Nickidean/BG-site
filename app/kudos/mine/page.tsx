@@ -34,7 +34,6 @@ export default function MinePage() {
       fetch('/api/kudos/recognitions').then(r => r.json()),
     ]).then(([meData, recs]) => {
       if (!meData.id) { router.replace('/kudos'); return; }
-      if (meData.role === 'admin') { router.replace('/kudos/admin'); return; }
       setMe(meData);
       if (Array.isArray(recs)) setRecognitions(recs);
     }).catch(() => router.replace('/kudos'))
