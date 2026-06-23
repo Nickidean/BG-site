@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PinInput } from './components/PinInput';
 
 interface CoachOption {
   id: string;
@@ -106,6 +105,8 @@ export default function KudosLoginPage() {
                   value={selectedId}
                   onChange={e => setSelectedId(e.target.value)}
                   required
+                  name="username"
+                  autoComplete="username"
                   className="w-full rounded-lg bg-white/10 border border-white/20 text-white px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
                   <option value="" disabled className="bg-green-900">Select your name…</option>
@@ -117,7 +118,18 @@ export default function KudosLoginPage() {
             </div>
 
             <div>
-              <PinInput value={pin} onChange={setPin} label="Your PIN" />
+              <label className="block text-sm font-medium text-green-200 mb-1">Your PIN</label>
+              <input
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                inputMode="numeric"
+                value={pin}
+                onChange={e => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="••••••"
+                required
+                className="w-full rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/30 px-3 py-2.5 text-base focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
             </div>
 
             {error && (
