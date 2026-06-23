@@ -63,6 +63,9 @@ export default function AdminPage() {
   // Edit coach
   const [editId, setEditId] = useState<string | null>(null);
   const [editPin, setEditPin] = useState('');
+  const [editEmailId, setEditEmailId] = useState<string | null>(null);
+  const [editEmailValue, setEditEmailValue] = useState('');
+  const [editEmailLoading, setEditEmailLoading] = useState(false);
 
   // Boost recognition
   const [boostId, setBoostId] = useState<string | null>(null);
@@ -225,6 +228,25 @@ export default function AdminPage() {
       setAddError('Something went wrong');
     } finally {
       setAddLoading(false);
+    }
+  }
+
+  async function handleSaveEmail(id: string) {
+    setEditEmailLoading(true);
+    try {
+      const res = await fetch('/api/kudos/coaches', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, email: editEmailValue.trim().toLowerCase() }),
+      });
+      if (res.ok) {
+        setEditEmailId(null);
+        setEditEmailValue('');
+        const updatedCoaches = await fetch('/api/kudos/coaches').then(r => r.json());
+        if (Array.isArray(updatedCoaches)) setCoaches(updatedCoaches);
+      }
+    } finally {
+      setEditEmailLoading(false);
     }
   }
 
@@ -642,10 +664,21 @@ export default function AdminPage() {
                       {c.role === 'admin' && <span className="ml-2 text-xs text-green-400/70 bg-green-500/10 px-1.5 py-0.5 rounded">admin</span>}
                       {c.role === 'chairman' && <span className="ml-2 text-xs text-yellow-300/80 bg-yellow-500/10 px-1.5 py-0.5 rounded">chairman</span>}
                       <p className="text-xs text-green-400/50 mt-0.5">PIN: {c.pin}</p>
+                      <p className="text-xs mt-0.5">
+                        {c.email
+                          ? <span className="text-green-400/70">{c.email}</span>
+                          : <span className="text-red-300/70">No email — won't receive notifications</span>}
+                      </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-1.5 shrink-0">
                       <button
-                        onClick={() => { setEditId(editId === c.id ? null : c.id); setEditPin(''); }}
+                        onClick={() => { setEditEmailId(editEmailId === c.id ? null : c.id); setEditEmailValue(c.email ?? ''); setEditId(null); }}
+                        className="text-xs text-green-300 hover:text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg transition-colors"
+                      >
+                        {c.email ? 'Edit email' : 'Add email'}
+                      </button>
+                      <button
+                        onClick={() => { setEditId(editId === c.id ? null : c.id); setEditPin(''); setEditEmailId(null); }}
                         className="text-xs text-green-300 hover:text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg transition-colors"
                       >
                         Reset PIN
@@ -658,6 +691,25 @@ export default function AdminPage() {
                       </button>
                     </div>
                   </div>
+                  {editEmailId === c.id && (
+                    <div className="mt-3 flex gap-2">
+                      <input
+                        type="email"
+                        value={editEmailValue}
+                        onChange={e => setEditEmailValue(e.target.value)}
+                        placeholder="coach@example.com"
+                        className="bg-white/10 border border-white/20 text-white placeholder-white/30 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-400 flex-1"
+                      />
+                      <button
+                        onClick={() => handleSaveEmail(c.id)}
+                        disabled={editEmailLoading}
+                        className="bg-green-500 hover:bg-green-400 disabled:opacity-50 text-white text-sm px-3 py-1.5 rounded-lg transition-colors"
+                      >
+                        Save
+                      </button>
+                      <button onClick={() => setEditEmailId(null)} className="text-white/50 hover:text-white text-sm px-2 transition-colors">✕</button>
+                    </div>
+                  )}
                   {editId === c.id && (
                     <div className="mt-3 flex gap-2">
                       <input

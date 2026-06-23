@@ -65,7 +65,7 @@ export async function PATCH(req: NextRequest) {
   const isAdmin = coachId === '__admin__' || (await isAdminCoach(coachId));
   if (!isAdmin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-  const { id, name, pin, role, active } = await req.json();
+  const { id, name, pin, role, active, email } = await req.json();
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
 
   const coach = await getCoach(id);
@@ -78,6 +78,7 @@ export async function PATCH(req: NextRequest) {
   }
   if (role !== undefined) coach.role = role;
   if (active !== undefined) coach.active = active;
+  if (email !== undefined) coach.email = email ? email.trim().toLowerCase() : undefined;
 
   await saveCoach(coach);
   return NextResponse.json({ ok: true });
