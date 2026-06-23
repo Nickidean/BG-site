@@ -138,6 +138,8 @@ export async function sendKudosEmail(recognition: Recognition, recipientEmails: 
     console.log('[Email] Resend response:', JSON.stringify(result));
   } catch (err) {
     console.error('[Email] Failed to send kudos email:', err);
+    const { writeLog } = await import('./log');
+    await writeLog('email_failed', `Kudos email failed to ${recipientEmails.join(', ')}`, { error: String(err) });
   }
 }
 

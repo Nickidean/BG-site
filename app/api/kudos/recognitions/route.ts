@@ -6,6 +6,7 @@ import { sendKudosEmail, sendBoostEmail, sendAllKudosGivenEmail } from '@/lib/ku
 import { MONTHLY_LIMIT, isAdminRole } from '@/lib/kudos/types';
 import type { Recognition } from '@/lib/kudos/types';
 import { randomUUID } from 'crypto';
+import { writeLog } from '@/lib/kudos/log';
 
 async function getAuthedCoachId(req: NextRequest): Promise<string | null> {
   const token = getTokenFromRequest(req.headers.get('cookie'));
@@ -74,15 +75,19 @@ export async function POST(req: NextRequest) {
 
   await saveRecognition(recognition);
   await postToWhatsApp(recognition);
+  await writeLog('kudos_sent', `${coach.name} gave kudos to ${recognition.recipientNames.join(' & ')}`, {
+    giverId: coachId, giverName: coach.name, recipientNames: recognition.recipientNames, category: recognition.category,
+  });
 
   // Send email notifications to recipients who have an email address
   const recipientEmails = coaches
     .filter(c => recognition.recipientIds.includes(c.id) && c.email)
     .map(c => c.email as string);
 
-  console.log('[kudos/email] RESEND_API_KEY set:', !!process.env.RESEND_API_KEY);
-  console.log('[kudos/email] Recipient emails found:', recipientEmails);
   await sendKudosEmail(recognition, recipientEmails);
+  if (recipientEmails.length) {
+    await writeLog('email_sent', `Kudos email sent to ${recipientEmails.join(', ')}`, { type: 'kudos', recipientEmails });
+  }
 
   // If the giver has now used all their kudos this month, thank them
   const newTotal = given + 1;
@@ -90,6 +95,7 @@ export async function POST(req: NextRequest) {
     const chairman = coaches.find(c => c.role === 'chairman' && c.active);
     const chairmanName = chairman?.name ?? 'The Chairman';
     await sendAllKudosGivenEmail(coach.name, coach.email, chairmanName, MONTHLY_LIMIT);
+    await writeLog('email_sent', `All-kudos-given email sent to ${coach.name}`, { type: 'all_kudos_given', email: coach.email });
   }
 
   return NextResponse.json({ ok: true, id: recognition.id, debug: { recipientEmails, resendConfigured: !!process.env.RESEND_API_KEY } });
@@ -121,6 +127,10 @@ export async function PATCH(req: NextRequest) {
     .map(c => c.email as string);
 
   await sendBoostEmail(updated, boost, recipientEmails);
+  await writeLog('boost', `Boost added to ${updated.recipientNames.join(' & ')}'s recognition`, { recognitionId: id, recipientNames: updated.recipientNames });
+  if (recipientEmails.length) {
+    await writeLog('email_sent', `Boost email sent to ${recipientEmails.join(', ')}`, { type: 'boost', recipientEmails });
+  }
 
   return NextResponse.json({ ok: true, recognition: updated });
 }

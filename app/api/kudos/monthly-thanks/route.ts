@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, getTokenFromRequest } from '@/lib/kudos/auth';
 import { getCoach, getCoaches, getMonthlyThanksSent, setMonthlyThanksSent } from '@/lib/kudos/db';
 import { sendMonthlyThanksEmail } from '@/lib/kudos/email';
+import { writeLog } from '@/lib/kudos/log';
 import { isAdminRole } from '@/lib/kudos/types';
 
 async function requireChairman(req: NextRequest): Promise<{ id: string; name: string } | null> {
@@ -42,6 +43,7 @@ export async function POST(req: NextRequest) {
 
   await sendMonthlyThanksEmail(emails, chairman.name);
   await setMonthlyThanksSent();
+  await writeLog('monthly_thanks', `Monthly thank-you sent to ${recipients.length} coaches by ${chairman.name}`, { sentTo: recipients.length, emails });
 
   return NextResponse.json({ ok: true, sentTo: recipients.length });
 }
