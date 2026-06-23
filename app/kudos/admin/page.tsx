@@ -669,6 +669,26 @@ export default function AdminPage() {
                           ? <span className="text-green-400/70">{c.email}</span>
                           : <span className="text-red-300/70">No email — won't receive notifications</span>}
                       </p>
+                      {c.role !== 'chairman' && (
+                        <label className="flex items-center gap-2 mt-2 cursor-pointer w-fit">
+                          <input
+                            type="checkbox"
+                            checked={c.role === 'admin'}
+                            onChange={async e => {
+                              const newRole = e.target.checked ? 'admin' : 'coach';
+                              await fetch('/api/kudos/coaches', {
+                                method: 'PATCH',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id: c.id, role: newRole }),
+                              });
+                              const updated = await fetch('/api/kudos/coaches').then(r => r.json());
+                              if (Array.isArray(updated)) setCoaches(updated);
+                            }}
+                            className="w-4 h-4 rounded accent-green-500"
+                          />
+                          <span className="text-xs text-green-300/70">Admin access</span>
+                        </label>
+                      )}
                     </div>
                     <div className="flex flex-col gap-1.5 shrink-0">
                       <button
