@@ -11,6 +11,39 @@ type TariffType = "fix" | "var";
 
 const CTA = "#AAFF1F";
 
+// ── Tariff rate data ──────────────────────────────────────────────────────────
+
+const TARIFF_RATES = {
+  fix: {
+    elecUnit: 25.79,       // p/kWh — Fix & Fall Jun28 v6
+    elecStanding: 47.632,  // p/day
+    gasUnit: 6.642,        // p/kWh
+    gasStanding: 28.262,   // p/day
+    exitFee: 75,
+  },
+  var: {
+    elecUnit: 26.381,      // p/kWh — Standard Variable Tariff v26
+    elecStanding: 53.944,  // p/day
+    gasUnit: 7.26,         // p/kWh
+    gasStanding: 28.703,   // p/day
+    exitFee: 0,
+  },
+} as const;
+
+type TariffRates = { elecUnit: number; elecStanding: number; gasUnit: number; gasStanding: number; exitFee: number };
+function calcMonthly(elec: number, gas: number, r: TariffRates): number {
+  return (
+    (elec * r.elecUnit / 100) +
+    (365 * r.elecStanding / 100) +
+    (gas * r.gasUnit / 100) +
+    (365 * r.gasStanding / 100)
+  ) / 12;
+}
+
+function fmtPrice(n: number): string {
+  return `£${n.toFixed(2)}`;
+}
+
 // ── Nav ───────────────────────────────────────────────────────────────────────
 
 function Nav() {
@@ -566,6 +599,10 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
   const [allRatesOpen, setAllRatesOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
 
+  const fixPrice = calcMonthly(elec, gas, TARIFF_RATES.fix);
+  const varPrice = calcMonthly(elec, gas, TARIFF_RATES.var);
+  const priceDiff = Math.abs(fixPrice - varPrice);
+
   return (
     <div style={{ flex: 1, padding: "48px 32px 64px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
       <h1 style={{ color: "#fff", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, marginBottom: 20, lineHeight: 1.1 }}>Your tariff options</h1>
@@ -584,16 +621,33 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
       {/* Cards — unequal weighting, suggestion first */}
       <div className="tariff-grid-step4">
         <SuggestionCard
+          price={fixPrice}
+          priceDiff={priceDiff}
           ratesOpen={allRatesOpen}
           onToggleRates={() => setAllRatesOpen(o => !o)}
           onSelect={() => onSelectTariff("fix")}
-          ratesPanel={<RatesPanel elecUnit="25.79p per kWh" elecStanding="47.632p per day" elecExit="£75 per fuel" gasUnit="6.642p per kWh" gasStanding="28.262p per day" gasExit="£75 per fuel" />}
+          ratesPanel={<RatesPanel
+            elecUnit={`${TARIFF_RATES.fix.elecUnit}p per kWh`}
+            elecStanding={`${TARIFF_RATES.fix.elecStanding}p per day`}
+            elecExit="£75 per fuel"
+            gasUnit={`${TARIFF_RATES.fix.gasUnit}p per kWh`}
+            gasStanding={`${TARIFF_RATES.fix.gasStanding}p per day`}
+            gasExit="£75 per fuel"
+          />}
         />
         <AlternativeCard
+          price={varPrice}
           ratesOpen={allRatesOpen}
           onToggleRates={() => setAllRatesOpen(o => !o)}
           onSelect={() => onSelectTariff("var")}
-          ratesPanel={<RatesPanel elecUnit="24.936p per kWh" elecStanding="53.937p per day" elecExit="£0" gasUnit="5.673p per kWh" gasStanding="28.744p per day" gasExit="£0" />}
+          ratesPanel={<RatesPanel
+            elecUnit={`${TARIFF_RATES.var.elecUnit}p per kWh`}
+            elecStanding={`${TARIFF_RATES.var.elecStanding}p per day`}
+            elecExit="£0"
+            gasUnit={`${TARIFF_RATES.var.gasUnit}p per kWh`}
+            gasStanding={`${TARIFF_RATES.var.gasStanding}p per day`}
+            gasExit="£0"
+          />}
         />
       </div>
 
@@ -611,6 +665,8 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
 
       <HelpPanel
         open={helpOpen}
+        fixPrice={fixPrice}
+        varPrice={varPrice}
         onSelectTariff={(t) => { onSelectTariff(t); setHelpOpen(false); }}
         onClose={() => setHelpOpen(false)}
       />
@@ -620,7 +676,8 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
 
 // ── Suggestion card (Fix & Fall) ─────────────────────────────────────────────
 
-function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+  price: number; priceDiff: number;
   ratesOpen: boolean; onToggleRates: () => void; onSelect: () => void; ratesPanel: React.ReactNode;
 }) {
   const [exitOpen, setExitOpen] = useState(false);
@@ -651,23 +708,23 @@ function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 4 }}>Fix &amp; Fall tariff</div>
+      <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 4 }}>Fix &amp; Fall Jun28</div>
       <div style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", marginBottom: 20 }}>Peace of mind, without the usual catch.</div>
 
       {/* Price */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 50, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>£103.28</span>
+        <span style={{ fontSize: 50, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Monthly estimate</div>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Monthly estimate (inc. VAT)</div>
 
       {/* Body */}
       <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 16, flex: 1 }}>
-        Your rate&apos;s fixed for 12 months, so a price rise won&apos;t touch you. And if prices fall, yours falls too. You get certainty now, with a bit of upside if the market drops.
+        Your rate&apos;s fixed until June 2028, so a price rise won&apos;t touch you. And if prices fall, yours falls too. You get certainty now, with a bit of upside if the market drops.
       </p>
 
       {/* Trade-off line */}
       <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 20 }}>
-        It&apos;s around £5 a month more than our variable tariff today, with a £75 per fuel charge if you leave early. That&apos;s the cost of locking in your protection.
+        It&apos;s around {fmtPrice(priceDiff)} a month more than our variable tariff today, with a £75 per fuel charge if you leave early. That&apos;s the cost of locking in your protection.
       </p>
 
       {/* Meta */}
@@ -718,7 +775,8 @@ function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
 
 // ── Alternative card (Standard Variable) ─────────────────────────────────────
 
-function AlternativeCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+  price: number;
   ratesOpen: boolean; onToggleRates: () => void; onSelect: () => void; ratesPanel: React.ReactNode;
 }) {
   return (
@@ -745,9 +803,9 @@ function AlternativeCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
 
       {/* Price — slightly smaller */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 48, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>£98.01</span>
+        <span style={{ fontSize: 48, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 20 }}>Monthly estimate</div>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 20 }}>Monthly estimate (inc. VAT)</div>
 
       {/* Body */}
       <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.7, marginBottom: 20, flex: 1 }}>
@@ -855,7 +913,8 @@ type Q1Answer = "reliable" | "cheap" | null;
 type Q2Answer = "settled" | "flexible" | null;
 type HelpView = "questions" | "result";
 
-function HelpMeChoose({ onSelectTariff, onClose }: {
+function HelpMeChoose({ fixPrice, varPrice, onSelectTariff, onClose }: {
+  fixPrice: number; varPrice: number;
   onSelectTariff: (t: TariffType) => void; onClose: () => void;
 }) {
   const [view, setView] = useState<HelpView>("questions");
@@ -869,8 +928,8 @@ function HelpMeChoose({ onSelectTariff, onClose }: {
   function reason(): string {
     if (suggestedTariff === "fix") {
       return q2 === "settled"
-        ? "You want a bill you can count on and you're staying put. Fixing your rate for 12 months gives you that, and it still drops if prices fall."
-        : "A reliable bill matters most to you. Fix & Fall locks your rate for 12 months and still falls if prices drop. Just note the £75 per fuel exit fee if you move before then.";
+        ? "You want a bill you can count on and you're staying put. Fixing your rate until June 2028 gives you that, and it still drops if prices fall."
+        : "A reliable bill matters most to you. Fix & Fall locks your rate until June 2028 and still falls if prices drop. Just note the £75 per fuel exit fee if you move before then.";
     } else {
       return q2 === "flexible"
         ? "Lowest price matters most and you want to stay flexible. Standard Variable is cheaper right now, with no exit fee, so you can leave whenever you like."
@@ -878,8 +937,8 @@ function HelpMeChoose({ onSelectTariff, onClose }: {
     }
   }
 
-  const suggestedName = suggestedTariff === "fix" ? "Fix & Fall" : "Standard Variable";
-  const suggestedPrice = suggestedTariff === "fix" ? "£103.28" : "£98.01";
+  const suggestedName = suggestedTariff === "fix" ? "Fix & Fall Jun28" : "Standard Variable";
+  const suggestedPrice = fmtPrice(suggestedTariff === "fix" ? fixPrice : varPrice);
 
   if (view === "result") {
     return (
@@ -894,7 +953,7 @@ function HelpMeChoose({ onSelectTariff, onClose }: {
         </div>
 
         <div style={{ fontSize: 44, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px", marginBottom: 4 }}>{suggestedPrice}</div>
-        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>Monthly estimate</div>
+        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 20 }}>Monthly estimate (inc. VAT)</div>
 
         <p style={{ fontSize: 14, color: "rgba(255,255,255,0.8)", lineHeight: 1.75, marginBottom: 28 }}>{reason()}</p>
 
@@ -985,8 +1044,9 @@ function HelpMeChoose({ onSelectTariff, onClose }: {
 
 // ── Help panel shell (desktop drawer / mobile sheet) ─────────────────────────
 
-function HelpPanel({ open, onSelectTariff, onClose }: {
-  open: boolean; onSelectTariff: (t: TariffType) => void; onClose: () => void;
+function HelpPanel({ open, fixPrice, varPrice, onSelectTariff, onClose }: {
+  open: boolean; fixPrice: number; varPrice: number;
+  onSelectTariff: (t: TariffType) => void; onClose: () => void;
 }) {
   if (!open) return null;
   return (
@@ -997,7 +1057,7 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
         aria-hidden="true"
       />
 
-      {/* Desktop drawer — right side, below sticky header */}
+      {/* Desktop drawer */}
       <div
         className="help-drawer-desktop"
         role="dialog"
@@ -1011,7 +1071,7 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
         </button>
         <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 6, marginTop: 8 }}>Help me choose</div>
         <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 28 }}>Answer two quick questions and we&apos;ll suggest the right tariff for you.</div>
-        <HelpMeChoose onSelectTariff={onSelectTariff} onClose={onClose} />
+        <HelpMeChoose fixPrice={fixPrice} varPrice={varPrice} onSelectTariff={onSelectTariff} onClose={onClose} />
       </div>
 
       {/* Mobile bottom sheet */}
@@ -1026,7 +1086,7 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
         <div style={{ width: 40, height: 4, background: "rgba(255,255,255,0.25)", borderRadius: 4, margin: "0 auto 20px" }} />
         <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 6 }}>Help me choose</div>
         <div style={{ fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 20 }}>Answer two quick questions and we&apos;ll suggest the right tariff for you.</div>
-        <HelpMeChoose onSelectTariff={onSelectTariff} onClose={onClose} />
+        <HelpMeChoose fixPrice={fixPrice} varPrice={varPrice} onSelectTariff={onSelectTariff} onClose={onClose} />
       </div>
     </>
   );
@@ -1076,15 +1136,16 @@ function TrustpilotBadge() {
 
 // ── Confirmation ──────────────────────────────────────────────────────────────
 
-function Confirmation({ tariff }: { tariff: TariffType }) {
+function Confirmation({ tariff, elec, gas }: { tariff: TariffType; elec: number; gas: number }) {
   const fix = tariff === "fix";
+  const price = fmtPrice(calcMonthly(elec, gas, fix ? TARIFF_RATES.fix : TARIFF_RATES.var));
   return (
     <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: 40 }}>
       <div style={{ textAlign: "center", maxWidth: 480 }}>
         <div style={{ fontSize: 56, marginBottom: 20 }}>✅</div>
-        <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", marginBottom: 12 }}>{fix ? "Fix & Fall tariff selected" : "Standard Variable tariff selected"}</div>
+        <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", marginBottom: 12 }}>{fix ? "Fix & Fall Jun28 selected" : "Standard Variable selected"}</div>
         <div style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.7 }}>{fix ? "Great choice. Your rate is locked in — and if prices fall, yours will too." : "No problem. You're on the flexible tariff with no lock-in."}</div>
-        <div style={{ marginTop: 32, fontSize: 36, fontWeight: 800, color: CTA }}>{fix ? "£103.28" : "£98.01"}<span style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.5)" }}>/mo estimated</span></div>
+        <div style={{ marginTop: 32, fontSize: 36, fontWeight: 800, color: CTA }}>{price}<span style={{ fontSize: 16, fontWeight: 400, color: "rgba(255,255,255,0.5)" }}>/mo estimated</span></div>
       </div>
     </div>
   );
@@ -1111,7 +1172,7 @@ export default function QuoteJourney() {
           {step === 2 && <Step2 fuel={fuel} setFuel={setFuel} smartDevices={smartDevices} setSmartDevices={setSmartDevices} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
           {step === 3 && <Step3 elec={elec} setElec={setElec} gas={gas} setGas={setGas} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
           {step === 4 && <Step4 elec={elec} gas={gas} onBack={() => setStep(3)} onSelectTariff={handleSelectTariff} />}
-          {step === 5 && selectedTariff && <Confirmation tariff={selectedTariff} />}
+          {step === 5 && selectedTariff && <Confirmation tariff={selectedTariff} elec={elec} gas={gas} />}
         </div>
       </div>
     </div>
