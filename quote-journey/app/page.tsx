@@ -790,8 +790,6 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
         flexDirection: "column",
         backdropFilter: "blur(8px)",
         position: "relative",
-        alignSelf: "start",
-        marginTop: 16,
       }}
       className="alt-card"
     >

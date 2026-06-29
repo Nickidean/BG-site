@@ -93,16 +93,14 @@ body {
     gap: 24px;
   }
 
-  /* 3:2 weighting — suggestion wider */
   .tariff-grid-step4 {
     grid-template-columns: 3fr 2fr;
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
   }
 
-  /* Alt card drops down slightly to reinforce hierarchy */
   .alt-card {
-    margin-top: 24px !important;
+    margin-top: 0 !important;
   }
 
   .help-drawer-desktop { display: block; }
