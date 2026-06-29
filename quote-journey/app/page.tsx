@@ -593,11 +593,14 @@ function OptionBtn({ selected, onClick, children, xstyle }: {
 
 // ── Step 4: Tariffs ───────────────────────────────────────────────────────────
 
-function Step4({ elec, gas, onBack, onSelectTariff }: {
-  elec: number; gas: number; onBack: () => void; onSelectTariff: (t: TariffType) => void;
+function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
+  elec: number; gas: number;
+  setElec: (v: number) => void; setGas: (v: number) => void;
+  onSelectTariff: (t: TariffType) => void;
 }) {
   const [allRatesOpen, setAllRatesOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [editUsageOpen, setEditUsageOpen] = useState(false);
 
   const fixPrice = calcMonthly(elec, gas, TARIFF_RATES.fix);
   const varPrice = calcMonthly(elec, gas, TARIFF_RATES.var);
@@ -605,17 +608,25 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
 
   return (
     <div style={{ flex: 1, padding: "20px 32px 32px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
-      <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 10, lineHeight: 1.1 }}>Your tariff options</h1>
+      <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 12, lineHeight: 1.1 }}>Your tariff options</h1>
 
-      {/* Summary */}
-      <div style={{ marginBottom: 16, fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.8 }}>
-        <div><span style={{ color: "rgba(255,255,255,0.45)" }}>Address: </span><span style={{ color: "#fff" }}>24 Millstream, Maidenhead Rd, Windsor, Berkshire, SL4 5GD</span></div>
-        <div><span style={{ color: "rgba(255,255,255,0.45)" }}>Fuel type: </span><span style={{ color: "#fff" }}>Gas and electricity</span></div>
-        <div>
-          <span style={{ color: "rgba(255,255,255,0.45)" }}>Energy usage: </span>
-          <span style={{ color: "#fff" }}>Electricity: {elec.toLocaleString()} kWh &nbsp;·&nbsp; Gas: {gas.toLocaleString()} kWh</span>
-          &nbsp;&nbsp;<span onClick={onBack} style={{ color: CTA, cursor: "pointer", textDecoration: "underline" }}>Edit</span>
-        </div>
+      {/* Summary strip */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
+        <SummaryChip icon={
+          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        }>24 Millstream, Maidenhead Rd</SummaryChip>
+        <SummaryChip icon={
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinejoin="round"/></svg>
+        }>Gas &amp; electricity</SummaryChip>
+        <button
+          onClick={() => setEditUsageOpen(true)}
+          style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(170,255,31,0.08)", border: `1px solid ${CTA}`, borderRadius: 20, padding: "5px 12px 5px 10px", cursor: "pointer", color: "#fff", fontSize: 12, fontWeight: 500 }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinejoin="round"/></svg>
+          <span style={{ color: "rgba(255,255,255,0.6)" }}>Usage:</span>
+          <span>{elec.toLocaleString()} / {gas.toLocaleString()} kWh</span>
+          <svg width="10" height="10" fill="none" stroke={CTA} strokeWidth={2} viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
       </div>
 
       {/* Cards — unequal weighting, suggestion first */}
@@ -669,6 +680,23 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
         onSelectTariff={(t) => { onSelectTariff(t); setHelpOpen(false); }}
         onClose={() => setHelpOpen(false)}
       />
+
+      <EditUsagePanel
+        open={editUsageOpen}
+        elec={elec}
+        gas={gas}
+        onConfirm={(e, g) => { setElec(e); setGas(g); setEditUsageOpen(false); }}
+        onClose={() => setEditUsageOpen(false)}
+      />
+    </div>
+  );
+}
+
+function SummaryChip({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "5px 12px 5px 10px", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
+      <span style={{ color: "rgba(255,255,255,0.4)", display: "flex" }}>{icon}</span>
+      {children}
     </div>
   );
 }
@@ -1091,6 +1119,95 @@ function HelpPanel({ open, fixPrice, varPrice, onSelectTariff, onClose }: {
   );
 }
 
+// ── Edit usage drawer ─────────────────────────────────────────────────────────
+
+function EditUsagePanel({ open, elec, gas, onConfirm, onClose }: {
+  open: boolean; elec: number; gas: number;
+  onConfirm: (elec: number, gas: number) => void;
+  onClose: () => void;
+}) {
+  const [homeType, setHomeType] = useState<HomeType>("semi");
+  const [bedrooms, setBedrooms] = useState(3);
+  const [heating, setHeating] = useState<HeatingType>("gas");
+  const [people, setPeople] = useState(3);
+  const [hasEV, setHasEV] = useState(false);
+  const [homeDuringDay, setHomeDuringDay] = useState(false);
+
+  const est = computeFromDetail({ homeType, bedrooms, heating, people, ev: hasEV, homeDuringDay });
+  const previewFix = calcMonthly(est.elec, est.gas, TARIFF_RATES.fix);
+  const previewVar = calcMonthly(est.elec, est.gas, TARIFF_RATES.var);
+
+  if (!open) return null;
+
+  const drawerContent = (
+    <>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.55)", marginBottom: 24 }}>
+        Answer the questions below and we&apos;ll recalculate your quote.
+      </div>
+
+      <DetailView
+        homeType={homeType} setHomeType={setHomeType}
+        bedrooms={bedrooms} setBedrooms={setBedrooms}
+        heating={heating} setHeating={setHeating}
+        people={people} setPeople={setPeople}
+        hasEV={hasEV} setHasEV={setHasEV}
+        homeDuringDay={homeDuringDay} setHomeDuringDay={setHomeDuringDay}
+        estimate={est}
+      />
+
+      {/* Live price preview */}
+      <div style={{ background: "rgba(170,255,31,0.06)", border: `1px solid rgba(170,255,31,0.2)`, borderRadius: 12, padding: "14px 16px", marginTop: 16, marginBottom: 20 }}>
+        <div style={{ fontSize: 11, color: CTA, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Updated quote preview</div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+          <span style={{ color: "rgba(255,255,255,0.6)" }}>Fix &amp; Fall Jun28</span>
+          <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewFix)}/mo</span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 6 }}>
+          <span style={{ color: "rgba(255,255,255,0.6)" }}>Standard Variable</span>
+          <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewVar)}/mo</span>
+        </div>
+      </div>
+
+      <button
+        onClick={() => onConfirm(est.elec, est.gas)}
+        style={{ display: "block", width: "100%", padding: "15px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+      >
+        Update my quote
+      </button>
+    </>
+  );
+
+  return (
+    <>
+      <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 55 }} aria-hidden="true" />
+
+      <div
+        className="help-drawer-desktop"
+        role="dialog" aria-modal="true" aria-label="Edit energy usage"
+        style={{ position: "fixed", top: 0, right: 0, height: "100%", width: 460, background: "#0c2550", zIndex: 60, padding: "32px 28px 48px", overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.5)" }}
+        onKeyDown={(e) => e.key === "Escape" && onClose()}
+      >
+        <button onClick={onClose} style={{ position: "absolute", top: 20, right: 20, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.5)", display: "flex" }} aria-label="Close">
+          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" strokeLinecap="round"/></svg>
+        </button>
+        <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 4, marginTop: 8 }}>Update your usage</div>
+        {drawerContent}
+      </div>
+
+      <div
+        className="help-drawer-mobile"
+        role="dialog" aria-modal="true" aria-label="Edit energy usage"
+        style={{ position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)", width: "100%", maxWidth: 520, background: "#0c2550", borderRadius: "20px 20px 0 0", zIndex: 60, padding: "24px 24px 48px", overflowY: "auto", maxHeight: "90vh" }}
+        onKeyDown={(e) => e.key === "Escape" && onClose()}
+      >
+        <div style={{ width: 40, height: 4, background: "rgba(255,255,255,0.25)", borderRadius: 4, margin: "0 auto 20px" }} />
+        <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 4 }}>Update your usage</div>
+        {drawerContent}
+      </div>
+    </>
+  );
+}
+
 // ── Shared ────────────────────────────────────────────────────────────────────
 
 function StepShell({ step, title, onBack, onNext, children }: {
@@ -1170,7 +1287,7 @@ export default function QuoteJourney() {
           {step === 1 && <Step1 onNext={() => setStep(2)} />}
           {step === 2 && <Step2 fuel={fuel} setFuel={setFuel} smartDevices={smartDevices} setSmartDevices={setSmartDevices} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
           {step === 3 && <Step3 elec={elec} setElec={setElec} gas={gas} setGas={setGas} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
-          {step === 4 && <Step4 elec={elec} gas={gas} onBack={() => setStep(3)} onSelectTariff={handleSelectTariff} />}
+          {step === 4 && <Step4 elec={elec} gas={gas} setElec={setElec} setGas={setGas} onSelectTariff={handleSelectTariff} />}
           {step === 5 && selectedTariff && <Confirmation tariff={selectedTariff} elec={elec} gas={gas} />}
         </div>
       </div>
