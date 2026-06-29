@@ -1275,12 +1275,12 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
       </header>
 
       {/* Hero */}
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px" }}>
         <div style={{
           position: "relative",
-          borderRadius: 24,
+          borderRadius: "0 0 24px 24px",
           overflow: "hidden",
-          minHeight: 420,
+          minHeight: "calc(100vh - 104px)",
           background: "linear-gradient(135deg, #1a9fe0 0%, #0d7fc4 40%, #0a5fa0 100%)",
           display: "flex",
           alignItems: "center",
