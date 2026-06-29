@@ -611,7 +611,7 @@ function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
       <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 12, lineHeight: 1.1 }}>Your tariff options</h1>
 
       {/* Summary strip */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 22 }}>
         <SummaryChip icon={
           <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         }>24 Millstream, Maidenhead Rd</SummaryChip>
@@ -620,12 +620,11 @@ function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
         }>Gas &amp; electricity</SummaryChip>
         <button
           onClick={() => setEditUsageOpen(true)}
-          style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(170,255,31,0.08)", border: `1px solid ${CTA}`, borderRadius: 20, padding: "5px 12px 5px 10px", cursor: "pointer", color: "#fff", fontSize: 12, fontWeight: 500 }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px 6px 12px", cursor: "pointer", fontSize: 12, fontWeight: 500 }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinejoin="round"/></svg>
-          <span style={{ color: "rgba(255,255,255,0.6)" }}>Usage:</span>
-          <span>{elec.toLocaleString()} / {gas.toLocaleString()} kWh</span>
-          <svg width="10" height="10" fill="none" stroke={CTA} strokeWidth={2} viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth={2}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" strokeLinejoin="round"/></svg>
+          <span style={{ color: "rgba(255,255,255,0.7)" }}>{elec.toLocaleString()} / {gas.toLocaleString()} kWh</span>
+          <span style={{ color: CTA, fontWeight: 600 }}>Edit</span>
         </button>
       </div>
 
@@ -694,7 +693,7 @@ function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
 
 function SummaryChip({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "5px 12px 5px 10px", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
+    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 20, padding: "6px 14px 6px 12px", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
       <span style={{ color: "rgba(255,255,255,0.4)", display: "flex" }}>{icon}</span>
       {children}
     </div>
