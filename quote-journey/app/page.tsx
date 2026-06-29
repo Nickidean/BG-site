@@ -1236,17 +1236,196 @@ function Confirmation({ tariff, elec, gas }: { tariff: TariffType; elec: number;
   );
 }
 
+// ── Landing page ─────────────────────────────────────────────────────────────
+
+function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
+  const [postcode, setPostcode] = useState("");
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (postcode.trim()) onStart(postcode.trim());
+  }
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#001029" }}>
+
+      {/* Top utility bar */}
+      <div style={{ background: "#001029", padding: "8px 32px", display: "flex", gap: 24 }}>
+        {["Offers", "Business", "Landlord", "Accessibility toolbar"].map((l) => (
+          <a key={l} href="#" style={{ color: "#83B5FF", fontSize: 12, textDecoration: "none" }}>{l}</a>
+        ))}
+      </div>
+
+      {/* Main nav */}
+      <header style={{ background: "#001029", padding: "0 32px", display: "flex", alignItems: "center", height: 64, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <Image src="/bg-logo.png" alt="British Gas" width={120} height={40} style={{ objectFit: "contain" }} />
+        </div>
+        <nav style={{ display: "flex", gap: 28, flex: 1, justifyContent: "center" }}>
+          {["Energy", "Products", "Servicing", "Repairs", "Cover", "Help"].map((l) => (
+            <a key={l} href="#" className="nav-link">{l}</a>
+          ))}
+        </nav>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <button style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", padding: 4, display: "flex" }}>
+            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" strokeLinecap="round"/></svg>
+          </button>
+          <button style={{ background: CTA, color: "#0b1f3a", border: "none", borderRadius: 24, padding: "9px 20px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Login</button>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 24px 0" }}>
+        <div style={{
+          position: "relative",
+          borderRadius: 24,
+          overflow: "hidden",
+          minHeight: 420,
+          background: "linear-gradient(135deg, #1a9fe0 0%, #0d7fc4 40%, #0a5fa0 100%)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}>
+          {/* Background image */}
+          <Image
+            src="/hero-bg.jpg"
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+
+          {/* Trustpilot */}
+          <div style={{ position: "absolute", top: 28, left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: 8, whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "0.06em" }}>Great</span>
+            <span style={{ color: "#00b67a", fontSize: 18, letterSpacing: 2 }}>★★★★</span>
+            <span style={{ fontSize: 12, color: "rgba(255,255,255,0.8)" }}>198K</span>
+            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", fontStyle: "italic" }}>Trustpilot</span>
+          </div>
+
+          {/* Headline + form */}
+          <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "60px 24px 48px" }}>
+            <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 32, maxWidth: 560, margin: "0 auto 32px" }}>
+              Compare our gas and<br />electricity tariffs
+            </h1>
+            <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                <svg style={{ position: "absolute", left: 14, color: "rgba(0,0,0,0.4)" }} width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                <input
+                  type="text"
+                  placeholder="Postcode"
+                  value={postcode}
+                  onChange={(e) => setPostcode(e.target.value)}
+                  style={{ paddingLeft: 38, paddingRight: 16, paddingTop: 14, paddingBottom: 14, fontSize: 15, borderRadius: 28, border: "none", outline: "none", background: "#fff", color: "#001029", width: 180, fontFamily: "inherit" }}
+                />
+              </div>
+              <button
+                type="submit"
+                style={{ padding: "14px 28px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}
+              >
+                Get a Quote
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Awards */}
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "48px 24px 0" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 24 }}>Awards &amp; Recommendations</h2>
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "16px 20px" }}>
+            <div style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid #e63946", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: 10, fontWeight: 800, color: "#e63946", textAlign: "center", lineHeight: 1.2 }}>Which?<br/>Trusted<br/>Trader</span>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "16px 20px" }}>
+            <div style={{ width: 44, height: 44, background: "#1a3a6b", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <span style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>U</span>
+            </div>
+            <div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Uswitch Energy Awards</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Best Overall Improvement</div>
+              <div style={{ fontSize: 12, color: CTA }}>Winner 2024 &amp; 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "48px 24px 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 32, paddingBottom: 48, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+
+          {/* Social */}
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>Social media</div>
+            <div style={{ display: "flex", gap: 14 }}>
+              {["f", "in", "𝕏", "▶"].map((icon) => (
+                <a key={icon} href="#" style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "#fff", textDecoration: "none" }}>{icon}</a>
+              ))}
+            </div>
+          </div>
+
+          {/* App */}
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>Download our app</div>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {["Google Play", "App Store"].map((s) => (
+                <a key={s} href="#" style={{ padding: "8px 14px", background: "#000", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, fontSize: 11, color: "#fff", textDecoration: "none", fontWeight: 600 }}>{s}</a>
+              ))}
+            </div>
+          </div>
+
+          {/* Safe Spaces */}
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>We proudly support</div>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#0d5fa0", border: "2px solid rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontSize: 9, color: "#fff", textAlign: "center", lineHeight: 1.2, fontWeight: 700 }}>SAFE<br/>SPACES</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer links */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, padding: "40px 0 48px" }}>
+          {[
+            { heading: "Information", links: ["Energy terms & conditions", "Website terms & conditions", "Privacy policy", "Cookie settings", "Conformity", "Legal information", "Access for all", "Modern slavery transparency statement", "Carbon reduction plan"] },
+            { heading: "Support", links: ["Emergencies", "Contact us", "Complaints", "Responsible disclosure", "Priority Service Register"] },
+            { heading: "The Company", links: ["About us", "Our performance", "Careers", "British Gas Business", "Hive Active Heating", "Centrica PLC", "The Source Blog", "Meet the Things"] },
+          ].map(({ heading, links }) => (
+            <div key={heading}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 14 }}>{heading}</div>
+              {links.map((l) => (
+                <a key={l} href="#" style={{ display: "block", fontSize: 13, color: "#83B5FF", textDecoration: "none", marginBottom: 8 }}>{l}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Image src="/bg-logo.png" alt="British Gas" width={100} height={34} style={{ objectFit: "contain" }} />
+          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>© British Gas 2025</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 export default function QuoteJourney() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
+  const [postcode, setPostcode] = useState("");
   const [fuel, setFuel] = useState<FuelType>("dual");
   const [smartDevices, setSmartDevices] = useState<Set<SmartDevice>>(new Set());
   const [elec, setElec] = useState(2700);
   const [gas, setGas] = useState(11500);
   const [selectedTariff, setSelectedTariff] = useState<TariffType | null>(null);
 
+  function handleStart(pc: string) { setPostcode(pc); setStep(1); }
   function handleSelectTariff(t: TariffType) { setSelectedTariff(t); setStep(5); }
+
+  if (step === 0) return <LandingPage onStart={handleStart} />;
 
   return (
     <div style={{ minHeight: "100vh", background: "#001029", display: "flex", justifyContent: "center", padding: "0" }}>
