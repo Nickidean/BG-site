@@ -56,6 +56,10 @@ function ProgressBar({ step }: { step: number }) {
 // ── Step 1: Address ───────────────────────────────────────────────────────────
 
 function Step1({ onNext }: { onNext: () => void }) {
+  const [postcode, setPostcode] = useState("DT63HY");
+  const [searched, setSearched] = useState(true);
+  const [address, setAddress] = useState("24");
+
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 16px 64px", minHeight: "calc(100vh - 100px)", position: "relative", background: "radial-gradient(ellipse at 65% 50%, #0d3068 0%, #071628 100%)" }}>
       <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "30px 30px", pointerEvents: "none" }} />
@@ -64,25 +68,54 @@ function Step1({ onNext }: { onNext: () => void }) {
         <div style={{ background: "#1a4fd6", borderRadius: 20, padding: "36px 32px 32px" }}>
           <div style={{ textAlign: "center", color: "rgba(255,255,255,0.65)", fontSize: 13, marginBottom: 8 }}>Step 1 of 4</div>
           <div style={{ textAlign: "center", color: "#fff", fontSize: 26, fontWeight: 700, marginBottom: 28 }}>Let&apos;s find your address</div>
-          <div style={{ position: "relative", marginBottom: 14 }}>
-            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#0b1f3a", opacity: 0.4, display: "flex" }}>
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            </span>
-            <input type="text" defaultValue="DT63HY" style={{ display: "block", width: "100%", padding: "14px 14px 14px 38px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", boxSizing: "border-box" }} />
+
+          {/* Postcode row */}
+          <div style={{ display: "flex", gap: 8, marginBottom: 14, alignItems: "stretch" }}>
+            <div style={{ position: "relative", flex: 1 }}>
+              <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#0b1f3a", opacity: 0.4, display: "flex" }}>
+                <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              </span>
+              <input
+                type="text"
+                value={postcode}
+                onChange={e => { setPostcode(e.target.value.toUpperCase()); setSearched(false); }}
+                placeholder="Enter postcode"
+                style={{ display: "block", width: "100%", padding: "14px 14px 14px 38px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", boxSizing: "border-box", height: "100%" }}
+              />
+            </div>
+            <button
+              onClick={() => postcode.trim() && setSearched(true)}
+              style={{ padding: "0 20px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "2px solid rgba(255,255,255,0.3)", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap" }}
+            >
+              {searched ? "Search again" : "Find address"}
+            </button>
           </div>
-          <div style={{ position: "relative", marginBottom: 4 }}>
-            <select defaultValue="24" style={{ display: "block", width: "100%", padding: "14px 40px 14px 14px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", appearance: "none", boxSizing: "border-box" }}>
-              <option value="">Select address</option>
-              <option value="24">24 Millstream, Maidenhead Rd</option>
-              <option value="12">12 Millstream, Maidenhead Rd</option>
-              <option value="8">8 Millstream, Maidenhead Rd</option>
-            </select>
-            <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "#0b1f3a", opacity: 0.5, display: "flex" }}>
-              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-            </span>
-          </div>
+
+          {/* Address selector — only shown after a search */}
+          {searched && (
+            <div style={{ position: "relative", marginBottom: 4 }}>
+              <select
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+                style={{ display: "block", width: "100%", padding: "14px 40px 14px 14px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", appearance: "none", boxSizing: "border-box" }}
+              >
+                <option value="">Select address</option>
+                <option value="24">24 Millstream, Maidenhead Rd</option>
+                <option value="12">12 Millstream, Maidenhead Rd</option>
+                <option value="8">8 Millstream, Maidenhead Rd</option>
+              </select>
+              <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "#0b1f3a", opacity: 0.5, display: "flex" }}>
+                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+              </span>
+            </div>
+          )}
+
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 20 }}>
-            <button onClick={onNext} style={{ padding: "14px 28px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 24, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+            <button
+              onClick={onNext}
+              disabled={!searched || !address}
+              style={{ padding: "14px 28px", background: searched && address ? CTA : "rgba(255,255,255,0.2)", color: searched && address ? "#0b1f3a" : "rgba(255,255,255,0.4)", border: "none", borderRadius: 24, fontSize: 15, fontWeight: 700, cursor: searched && address ? "pointer" : "not-allowed", transition: "background 0.2s" }}
+            >
               Choose this address
             </button>
           </div>
@@ -199,8 +232,8 @@ function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
 
 function URow({ label, value, border }: { label: string; value: string; border?: boolean }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "7px 0", fontSize: 14, borderBottom: border ? "1px solid rgba(255,255,255,0.1)" : "none" }}>
-      <span style={{ color: "#93c5fd" }}>{label}</span>
+    <div style={{ display: "flex", gap: 8, padding: "7px 0", fontSize: 14, borderBottom: border ? "1px solid rgba(255,255,255,0.1)" : "none" }}>
+      <span style={{ color: "#93c5fd", width: 150, flexShrink: 0 }}>{label}</span>
       <span style={{ fontWeight: 600, color: "#fff" }}>{value}</span>
     </div>
   );
@@ -276,14 +309,14 @@ function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
     <div
       style={{
         background: "rgba(10,30,80,0.7)",
-        border: `2px solid ${CTA}`,
+        border: `1.5px solid ${CTA}`,
         borderRadius: 20,
         padding: "40px 32px 28px",
         display: "flex",
         flexDirection: "column",
         backdropFilter: "blur(8px)",
         position: "relative",
-        boxShadow: `0 0 40px rgba(170,255,31,0.08)`,
+        boxShadow: `0 0 24px rgba(170,255,31,0.05)`,
       }}
     >
       {/* Badge */}
@@ -303,7 +336,7 @@ function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
 
       {/* Price */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 56, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>£103.28</span>
+        <span style={{ fontSize: 50, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>£103.28</span>
       </div>
       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Monthly estimate</div>
 
@@ -318,12 +351,12 @@ function SuggestionCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
       </p>
 
       {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 6, display: "flex", justifyContent: "space-between" }}>
-        <span style={{ color: "#60a5fa" }}>Duration:</span>
+      <div style={{ fontSize: 13, marginBottom: 6, display: "flex", gap: 8 }}>
+        <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Duration:</span>
         <span style={{ color: "#fff", fontWeight: 600 }}>12 months</span>
       </div>
-      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", justifyContent: "space-between" }}>
-        <span style={{ color: "#60a5fa" }}>Early exit fee:</span>
+      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", gap: 8 }}>
+        <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Early exit fee:</span>
         <span style={{ color: "#fff", fontWeight: 600 }}>£75 per fuel</span>
       </div>
 
@@ -371,8 +404,8 @@ function AlternativeCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
   return (
     <div
       style={{
-        background: "rgba(10,20,50,0.5)",
-        border: "1.5px solid rgba(255,255,255,0.12)",
+        background: "rgba(10,25,65,0.6)",
+        border: "1.5px solid rgba(255,255,255,0.18)",
         borderRadius: 20,
         padding: "32px 28px 24px",
         display: "flex",
@@ -392,19 +425,19 @@ function AlternativeCard({ ratesOpen, onToggleRates, onSelect, ratesPanel }: {
 
       {/* Price — slightly smaller */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 44, fontWeight: 900, color: "rgba(255,255,255,0.75)", lineHeight: 1, letterSpacing: "-1px" }}>£98.01</span>
+        <span style={{ fontSize: 48, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>£98.01</span>
       </div>
       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 20 }}>Monthly estimate</div>
 
       {/* Body */}
-      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: 20, flex: 1 }}>
+      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.7, marginBottom: 20, flex: 1 }}>
         Your prices aren&apos;t fixed. They move up or down in line with the Ofgem price cap. There&apos;s no exit fee, so you&apos;re free to leave whenever you like.
       </p>
 
       {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", justifyContent: "space-between" }}>
-        <span style={{ color: "rgba(148,197,253,0.6)" }}>Early exit fee:</span>
-        <span style={{ color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>£0 per fuel</span>
+      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", gap: 8 }}>
+        <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Early exit fee:</span>
+        <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>£0 per fuel</span>
       </div>
 
       {/* Outline CTA */}
@@ -602,13 +635,13 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
         aria-hidden="true"
       />
 
-      {/* Desktop drawer — right side */}
+      {/* Desktop drawer — right side, below sticky header */}
       <div
         className="help-drawer-desktop"
         role="dialog"
         aria-modal="true"
         aria-label="Help me choose"
-        style={{ position: "fixed", top: 0, right: 0, height: "100%", width: 460, background: "#0c2550", zIndex: 40, padding: "32px 28px 48px", overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.5)" }}
+        style={{ position: "fixed", top: 96, right: 0, height: "calc(100% - 96px)", width: 460, background: "#0c2550", zIndex: 40, padding: "32px 28px 48px", overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.5)" }}
         onKeyDown={(e) => e.key === "Escape" && onClose()}
       >
         <button onClick={onClose} style={{ position: "absolute", top: 20, right: 20, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.5)", display: "flex" }} aria-label="Close">
