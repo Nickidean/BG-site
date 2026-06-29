@@ -604,14 +604,12 @@ function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
 
   const fixPrice = calcMonthly(elec, gas, TARIFF_RATES.fix);
   const varPrice = calcMonthly(elec, gas, TARIFF_RATES.var);
-  const priceDiff = Math.abs(fixPrice - varPrice);
-
   return (
     <div style={{ flex: 1, padding: "20px 32px 32px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
-      <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 12, lineHeight: 1.1 }}>Your tariff options</h1>
+      <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 20, lineHeight: 1.1 }}>Your tariff options</h1>
 
       {/* Summary strip */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 22 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 32 }}>
         <SummaryChip icon={
           <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
         }>24 Millstream, Maidenhead Rd</SummaryChip>
@@ -632,7 +630,6 @@ function Step4({ elec, gas, setElec, setGas, onSelectTariff }: {
       <div className="tariff-grid-step4">
         <SuggestionCard
           price={fixPrice}
-          priceDiff={priceDiff}
           ratesOpen={allRatesOpen}
           onToggleRates={() => setAllRatesOpen(o => !o)}
           onSelect={() => onSelectTariff("fix")}
@@ -702,11 +699,10 @@ function SummaryChip({ icon, children }: { icon: React.ReactNode; children: Reac
 
 // ── Suggestion card (Fix & Fall) ─────────────────────────────────────────────
 
-function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
-  price: number; priceDiff: number;
+function SuggestionCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel }: {
+  price: number;
   ratesOpen: boolean; onToggleRates: () => void; onSelect: () => void; ratesPanel: React.ReactNode;
 }) {
-  const [exitOpen, setExitOpen] = useState(false);
 
   return (
     <div
@@ -734,8 +730,7 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 2 }}>Fix &amp; Fall Jun28</div>
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 14 }}>Peace of mind, without the usual catch.</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 14 }}>Fix &amp; Fall Jun28</div>
 
       {/* Price */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
@@ -746,11 +741,6 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       {/* Body */}
       <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, marginBottom: 10, flex: 1 }}>
         Fixed until June 2028 — price rises won&apos;t touch you. And if prices fall, yours falls too.
-      </p>
-
-      {/* Trade-off line */}
-      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5, marginBottom: 14 }}>
-        Around {fmtPrice(priceDiff)} a month more than our variable tariff, with a £75 per fuel exit fee. That&apos;s the cost of locking in your protection.
       </p>
 
       {/* Meta */}
@@ -770,22 +760,6 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       >
         Select this tariff
       </button>
-
-      {/* Exit fee objection handler */}
-      <button
-        onClick={() => setExitOpen(o => !o)}
-        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: "7px 0", background: "transparent", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 12, cursor: "pointer", marginBottom: 2 }}
-      >
-        Worried about the £75 exit fee?
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-          {exitOpen ? <path d="M6 3L11 9H1L6 3Z"/> : <path d="M6 9L1 3H11L6 9Z"/>}
-        </svg>
-      </button>
-      {exitOpen && (
-        <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 12px", marginBottom: 8, fontSize: 12, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
-          It only applies if you leave before June 2028. Stay the term and there&apos;s nothing to pay. And because your rate drops if prices fall, you&apos;d rarely have a reason to leave early.
-        </div>
-      )}
 
       {/* View rates */}
       <button onClick={onToggleRates} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "none", fontSize: 13, cursor: "pointer" }}>
