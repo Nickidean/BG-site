@@ -479,12 +479,54 @@ function RatesPanel({ elecUnit, elecStanding, elecExit, gasUnit, gasStanding, ga
   );
 }
 
+const RATE_TIPS: Record<string, string> = {
+  "Unit rate": "The price you pay per kWh of energy you actually use.",
+  "Standing charge": "A fixed daily charge just for being connected to the grid — applies whether you use energy or not.",
+  "Early exit fee": "A charge if you leave this tariff before the end of the contract period.",
+};
+
 function RR({ label, value, border, bb }: { label: string; value: string; border?: boolean; bb?: boolean }) {
+  const tip = RATE_TIPS[label];
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 13, borderBottom: border ? "1px solid rgba(255,255,255,0.08)" : bb ? "1px solid rgba(255,255,255,0.15)" : "none" }}>
-      <span style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", fontSize: 13, borderBottom: border ? "1px solid rgba(255,255,255,0.08)" : bb ? "1px solid rgba(255,255,255,0.15)" : "none" }}>
+      <span style={{ color: "rgba(255,255,255,0.55)", display: "flex", alignItems: "center", gap: 5 }}>
+        {label}
+        {tip && <Tooltip text={tip} />}
+      </span>
       <span style={{ fontWeight: 600, color: "#fff" }}>{value}</span>
     </div>
+  );
+}
+
+function Tooltip({ text }: { text: string }) {
+  const [visible, setVisible] = useState(false);
+  return (
+    <span style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+      <button
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+        onFocus={() => setVisible(true)}
+        onBlur={() => setVisible(false)}
+        style={{ background: "transparent", border: "none", cursor: "pointer", padding: 0, color: "rgba(255,255,255,0.35)", display: "flex", lineHeight: 1 }}
+        aria-label={`What is ${text}`}
+      >
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+          <circle cx="6.5" cy="6.5" r="6" stroke="currentColor" strokeWidth="1.2"/>
+          <text x="6.5" y="9.5" textAnchor="middle" fill="currentColor" fontSize="8" fontWeight="700" fontFamily="sans-serif">i</text>
+        </svg>
+      </button>
+      {visible && (
+        <span style={{
+          position: "absolute", bottom: "calc(100% + 6px)", left: "50%", transform: "translateX(-50%)",
+          background: "#0a1e4a", border: "1px solid rgba(255,255,255,0.15)",
+          color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.5,
+          padding: "8px 10px", borderRadius: 8, width: 200, zIndex: 99,
+          pointerEvents: "none", boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+        }}>
+          {text}
+        </span>
+      )}
+    </span>
   );
 }
 
@@ -632,7 +674,7 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
     <>
       <div
         onClick={onClose}
-        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 30 }}
+        style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 55 }}
         aria-hidden="true"
       />
 
@@ -642,7 +684,7 @@ function HelpPanel({ open, onSelectTariff, onClose }: {
         role="dialog"
         aria-modal="true"
         aria-label="Help me choose"
-        style={{ position: "fixed", top: 96, right: 0, height: "calc(100% - 96px)", width: 460, background: "#0c2550", zIndex: 40, padding: "32px 28px 48px", overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.5)" }}
+        style={{ position: "fixed", top: 0, right: 0, height: "100%", width: 460, background: "#0c2550", zIndex: 60, padding: "32px 28px 48px", overflowY: "auto", boxShadow: "-8px 0 40px rgba(0,0,0,0.5)" }}
         onKeyDown={(e) => e.key === "Escape" && onClose()}
       >
         <button onClick={onClose} style={{ position: "absolute", top: 20, right: 20, background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.5)", display: "flex" }} aria-label="Close">
