@@ -285,6 +285,7 @@ function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
 
   const moverEst = applyMovers(bigMovers);
   const detailEst = computeFromDetail({ homeType, bedrooms, heating, people, ev: hasEV, homeDuringDay });
+  const detailChanged = homeType !== "semi" || bedrooms !== 3 || heating !== "gas" || people !== 3 || hasEV || homeDuringDay;
 
   function confirm(e: number, g: number) { setElec(e); setGas(g); onNext(); }
 
@@ -343,6 +344,7 @@ function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
                 hasEV={hasEV} setHasEV={setHasEV}
                 homeDuringDay={homeDuringDay} setHomeDuringDay={setHomeDuringDay}
                 estimate={detailEst}
+                updated={detailChanged}
               />
             )}
             {subView === "rawkwh" && (
