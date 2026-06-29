@@ -1165,7 +1165,7 @@ export default function QuoteJourney() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#001029", display: "flex", justifyContent: "center", padding: "0" }}>
-      <div style={{ width: "100%", maxWidth: 1440, background: "#0b1f3a", display: "flex", flexDirection: "column", position: "relative", borderRadius: "0 0 48px 48px", overflow: "hidden" }}>
+      <div style={{ width: "100%", maxWidth: 1440, background: "#0b1f3a", display: "flex", flexDirection: "column", position: "relative", borderRadius: "0 0 48px 48px" }}>
         <Nav />
         <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
           {step === 1 && <Step1 onNext={() => setStep(2)} />}
