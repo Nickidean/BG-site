@@ -1278,9 +1278,9 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
       <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 24px 0" }}>
         <div style={{
           position: "relative",
-          borderRadius: 24,
+          borderRadius: 80,
           overflow: "hidden",
-          minHeight: 420,
+          minHeight: 700,
           background: "linear-gradient(135deg, #1a9fe0 0%, #0d7fc4 40%, #0a5fa0 100%)",
           display: "flex",
           alignItems: "center",
