@@ -723,7 +723,7 @@ function SuggestionCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel 
     >
       {/* Badge */}
       <div style={{
-        position: "absolute", top: -14, left: 28,
+        position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
         background: CTA, color: "#0b1f3a",
         fontSize: 11, fontWeight: 800,
         padding: "5px 18px", borderRadius: 20,
@@ -733,31 +733,23 @@ function SuggestionCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel 
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 6 }}>Fix &amp; Fall Jun28</div>
-      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 12, lineHeight: 1.5 }}>
+      <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 4, textAlign: "center" }}>Fix &amp; Fall Jun28</div>
+
+      {/* Why we suggest it */}
+      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 20, lineHeight: 1.5, textAlign: "center" }}>
         Based on your usage, this gives you the lowest monthly cost while protecting you if prices rise.
       </p>
 
       {/* Price */}
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
-        <span style={{ fontSize: 42, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 6, marginBottom: 2 }}>
+        <span style={{ fontSize: 48, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 14 }}>Monthly estimate (inc. VAT)</div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 20, textAlign: "center" }}>Monthly estimate (inc. VAT)</div>
 
-      {/* Body */}
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, marginBottom: 10, flex: 1 }}>
+      {/* Description */}
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, marginBottom: 24, flex: 1, textAlign: "center" }}>
         Fixed until June 2028 — price rises won&apos;t touch you. And if prices fall, yours falls too.
       </p>
-
-      {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 4, display: "flex", gap: 8 }}>
-        <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Duration:</span>
-        <span style={{ color: "#fff", fontWeight: 600 }}>Until June 2028</span>
-      </div>
-      <div style={{ fontSize: 13, marginBottom: 16, display: "flex", gap: 8 }}>
-        <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Early exit fee:</span>
-        <span style={{ color: "#fff", fontWeight: 600 }}>£75 per fuel</span>
-      </div>
 
       {/* Primary CTA */}
       <button
@@ -799,35 +791,22 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
       }}
       className="alt-card"
     >
-      {/* Kicker — same height slot as the suggestion badge */}
-      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Prefer to pay less now?</div>
-
       {/* Name */}
-      <div style={{ fontSize: 18, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 6 }}>Standard Variable tariff</div>
-      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 12, lineHeight: 1.5 }}>
-        A lower rate today, but prices move with the Ofgem cap — no lock-in, no exit fee.
-      </p>
+      <div style={{ fontSize: 20, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 4, textAlign: "center" }}>Standard Variable</div>
+
+      {/* Spacer — matches the "why" line height on the suggestion card */}
+      <p style={{ fontSize: 12, color: "transparent", marginBottom: 20, lineHeight: 1.5, textAlign: "center", userSelect: "none" }}>–</p>
 
       {/* Price */}
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
-        <span style={{ fontSize: 42, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: 6, marginBottom: 2 }}>
+        <span style={{ fontSize: 48, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 14 }}>Monthly estimate (inc. VAT)</div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 20, textAlign: "center" }}>Monthly estimate (inc. VAT)</div>
 
-      {/* Body */}
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: 10, flex: 1 }}>
+      {/* Description */}
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: 24, flex: 1, textAlign: "center" }}>
         Rates move with the Ofgem price cap — up or down. No exit fee, leave whenever you like.
       </p>
-
-      {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 4, display: "flex", gap: 8 }}>
-        <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Duration:</span>
-        <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>Rolling monthly</span>
-      </div>
-      <div style={{ fontSize: 13, marginBottom: 16, display: "flex", gap: 8 }}>
-        <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Early exit fee:</span>
-        <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>£0 per fuel</span>
-      </div>
 
       {/* Outline CTA */}
       <button
