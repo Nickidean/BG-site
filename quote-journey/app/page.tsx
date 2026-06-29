@@ -110,11 +110,11 @@ function Step1({ onNext }: { onNext: () => void }) {
             </div>
           )}
 
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 20 }}>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.12)", marginTop: 24, paddingTop: 20 }}>
             <button
               onClick={onNext}
               disabled={!searched || !address}
-              style={{ padding: "14px 28px", background: searched && address ? CTA : "rgba(255,255,255,0.2)", color: searched && address ? "#0b1f3a" : "rgba(255,255,255,0.4)", border: "none", borderRadius: 24, fontSize: 15, fontWeight: 700, cursor: searched && address ? "pointer" : "not-allowed", transition: "background 0.2s" }}
+              style={{ display: "block", width: "100%", padding: 14, background: searched && address ? CTA : "rgba(255,255,255,0.2)", color: searched && address ? "#0b1f3a" : "rgba(255,255,255,0.4)", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: searched && address ? "pointer" : "not-allowed", transition: "background 0.2s" }}
             >
               Choose this address
             </button>
@@ -690,15 +690,15 @@ function StepShell({ step, title, onBack, onNext, children }: {
           <div style={{ background: "#1a4fd6", borderRadius: 20, padding: "28px 28px 24px" }}>
             <div style={{ textAlign: "center", color: "#fff", fontSize: 24, fontWeight: 700, marginBottom: 24 }}>{title}</div>
             {children}
-          </div>
-          <TrustpilotBadge />
-          {/* Nav buttons — inline below card on desktop, fixed bottom on mobile */}
-          <div className="nav-buttons-sticky">
-            <div style={{ display: "flex", gap: 10, padding: "16px 0 0" }}>
-              <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
-              <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
+            {/* Nav buttons — inside card on desktop, fixed bottom on mobile */}
+            <div className="nav-buttons-sticky nav-buttons-in-card">
+              <div style={{ display: "flex", gap: 10 }}>
+                <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
+                <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
+              </div>
             </div>
           </div>
+          <TrustpilotBadge />
         </div>
       </div>
     </div>

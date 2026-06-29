@@ -112,4 +112,11 @@ body {
     align-items: center;
     padding-bottom: 60px;
   }
+
+  /* Buttons inside the card on desktop — divider + spacing */
+  .nav-buttons-in-card {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin-top: 24px;
+    padding-top: 20px;
+  }
 }
