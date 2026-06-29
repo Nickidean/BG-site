@@ -1309,8 +1309,8 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
 
           {/* Headline + form */}
           <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "60px 24px 48px" }}>
-            <h1 style={{ fontSize: "clamp(28px, 5vw, 48px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 32, maxWidth: 560, margin: "0 auto 32px" }}>
-              Compare our gas and<br />electricity tariffs
+            <h1 style={{ fontSize: "clamp(32px, 5vw, 56px)", fontWeight: 800, color: "#fff", lineHeight: 1.15, marginBottom: 32, maxWidth: 620, margin: "0 auto 32px" }}>
+              Let&apos;s find the right tariff for you and your home
             </h1>
             <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
               <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
