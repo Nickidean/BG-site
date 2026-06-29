@@ -466,7 +466,7 @@ function AdjustView({ bigMovers, toggleMover, estimate }: {
   );
 }
 
-function DetailView({ homeType, setHomeType, bedrooms, setBedrooms, heating, setHeating, people, setPeople, hasEV, setHasEV, homeDuringDay, setHomeDuringDay, estimate }: {
+function DetailView({ homeType, setHomeType, bedrooms, setBedrooms, heating, setHeating, people, setPeople, hasEV, setHasEV, homeDuringDay, setHomeDuringDay, estimate, updated = true }: {
   homeType: HomeType; setHomeType: (v: HomeType) => void;
   bedrooms: number; setBedrooms: (v: number) => void;
   heating: HeatingType; setHeating: (v: HeatingType) => void;
@@ -474,6 +474,7 @@ function DetailView({ homeType, setHomeType, bedrooms, setBedrooms, heating, set
   hasEV: boolean; setHasEV: (v: boolean) => void;
   homeDuringDay: boolean; setHomeDuringDay: (v: boolean) => void;
   estimate: { elec: number; gas: number };
+  updated?: boolean;
 }) {
   return (
     <>
@@ -522,7 +523,7 @@ function DetailView({ homeType, setHomeType, bedrooms, setBedrooms, heating, set
         <OptionBtn selected={!homeDuringDay} onClick={() => setHomeDuringDay(false)} xstyle={{ flex: 1 }}>Mostly out</OptionBtn>
       </div>
 
-      <EstimateSummary elec={estimate.elec} gas={estimate.gas} updated={true} />
+      <EstimateSummary elec={estimate.elec} gas={estimate.gas} updated={updated} />
     </>
   );
 }
@@ -1108,6 +1109,9 @@ function EditUsagePanel({ open, elec, gas, onConfirm, onClose }: {
   const previewFix = calcMonthly(est.elec, est.gas, TARIFF_RATES.fix);
   const previewVar = calcMonthly(est.elec, est.gas, TARIFF_RATES.var);
 
+  // Only show updated state once the user has changed something from defaults
+  const hasChanged = homeType !== "semi" || bedrooms !== 3 || heating !== "gas" || people !== 3 || hasEV || homeDuringDay;
+
   if (!open) return null;
 
   const drawerContent = (
@@ -1124,24 +1128,27 @@ function EditUsagePanel({ open, elec, gas, onConfirm, onClose }: {
         hasEV={hasEV} setHasEV={setHasEV}
         homeDuringDay={homeDuringDay} setHomeDuringDay={setHomeDuringDay}
         estimate={est}
+        updated={hasChanged}
       />
 
-      {/* Live price preview */}
-      <div style={{ background: "rgba(170,255,31,0.06)", border: `1px solid rgba(170,255,31,0.2)`, borderRadius: 12, padding: "14px 16px", marginTop: 16, marginBottom: 20 }}>
-        <div style={{ fontSize: 11, color: CTA, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Updated quote preview</div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-          <span style={{ color: "rgba(255,255,255,0.6)" }}>Fix &amp; Fall Jun28</span>
-          <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewFix)}/mo</span>
+      {/* Live price preview — only shown once something changed */}
+      {hasChanged && (
+        <div style={{ background: "rgba(170,255,31,0.06)", border: `1px solid rgba(170,255,31,0.2)`, borderRadius: 12, padding: "14px 16px", marginTop: 16, marginBottom: 20 }}>
+          <div style={{ fontSize: 11, color: CTA, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>Updated quote preview</div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+            <span style={{ color: "rgba(255,255,255,0.6)" }}>Fix &amp; Fall Jun28</span>
+            <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewFix)}/mo</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 6 }}>
+            <span style={{ color: "rgba(255,255,255,0.6)" }}>Standard Variable</span>
+            <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewVar)}/mo</span>
+          </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 13, marginTop: 6 }}>
-          <span style={{ color: "rgba(255,255,255,0.6)" }}>Standard Variable</span>
-          <span style={{ color: "#fff", fontWeight: 700 }}>{fmtPrice(previewVar)}/mo</span>
-        </div>
-      </div>
+      )}
 
       <button
         onClick={() => onConfirm(est.elec, est.gas)}
-        style={{ display: "block", width: "100%", padding: "15px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+        style={{ display: "block", width: "100%", padding: "15px", background: hasChanged ? CTA : "rgba(255,255,255,0.15)", color: hasChanged ? "#0b1f3a" : "rgba(255,255,255,0.4)", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: hasChanged ? "pointer" : "default", marginTop: hasChanged ? 0 : 16 }}
       >
         Update my quote
       </button>
