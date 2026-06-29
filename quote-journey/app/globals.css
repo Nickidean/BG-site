@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #001029;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #fff;
+}
+
+.tariff-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Step 4 unequal two-up: suggestion wider, alternative narrower */
+.tariff-grid-step4 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+/* Alt card — no offset on mobile */
+.alt-card {
+  margin-top: 0 !important;
+}
+
+.nav-link {
+  color: rgba(255,255,255,0.8);
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Help me choose: bottom sheet on mobile, right drawer on desktop */
+.help-drawer-desktop { display: none; }
+.help-drawer-mobile  { display: block; }
+
+/* Progress bar and nav buttons — normal flow on desktop */
+.progress-sticky {
+  padding: 20px 0 0;
+}
+
+.nav-buttons-sticky {
+  /* desktop: normal flow inside the content column */
+}
+
+.step-content {
+  align-items: flex-start;
+}
+
+/* ── Mobile overrides ── */
+@media (max-width: 767px) {
+  nav { display: none !important; }
+
+  /* Progress bar locks to top */
+  .progress-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: #0b1f3a;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Nav buttons lock to bottom — above Safari chrome */
+  .nav-buttons-sticky {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    background: #0b1f3a;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 80px);
+  }
+
+  /* Extra padding so content doesn't hide behind fixed bars */
+  .step-content {
+    padding-top: 72px;
+    padding-bottom: 160px;
+  }
+}
+
+/* ── Desktop ── */
+@media (min-width: 768px) {
+  .tariff-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .tariff-grid-step4 {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .alt-card {
+    margin-top: 0 !important;
+  }
+
+  .help-drawer-desktop { display: block; }
+  .help-drawer-mobile  { display: none; }
+
+  .step-content {
+    align-items: center;
+    padding-bottom: 60px;
+  }
+
+  /* Buttons inside the card on desktop — divider + spacing */
+  .nav-buttons-in-card {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+}
