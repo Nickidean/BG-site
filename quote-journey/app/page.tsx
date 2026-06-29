@@ -282,24 +282,7 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
       <div style={{ textAlign: "center", marginTop: 40 }}>
         {/* Advisor avatar */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-          <div style={{ width: 48, height: 48, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.2)", flexShrink: 0 }}>
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" fill="#1a4fd6"/>
-              {/* Shoulders */}
-              <path d="M4 48 C4 34 14 30 24 30 C34 30 44 34 44 48Z" fill="#0d3580"/>
-              {/* Neck */}
-              <rect x="20" y="26" width="8" height="6" rx="2" fill="#f5c5a3"/>
-              {/* Head */}
-              <ellipse cx="24" cy="20" rx="10" ry="11" fill="#f5c5a3"/>
-              {/* Hair */}
-              <path d="M14 18 C14 10 34 10 34 18 C34 14 30 9 24 9 C18 9 14 14 14 18Z" fill="#4a3728"/>
-              {/* Eyes */}
-              <ellipse cx="20" cy="20" rx="1.5" ry="1.8" fill="#2d1f0e"/>
-              <ellipse cx="28" cy="20" rx="1.5" ry="1.8" fill="#2d1f0e"/>
-              {/* Smile */}
-              <path d="M20 25 Q24 28 28 25" stroke="#c97b5a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-            </svg>
-          </div>
+          <Image src="/advisor.jpg" alt="Advisor" width={48} height={48} style={{ borderRadius: "50%", objectFit: "cover", objectPosition: "center top", border: "2px solid rgba(255,255,255,0.2)" }} />
         </div>
         <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 15, marginBottom: 14 }}>Still not sure which one&apos;s right for you?</div>
         <button
