@@ -604,11 +604,11 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
   const priceDiff = Math.abs(fixPrice - varPrice);
 
   return (
-    <div style={{ flex: 1, padding: "48px 32px 64px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
-      <h1 style={{ color: "#fff", fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, marginBottom: 20, lineHeight: 1.1 }}>Your tariff options</h1>
+    <div style={{ flex: 1, padding: "20px 32px 32px", maxWidth: 1100, margin: "0 auto", width: "100%", boxSizing: "border-box" }}>
+      <h1 style={{ color: "#fff", fontSize: "clamp(22px, 3vw, 32px)", fontWeight: 800, marginBottom: 10, lineHeight: 1.1 }}>Your tariff options</h1>
 
       {/* Summary */}
-      <div style={{ marginBottom: 36, fontSize: 14, color: "rgba(255,255,255,0.65)", lineHeight: 2.2 }}>
+      <div style={{ marginBottom: 16, fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.8 }}>
         <div><span style={{ color: "rgba(255,255,255,0.45)" }}>Address: </span><span style={{ color: "#fff" }}>24 Millstream, Maidenhead Rd, Windsor, Berkshire, SL4 5GD</span></div>
         <div><span style={{ color: "rgba(255,255,255,0.45)" }}>Fuel type: </span><span style={{ color: "#fff" }}>Gas and electricity</span></div>
         <div>
@@ -652,14 +652,13 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
       </div>
 
       {/* Help me choose trigger */}
-      <div style={{ textAlign: "center", marginTop: 40 }}>
-        <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 15, marginBottom: 14 }}>Still not sure which one&apos;s right for you?</div>
+      <div style={{ textAlign: "center", marginTop: 20 }}>
         <button
           onClick={() => setHelpOpen(true)}
-          style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 24px 8px 8px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer" }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 18px 6px 6px", background: "transparent", color: "rgba(255,255,255,0.65)", border: "1.5px solid rgba(255,255,255,0.25)", borderRadius: 28, fontSize: 14, fontWeight: 500, cursor: "pointer" }}
         >
-          <Image src="/advisor.jpg" alt="" width={36} height={36} style={{ borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0 }} />
-          Help me choose
+          <Image src="/advisor.jpg" alt="" width={28} height={28} style={{ borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0 }} />
+          Not sure? Help me choose
         </button>
       </div>
 
@@ -688,7 +687,7 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
         background: "rgba(10,30,80,0.7)",
         border: `1.5px solid ${CTA}`,
         borderRadius: 20,
-        padding: "40px 32px 28px",
+        padding: "32px 24px 18px",
         display: "flex",
         flexDirection: "column",
         backdropFilter: "blur(8px)",
@@ -708,31 +707,31 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 4 }}>Fix &amp; Fall Jun28</div>
-      <div style={{ fontSize: 14, color: "rgba(255,255,255,0.6)", marginBottom: 20 }}>Peace of mind, without the usual catch.</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 2 }}>Fix &amp; Fall Jun28</div>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 14 }}>Peace of mind, without the usual catch.</div>
 
       {/* Price */}
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 50, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
+        <span style={{ fontSize: 42, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 24 }}>Monthly estimate (inc. VAT)</div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginBottom: 14 }}>Monthly estimate (inc. VAT)</div>
 
       {/* Body */}
-      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.85)", lineHeight: 1.75, marginBottom: 16, flex: 1 }}>
-        Your rate&apos;s fixed until June 2028, so a price rise won&apos;t touch you. And if prices fall, yours falls too. You get certainty now, with a bit of upside if the market drops.
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", lineHeight: 1.6, marginBottom: 10, flex: 1 }}>
+        Fixed until June 2028 — price rises won&apos;t touch you. And if prices fall, yours falls too.
       </p>
 
       {/* Trade-off line */}
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, marginBottom: 20 }}>
-        It&apos;s around {fmtPrice(priceDiff)} a month more than our variable tariff today, with a £75 per fuel charge if you leave early. That&apos;s the cost of locking in your protection.
+      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5, marginBottom: 14 }}>
+        Around {fmtPrice(priceDiff)} a month more than our variable tariff, with a £75 per fuel exit fee. That&apos;s the cost of locking in your protection.
       </p>
 
       {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 6, display: "flex", gap: 8 }}>
+      <div style={{ fontSize: 13, marginBottom: 4, display: "flex", gap: 8 }}>
         <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Duration:</span>
-        <span style={{ color: "#fff", fontWeight: 600 }}>12 months</span>
+        <span style={{ color: "#fff", fontWeight: 600 }}>Until June 2028</span>
       </div>
-      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", gap: 8 }}>
+      <div style={{ fontSize: 13, marginBottom: 16, display: "flex", gap: 8 }}>
         <span style={{ color: "#60a5fa", width: 110, flexShrink: 0 }}>Early exit fee:</span>
         <span style={{ color: "#fff", fontWeight: 600 }}>£75 per fuel</span>
       </div>
@@ -740,7 +739,7 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       {/* Primary CTA */}
       <button
         onClick={onSelect}
-        style={{ display: "block", width: "100%", padding: "16px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 10 }}
+        style={{ display: "block", width: "100%", padding: "13px", background: CTA, color: "#0b1f3a", border: "none", borderRadius: 28, fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 6 }}
       >
         Select this tariff
       </button>
@@ -748,7 +747,7 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
       {/* Exit fee objection handler */}
       <button
         onClick={() => setExitOpen(o => !o)}
-        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: "10px 0", background: "transparent", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 13, cursor: "pointer", marginBottom: 4 }}
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: "7px 0", background: "transparent", border: "none", color: "rgba(255,255,255,0.5)", fontSize: 12, cursor: "pointer", marginBottom: 2 }}
       >
         Worried about the £75 exit fee?
         <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
@@ -756,13 +755,13 @@ function SuggestionCard({ price, priceDiff, ratesOpen, onToggleRates, onSelect, 
         </svg>
       </button>
       {exitOpen && (
-        <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "12px 14px", marginBottom: 10, fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.65 }}>
-          It only applies if you leave before your 12 months are up. Stay the year and there&apos;s nothing to pay. And because your rate drops when prices fall, you&apos;d rarely have a reason to leave early.
+        <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: 10, padding: "10px 12px", marginBottom: 8, fontSize: 12, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>
+          It only applies if you leave before June 2028. Stay the term and there&apos;s nothing to pay. And because your rate drops if prices fall, you&apos;d rarely have a reason to leave early.
         </div>
       )}
 
       {/* View rates */}
-      <button onClick={onToggleRates} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, width: "100%", padding: "12px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "none", fontSize: 14, cursor: "pointer" }}>
+      <button onClick={onToggleRates} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.55)", border: "none", fontSize: 13, cursor: "pointer" }}>
         View rates
         <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
           {ratesOpen ? <path d="M6 3L11 9H1L6 3Z"/> : <path d="M6 9L1 3H11L6 9Z"/>}
@@ -785,7 +784,7 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
         background: "rgba(10,25,65,0.6)",
         border: "1.5px solid rgba(255,255,255,0.18)",
         borderRadius: 20,
-        padding: "32px 28px 24px",
+        padding: "24px 20px 16px",
         display: "flex",
         flexDirection: "column",
         backdropFilter: "blur(8px)",
@@ -796,24 +795,24 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
       className="alt-card"
     >
       {/* Kicker */}
-      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Prefer to pay less now?</div>
+      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Prefer to pay less now?</div>
 
       {/* Name */}
-      <div style={{ fontSize: 17, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 20 }}>Standard Variable tariff</div>
+      <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 12 }}>Standard Variable tariff</div>
 
       {/* Price — slightly smaller */}
-      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-        <span style={{ fontSize: 48, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
+        <span style={{ fontSize: 40, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
-      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 20 }}>Monthly estimate (inc. VAT)</div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 14 }}>Monthly estimate (inc. VAT)</div>
 
-      {/* Body */}
-      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.7, marginBottom: 20, flex: 1 }}>
-        Your prices aren&apos;t fixed. They move up or down in line with the Ofgem price cap. There&apos;s no exit fee, so you&apos;re free to leave whenever you like.
+      {/* Body — condensed */}
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.55, marginBottom: 14, flex: 1 }}>
+        Rates move with the Ofgem price cap — up or down. No exit fee, leave whenever you like.
       </p>
 
       {/* Meta */}
-      <div style={{ fontSize: 13, marginBottom: 28, display: "flex", gap: 8 }}>
+      <div style={{ fontSize: 13, marginBottom: 16, display: "flex", gap: 8 }}>
         <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Early exit fee:</span>
         <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>£0 per fuel</span>
       </div>
@@ -821,13 +820,13 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
       {/* Outline CTA */}
       <button
         onClick={onSelect}
-        style={{ display: "block", width: "100%", padding: "15px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 10 }}
+        style={{ display: "block", width: "100%", padding: "13px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 8 }}
       >
         Select this tariff
       </button>
 
       {/* View rates */}
-      <button onClick={onToggleRates} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, width: "100%", padding: "12px", background: "transparent", color: "rgba(255,255,255,0.4)", border: "none", fontSize: 14, cursor: "pointer" }}>
+      <button onClick={onToggleRates} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, width: "100%", padding: "8px", background: "transparent", color: "rgba(255,255,255,0.4)", border: "none", fontSize: 13, cursor: "pointer" }}>
         View rates
         <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
           {ratesOpen ? <path d="M6 3L11 9H1L6 3Z"/> : <path d="M6 9L1 3H11L6 9Z"/>}
