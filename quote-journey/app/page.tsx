@@ -267,7 +267,7 @@ function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
   function handleBack() {
     if (subView === "rawkwh") { setSubView(preRawView); return; }
     if (subView === "adjust") { setSubView("estimate"); return; }
-    if (subView === "detail") { setSubView("adjust"); return; }
+    if (subView === "detail") { setSubView("estimate"); return; }
     onBack();
   }
 
@@ -320,9 +320,9 @@ function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
               {subView === "estimate" && (
                 <>
                   <button onClick={() => confirm(EPC_ELEC, EPC_GAS)} style={{ display: "block", width: "100%", padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer", marginBottom: 10 }}>
-                    Yes, that&apos;s right
+                    Yes that looks right
                   </button>
-                  <button onClick={() => setSubView("adjust")} style={{ display: "block", width: "100%", padding: 13, background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+                  <button onClick={() => setSubView("detail")} style={{ display: "block", width: "100%", padding: 13, background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
                     Something&apos;s changed
                   </button>
                 </>
@@ -545,10 +545,10 @@ function OptionBtn({ selected, onClick, children, xstyle }: {
       onClick={onClick}
       style={{
         padding: "11px 8px", borderRadius: 8, cursor: "pointer", fontSize: 14,
-        color: selected ? "#0b1f3a" : "#fff",
-        border: selected ? `2px solid ${CTA}` : "2px solid rgba(255,255,255,0.15)",
-        background: selected ? CTA : "rgba(255,255,255,0.08)",
-        fontWeight: selected ? 700 : 400,
+        color: "#fff",
+        border: selected ? "2px solid rgba(255,255,255,0.75)" : "2px solid rgba(255,255,255,0.15)",
+        background: selected ? "rgba(255,255,255,0.16)" : "rgba(255,255,255,0.07)",
+        fontWeight: selected ? 600 : 400,
         flex: 1,
         ...xstyle,
       }}
