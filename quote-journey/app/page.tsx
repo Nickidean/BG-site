@@ -436,7 +436,7 @@ function EstimateView() {
         Typical for a 2–3 bedroom home with 2–3 people, heated by gas.
       </p>
       <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 0, textAlign: "center" }}>
-        This is an estimate — worth a quick check.
+        This is an estimate — you can check by looking at a recent bill or on your previous supplier's app.
       </p>
     </>
   );
