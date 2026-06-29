@@ -44,7 +44,7 @@ body {
 }
 
 .nav-buttons-sticky {
-  padding-bottom: 24px;
+  /* desktop: normal flow inside the content column */
 }
 
 .step-content {

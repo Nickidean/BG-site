@@ -280,15 +280,12 @@ function Step4({ elec, gas, onBack, onSelectTariff }: {
 
       {/* Help me choose trigger */}
       <div style={{ textAlign: "center", marginTop: 40 }}>
-        {/* Advisor avatar */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
-          <Image src="/advisor.jpg" alt="Advisor" width={48} height={48} style={{ borderRadius: "50%", objectFit: "cover", objectPosition: "center top", border: "2px solid rgba(255,255,255,0.2)" }} />
-        </div>
         <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 15, marginBottom: 14 }}>Still not sure which one&apos;s right for you?</div>
         <button
           onClick={() => setHelpOpen(true)}
-          style={{ padding: "14px 36px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer" }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 10, padding: "8px 24px 8px 8px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer" }}
         >
+          <Image src="/advisor.jpg" alt="" width={36} height={36} style={{ borderRadius: "50%", objectFit: "cover", objectPosition: "center top", flexShrink: 0 }} />
           Help me choose
         </button>
       </div>
@@ -695,13 +692,13 @@ function StepShell({ step, title, onBack, onNext, children }: {
             {children}
           </div>
           <TrustpilotBadge />
-        </div>
-      </div>
-
-      <div className="nav-buttons-sticky">
-        <div style={{ maxWidth: 540, margin: "0 auto", width: "100%", padding: "12px 16px", display: "flex", gap: 10 }}>
-          <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
-          <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
+          {/* Nav buttons — inline below card on desktop, fixed bottom on mobile */}
+          <div className="nav-buttons-sticky">
+            <div style={{ display: "flex", gap: 10, padding: "16px 0 0" }}>
+              <button onClick={onBack} style={{ padding: "14px 24px", background: "rgba(255,255,255,0.15)", color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Previous</button>
+              <button onClick={onNext} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>Continue</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
