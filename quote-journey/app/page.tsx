@@ -1250,27 +1250,31 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
     <div style={{ minHeight: "100vh", background: "#001029" }}>
 
       {/* Top utility bar */}
-      <div style={{ background: "#001029", padding: "8px 32px", display: "flex", gap: 24 }}>
-        {["Offers", "Business", "Landlord", "Accessibility toolbar"].map((l) => (
-          <a key={l} href="#" style={{ color: "#83B5FF", fontSize: 12, textDecoration: "none" }}>{l}</a>
-        ))}
+      <div style={{ background: "#001029" }}>
+        <div style={{ maxWidth: 1440, margin: "0 auto", padding: "8px 24px", display: "flex", gap: 24 }}>
+          {["Offers", "Business", "Landlord", "Accessibility toolbar"].map((l) => (
+            <a key={l} href="#" style={{ color: "#83B5FF", fontSize: 12, textDecoration: "none" }}>{l}</a>
+          ))}
+        </div>
       </div>
 
       {/* Main nav */}
-      <header style={{ background: "#001029", padding: "0 32px", display: "flex", alignItems: "center", height: 64, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-          <Image src="/bg-logo.png" alt="British Gas" width={120} height={40} style={{ objectFit: "contain" }} />
-        </div>
-        <nav style={{ display: "flex", gap: 28, flex: 1, justifyContent: "center" }}>
-          {["Energy", "Products", "Servicing", "Repairs", "Cover", "Help"].map((l) => (
-            <a key={l} href="#" className="nav-link">{l}</a>
-          ))}
-        </nav>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <button style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", padding: 4, display: "flex" }}>
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" strokeLinecap="round"/></svg>
-          </button>
-          <button style={{ background: CTA, color: "#0b1f3a", border: "none", borderRadius: 24, padding: "9px 20px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Login</button>
+      <header style={{ background: "#001029", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", height: 64 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <Image src="/bg-logo.png" alt="British Gas" width={120} height={40} style={{ objectFit: "contain" }} />
+          </div>
+          <nav style={{ display: "flex", gap: 28, flex: 1, justifyContent: "center" }}>
+            {["Energy", "Products", "Servicing", "Repairs", "Cover", "Help"].map((l) => (
+              <a key={l} href="#" className="nav-link">{l}</a>
+            ))}
+          </nav>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <button style={{ background: "transparent", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.7)", padding: 4, display: "flex" }}>
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35" strokeLinecap="round"/></svg>
+            </button>
+            <button style={{ background: CTA, color: "#0b1f3a", border: "none", borderRadius: 24, padding: "9px 20px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Login</button>
+          </div>
         </div>
       </header>
 
