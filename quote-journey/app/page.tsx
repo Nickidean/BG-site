@@ -1275,12 +1275,12 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
       </header>
 
       {/* Hero */}
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 24px 0" }}>
         <div style={{
           position: "relative",
-          borderRadius: "0 0 24px 24px",
+          borderRadius: 24,
           overflow: "hidden",
-          minHeight: "calc(100vh - 104px)",
+          minHeight: 420,
           background: "linear-gradient(135deg, #1a9fe0 0%, #0d7fc4 40%, #0a5fa0 100%)",
           display: "flex",
           alignItems: "center",
@@ -1330,82 +1330,10 @@ function LandingPage({ onStart }: { onStart: (postcode: string) => void }) {
         </div>
       </div>
 
-      {/* Awards */}
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "48px 24px 0" }}>
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 24 }}>Awards &amp; Recommendations</h2>
-        <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "16px 20px" }}>
-            <div style={{ width: 52, height: 52, borderRadius: "50%", border: "2px solid #e63946", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 10, fontWeight: 800, color: "#e63946", textAlign: "center", lineHeight: 1.2 }}>Which?<br/>Trusted<br/>Trader</span>
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: "16px 20px" }}>
-            <div style={{ width: 44, height: 44, background: "#1a3a6b", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ fontSize: 18, fontWeight: 900, color: "#fff" }}>U</span>
-            </div>
-            <div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Uswitch Energy Awards</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>Best Overall Improvement</div>
-              <div style={{ fontSize: 12, color: CTA }}>Winner 2024 &amp; 2025</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Footer */}
-      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "48px 24px 0" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 32, paddingBottom: 48, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-
-          {/* Social */}
-          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>Social media</div>
-            <div style={{ display: "flex", gap: 14 }}>
-              {["f", "in", "𝕏", "▶"].map((icon) => (
-                <a key={icon} href="#" style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "#fff", textDecoration: "none" }}>{icon}</a>
-              ))}
-            </div>
-          </div>
-
-          {/* App */}
-          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>Download our app</div>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {["Google Play", "App Store"].map((s) => (
-                <a key={s} href="#" style={{ padding: "8px 14px", background: "#000", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 8, fontSize: 11, color: "#fff", textDecoration: "none", fontWeight: 600 }}>{s}</a>
-              ))}
-            </div>
-          </div>
-
-          {/* Safe Spaces */}
-          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 24 }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#fff", marginBottom: 16 }}>We proudly support</div>
-            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#0d5fa0", border: "2px solid rgba(255,255,255,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ fontSize: 9, color: "#fff", textAlign: "center", lineHeight: 1.2, fontWeight: 700 }}>SAFE<br/>SPACES</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer links */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 32, padding: "40px 0 48px" }}>
-          {[
-            { heading: "Information", links: ["Energy terms & conditions", "Website terms & conditions", "Privacy policy", "Cookie settings", "Conformity", "Legal information", "Access for all", "Modern slavery transparency statement", "Carbon reduction plan"] },
-            { heading: "Support", links: ["Emergencies", "Contact us", "Complaints", "Responsible disclosure", "Priority Service Register"] },
-            { heading: "The Company", links: ["About us", "Our performance", "Careers", "British Gas Business", "Hive Active Heating", "Centrica PLC", "The Source Blog", "Meet the Things"] },
-          ].map(({ heading, links }) => (
-            <div key={heading}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 14 }}>{heading}</div>
-              {links.map((l) => (
-                <a key={l} href="#" style={{ display: "block", fontSize: 13, color: "#83B5FF", textDecoration: "none", marginBottom: 8 }}>{l}</a>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        {/* Bottom bar */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", padding: "20px 0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Image src="/bg-logo.png" alt="British Gas" width={100} height={34} style={{ objectFit: "contain" }} />
-          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>© British Gas 2025</span>
-        </div>
+      <div style={{ maxWidth: 1440, margin: "0 auto", padding: "24px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Image src="/bg-logo.png" alt="British Gas" width={100} height={34} style={{ objectFit: "contain" }} />
+        <span style={{ fontSize: 12, color: "rgba(255,255,255,0.4)" }}>© British Gas 2025</span>
       </div>
     </div>
   );
