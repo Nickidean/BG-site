@@ -733,7 +733,10 @@ function SuggestionCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel 
       </div>
 
       {/* Name */}
-      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 14 }}>Fix &amp; Fall Jun28</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 6 }}>Fix &amp; Fall Jun28</div>
+      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginBottom: 12, lineHeight: 1.5 }}>
+        Based on your usage, this gives you the lowest monthly cost while protecting you if prices rise.
+      </p>
 
       {/* Price */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
