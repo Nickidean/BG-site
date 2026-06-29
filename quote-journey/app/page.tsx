@@ -181,61 +181,380 @@ function Step2({ fuel, setFuel, smartDevices, setSmartDevices, onNext, onBack }:
   );
 }
 
-// ── Step 3: Usage ─────────────────────────────────────────────────────────────
+// ── Step 3: Usage (confirm-style) ────────────────────────────────────────────
+
+type HomeType = "flat" | "terraced" | "semi" | "detached";
+type HeatingType = "gas" | "electricity" | "heat_pump" | "other";
+type BigMover = "ev" | "electricHeat" | "morePeople" | "homeDuringDay";
+type UsageSubView = "estimate" | "adjust" | "detail" | "rawkwh";
+
+// EPC-sourced figures for 24 Millstream (simulated strong-data path)
+const EPC_ELEC = 1800;
+const EPC_GAS = 6700;
+
+// Illustrative estimation model — real coefficients to come from data team
+function computeFromDetail(opts: {
+  homeType: HomeType; bedrooms: number; heating: HeatingType;
+  people: number; ev: boolean; homeDuringDay: boolean;
+}): { elec: number; gas: number } {
+  const typeMult: Record<HomeType, number> = { flat: 0.58, terraced: 0.78, semi: 1.0, detached: 1.35 };
+  let e = 2900 * typeMult[opts.homeType];
+  let g = 11500 * typeMult[opts.homeType];
+  const bd = (opts.bedrooms - 3) * 0.1;
+  const pd = (opts.people - 2.4) * 0.07;
+  e *= (1 + bd) * (1 + pd);
+  g *= (1 + bd) * (1 + pd);
+  if (opts.heating === "electricity") { e += g; g = 0; }
+  else if (opts.heating === "heat_pump") { e += g / 2.8; g = 0; }
+  if (opts.ev) e += 2200;
+  if (opts.homeDuringDay) { e += 350; g += 550; }
+  return { elec: Math.round(e / 50) * 50, gas: Math.round(g / 50) * 50 };
+}
+
+function applyMovers(movers: Set<BigMover>): { elec: number; gas: number } {
+  let e = EPC_ELEC, g = EPC_GAS;
+  if (movers.has("ev")) e += 2200;
+  if (movers.has("electricHeat")) { e += Math.round(g / 2.8); g = 0; }
+  if (movers.has("morePeople")) { e += 250; g += 450; }
+  if (movers.has("homeDuringDay")) { e += 350; g += 550; }
+  return { elec: Math.round(e / 50) * 50, gas: Math.round(g / 50) * 50 };
+}
+
+const BIG_MOVER_OPTIONS: { id: BigMover; label: string }[] = [
+  { id: "ev", label: "We've got an electric vehicle" },
+  { id: "electricHeat", label: "We heat the home with electricity or a heat pump" },
+  { id: "morePeople", label: "More or fewer people live here now" },
+  { id: "homeDuringDay", label: "Someone's usually home during the day" },
+];
 
 function Step3({ elec, setElec, gas, setGas, onNext, onBack }: {
   elec: number; setElec: (v: number) => void;
   gas: number; setGas: (v: number) => void;
   onNext: () => void; onBack: () => void;
 }) {
-  const [editOpen, setEditOpen] = useState(false);
-  const [elecDraft, setElecDraft] = useState(String(elec));
-  const [gasDraft, setGasDraft] = useState(String(gas));
-  function saveUsage() { setElec(parseInt(elecDraft) || 1800); setGas(parseInt(gasDraft) || 6700); setEditOpen(false); }
+  const [subView, setSubView] = useState<UsageSubView>("estimate");
+  const [preRawView, setPreRawView] = useState<UsageSubView>("estimate");
+
+  // Big movers
+  const [bigMovers, setBigMovers] = useState<Set<BigMover>>(new Set());
+
+  // Detail inputs — seeded from typical semi
+  const [homeType, setHomeType] = useState<HomeType>("semi");
+  const [bedrooms, setBedrooms] = useState(3);
+  const [heating, setHeating] = useState<HeatingType>("gas");
+  const [people, setPeople] = useState(3);
+  const [hasEV, setHasEV] = useState(false);
+  const [homeDuringDay, setHomeDuringDay] = useState(false);
+
+  // Raw kWh override
+  const [rawElec, setRawElec] = useState(String(elec));
+  const [rawGas, setRawGas] = useState(String(gas));
+
+  const moverEst = applyMovers(bigMovers);
+  const detailEst = computeFromDetail({ homeType, bedrooms, heating, people, ev: hasEV, homeDuringDay });
+
+  function confirm(e: number, g: number) { setElec(e); setGas(g); onNext(); }
+
+  function toggleMover(m: BigMover) {
+    const next = new Set(bigMovers);
+    if (next.has(m)) next.delete(m); else next.add(m);
+    setBigMovers(next);
+    if (m === "ev") setHasEV(next.has(m));
+    if (m === "electricHeat") setHeating(next.has(m) ? "heat_pump" : "gas");
+    if (m === "homeDuringDay") setHomeDuringDay(next.has(m));
+  }
+
+  function handleBack() {
+    if (subView === "rawkwh") { setSubView(preRawView); return; }
+    if (subView === "adjust") { setSubView("estimate"); return; }
+    if (subView === "detail") { setSubView("adjust"); return; }
+    onBack();
+  }
+
+  function openRaw() {
+    setPreRawView(subView);
+    setSubView("rawkwh");
+  }
+
+  const TITLES: Record<UsageSubView, string> = {
+    estimate: "Here's the energy this home usually uses",
+    adjust: "Has anything changed?",
+    detail: "Tell us about your home",
+    rawkwh: "Enter your exact usage",
+  };
 
   return (
-    <StepShell step={3} title="How much energy do you use a year?" onBack={onBack} onNext={onNext}>
-      <div style={{ background: "rgba(255,255,255,0.1)", borderRadius: 12, padding: 18, marginBottom: 16 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, textAlign: "center", marginBottom: 14, color: "#fff" }}>We&apos;ve found the energy usage at the property</div>
-        <URow label="Address" value="24 Millstream, Maidenhead Rd" border />
-        <URow label="Electricity per year" value={`${elec.toLocaleString()} kWh`} border />
-        <URow label="Gas per year" value={`${gas.toLocaleString()} kWh`} />
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", textAlign: "center", marginTop: 10 }}>We&apos;ve used the latest yearly energy estimate for this property.</div>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <div className="progress-sticky">
+        <div style={{ maxWidth: 540, margin: "0 auto", width: "100%", padding: "0 16px" }}>
+          <ProgressBar step={3} />
+          <div style={{ textAlign: "center", color: "rgba(255,255,255,0.55)", fontSize: 13, marginBottom: 8 }}>Step 3 of 4</div>
+        </div>
       </div>
 
-      <button
-        onClick={() => setEditOpen(o => !o)}
-        style={{ display: "flex", alignItems: "center", gap: 6, background: "transparent", border: "none", color: "rgba(255,255,255,0.55)", fontSize: 13, cursor: "pointer", padding: "4px 0", textDecoration: "underline", textUnderlineOffset: 3 }}
-      >
-        <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        Edit usage
-      </button>
-
-      {editOpen && (
-        <div style={{ marginTop: 14 }}>
-          <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>Electricity (kWh)</div>
-              <input type="number" value={elecDraft} onChange={e => setElecDraft(e.target.value)} style={{ width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "#fff", fontSize: 14, color: "#0b1f3a", outline: "none", boxSizing: "border-box" }} />
+      <div style={{ flex: 1, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "24px 16px 100px" }} className="step-content">
+        <div style={{ width: "100%", maxWidth: 540 }}>
+          <div style={{ background: "#1a4fd6", borderRadius: 20, padding: "28px 28px 24px" }}>
+            <div style={{ textAlign: "center", color: "#fff", fontSize: 22, fontWeight: 700, marginBottom: 24, lineHeight: 1.3 }}>
+              {TITLES[subView]}
             </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", marginBottom: 4 }}>Gas (kWh)</div>
-              <input type="number" value={gasDraft} onChange={e => setGasDraft(e.target.value)} style={{ width: "100%", padding: "11px 12px", borderRadius: 8, border: "none", background: "#fff", fontSize: 14, color: "#0b1f3a", outline: "none", boxSizing: "border-box" }} />
+
+            {subView === "estimate" && <EstimateView />}
+            {subView === "adjust" && <AdjustView bigMovers={bigMovers} toggleMover={toggleMover} estimate={moverEst} />}
+            {subView === "detail" && (
+              <DetailView
+                homeType={homeType} setHomeType={setHomeType}
+                bedrooms={bedrooms} setBedrooms={setBedrooms}
+                heating={heating} setHeating={setHeating}
+                people={people} setPeople={setPeople}
+                hasEV={hasEV} setHasEV={setHasEV}
+                homeDuringDay={homeDuringDay} setHomeDuringDay={setHomeDuringDay}
+                estimate={detailEst}
+              />
+            )}
+            {subView === "rawkwh" && (
+              <RawKwhView rawElec={rawElec} setRawElec={setRawElec} rawGas={rawGas} setRawGas={setRawGas} />
+            )}
+
+            <div className="nav-buttons-sticky nav-buttons-in-card">
+              {subView === "estimate" && (
+                <>
+                  <button onClick={() => confirm(EPC_ELEC, EPC_GAS)} style={{ display: "block", width: "100%", padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer", marginBottom: 10 }}>
+                    Yes, that&apos;s right
+                  </button>
+                  <button onClick={() => setSubView("adjust")} style={{ display: "block", width: "100%", padding: 13, background: "rgba(255,255,255,0.12)", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 10, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+                    Something&apos;s changed
+                  </button>
+                </>
+              )}
+              {subView === "adjust" && (
+                <>
+                  <button onClick={() => confirm(moverEst.elec, moverEst.gas)} style={{ display: "block", width: "100%", padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 16, fontWeight: 700, cursor: "pointer", marginBottom: 10 }}>
+                    Confirm this estimate
+                  </button>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button onClick={handleBack} style={{ padding: "13px 20px", background: "rgba(255,255,255,0.12)", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Previous</button>
+                    <button onClick={() => setSubView("detail")} style={{ flex: 1, padding: 13, background: "transparent", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 10, fontSize: 14, cursor: "pointer" }}>
+                      Adjust in more detail
+                    </button>
+                  </div>
+                </>
+              )}
+              {subView === "detail" && (
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={handleBack} style={{ padding: "13px 20px", background: "rgba(255,255,255,0.12)", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Previous</button>
+                  <button onClick={() => confirm(detailEst.elec, detailEst.gas)} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+                    Confirm this estimate
+                  </button>
+                </div>
+              )}
+              {subView === "rawkwh" && (
+                <div style={{ display: "flex", gap: 10 }}>
+                  <button onClick={handleBack} style={{ padding: "13px 20px", background: "rgba(255,255,255,0.12)", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>Back</button>
+                  <button onClick={() => confirm(parseInt(rawElec) || EPC_ELEC, parseInt(rawGas) || EPC_GAS)} style={{ flex: 1, padding: 14, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+                    Use these figures
+                  </button>
+                </div>
+              )}
+
+              {subView !== "rawkwh" && (
+                <button onClick={openRaw} style={{ display: "block", width: "100%", marginTop: 14, background: "transparent", border: "none", color: "rgba(255,255,255,0.3)", fontSize: 12, cursor: "pointer", textDecoration: "underline", textUnderlineOffset: 3, padding: "4px 0" }}>
+                  I know my exact usage
+                </button>
+              )}
             </div>
           </div>
-          <button onClick={saveUsage} style={{ display: "block", width: "100%", padding: 13, background: CTA, color: "#0b1f3a", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer" }}>Save usage</button>
+          <TrustpilotBadge />
         </div>
-      )}
-    </StepShell>
+      </div>
+    </div>
   );
 }
 
-function URow({ label, value, border }: { label: string; value: string; border?: boolean }) {
+function EstimateView() {
   return (
-    <div style={{ display: "flex", gap: 8, padding: "7px 0", fontSize: 14, borderBottom: border ? "1px solid rgba(255,255,255,0.1)" : "none" }}>
-      <span style={{ color: "#93c5fd", width: 150, flexShrink: 0 }}>{label}</span>
-      <span style={{ fontWeight: 600, color: "#fff" }}>{value}</span>
+    <>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.2)", borderRadius: 20, padding: "5px 14px", fontSize: 12, color: "#93c5fd" }}>
+          <svg width="12" height="12" fill="none" viewBox="0 0 12 12">
+            <circle cx="6" cy="6" r="5.5" stroke="currentColor" strokeWidth="1"/>
+            <path d="M3.5 6l2 2 3-3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Based on records for this property
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 18 }}>
+        {([
+          { label: "Gas", value: EPC_GAS, color: "#fb923c" },
+          { label: "Electricity", value: EPC_ELEC, color: "#60a5fa" },
+        ] as { label: string; value: number; color: string }[]).map(({ label, value, color }) => (
+          <div key={label} style={{ background: "rgba(255,255,255,0.07)", borderRadius: 12, padding: "16px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 11, textTransform: "uppercase" as const, letterSpacing: "0.07em", color, marginBottom: 8, fontWeight: 700 }}>{label}</div>
+            <div style={{ fontSize: 30, fontWeight: 800, color: "#fff", lineHeight: 1 }}>{value.toLocaleString()}</div>
+            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>kWh a year</div>
+          </div>
+        ))}
+      </div>
+
+      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.65, marginBottom: 6, textAlign: "center" }}>
+        Typical for a 3-bed semi-detached home heated by gas.
+      </p>
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 0, textAlign: "center" }}>
+        This is an estimate — worth a quick check.
+      </p>
+    </>
+  );
+}
+
+function AdjustView({ bigMovers, toggleMover, estimate }: {
+  bigMovers: Set<BigMover>; toggleMover: (m: BigMover) => void; estimate: { elec: number; gas: number };
+}) {
+  return (
+    <>
+      <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 16, textAlign: "center" }}>
+        Tick anything that applies — we&apos;ll update the estimate.
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+        {BIG_MOVER_OPTIONS.map(({ id, label }) => {
+          const on = bigMovers.has(id);
+          return (
+            <div key={id} onClick={() => toggleMover(id)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 14px", borderRadius: 10, cursor: "pointer", border: on ? `2px solid ${CTA}` : "2px solid rgba(255,255,255,0.15)", background: on ? "rgba(170,255,31,0.1)" : "rgba(255,255,255,0.08)" }}>
+              <div style={{ width: 18, height: 18, borderRadius: 4, flexShrink: 0, border: on ? `2px solid ${CTA}` : "2px solid rgba(255,255,255,0.4)", background: on ? CTA : "transparent", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {on && <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#0b1f3a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+              </div>
+              <span style={{ fontSize: 14, color: "#fff" }}>{label}</span>
+            </div>
+          );
+        })}
+      </div>
+      <EstimateSummary elec={estimate.elec} gas={estimate.gas} updated={bigMovers.size > 0} />
+    </>
+  );
+}
+
+function DetailView({ homeType, setHomeType, bedrooms, setBedrooms, heating, setHeating, people, setPeople, hasEV, setHasEV, homeDuringDay, setHomeDuringDay, estimate }: {
+  homeType: HomeType; setHomeType: (v: HomeType) => void;
+  bedrooms: number; setBedrooms: (v: number) => void;
+  heating: HeatingType; setHeating: (v: HeatingType) => void;
+  people: number; setPeople: (v: number) => void;
+  hasEV: boolean; setHasEV: (v: boolean) => void;
+  homeDuringDay: boolean; setHomeDuringDay: (v: boolean) => void;
+  estimate: { elec: number; gas: number };
+}) {
+  return (
+    <>
+      <QLabel>What kind of home is it?</QLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
+        {(["flat", "terraced", "semi", "detached"] as HomeType[]).map(t => (
+          <OptionBtn key={t} selected={homeType === t} onClick={() => setHomeType(t)}>
+            {{ flat: "Flat", terraced: "Terraced", semi: "Semi-detached", detached: "Detached" }[t]}
+          </OptionBtn>
+        ))}
+      </div>
+
+      <QLabel>How many bedrooms?</QLabel>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {[1, 2, 3, 4, 5].map(n => (
+          <OptionBtn key={n} selected={bedrooms === n} onClick={() => setBedrooms(n)} xstyle={{ flex: 1 }}>{n === 5 ? "5+" : String(n)}</OptionBtn>
+        ))}
+      </div>
+
+      <QLabel>How is it heated?</QLabel>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 20 }}>
+        {([
+          { id: "gas", label: "Gas" }, { id: "electricity", label: "Electricity" },
+          { id: "heat_pump", label: "Heat pump" }, { id: "other", label: "Other" },
+        ] as { id: HeatingType; label: string }[]).map(({ id, label }) => (
+          <OptionBtn key={id} selected={heating === id} onClick={() => setHeating(id)}>{label}</OptionBtn>
+        ))}
+      </div>
+
+      <QLabel>How many people live there?</QLabel>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {[1, 2, 3, 4, 5].map(n => (
+          <OptionBtn key={n} selected={people === n} onClick={() => setPeople(n)} xstyle={{ flex: 1 }}>{n === 5 ? "5+" : String(n)}</OptionBtn>
+        ))}
+      </div>
+
+      <QLabel>Electric vehicle?</QLabel>
+      <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+        <OptionBtn selected={hasEV} onClick={() => setHasEV(true)} xstyle={{ flex: 1 }}>Yes</OptionBtn>
+        <OptionBtn selected={!hasEV} onClick={() => setHasEV(false)} xstyle={{ flex: 1 }}>No</OptionBtn>
+      </div>
+
+      <QLabel>Someone home during the day?</QLabel>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        <OptionBtn selected={homeDuringDay} onClick={() => setHomeDuringDay(true)} xstyle={{ flex: 1 }}>Usually yes</OptionBtn>
+        <OptionBtn selected={!homeDuringDay} onClick={() => setHomeDuringDay(false)} xstyle={{ flex: 1 }}>Mostly out</OptionBtn>
+      </div>
+
+      <EstimateSummary elec={estimate.elec} gas={estimate.gas} updated={true} />
+    </>
+  );
+}
+
+function RawKwhView({ rawElec, setRawElec, rawGas, setRawGas }: {
+  rawElec: string; setRawElec: (v: string) => void;
+  rawGas: string; setRawGas: (v: string) => void;
+}) {
+  return (
+    <>
+      <p style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", marginBottom: 20, lineHeight: 1.65 }}>
+        You&apos;ll find your annual usage on a recent energy bill or your online account.
+      </p>
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 6 }}>Electricity (kWh per year)</div>
+        <input type="number" value={rawElec} onChange={e => setRawElec(e.target.value)} placeholder="e.g. 1800" style={{ width: "100%", padding: "13px 14px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", boxSizing: "border-box" }} />
+      </div>
+      <div style={{ marginBottom: 8 }}>
+        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginBottom: 6 }}>Gas (kWh per year)</div>
+        <input type="number" value={rawGas} onChange={e => setRawGas(e.target.value)} placeholder="e.g. 6700" style={{ width: "100%", padding: "13px 14px", borderRadius: 10, border: "none", background: "#fff", fontSize: 15, color: "#0b1f3a", outline: "none", boxSizing: "border-box" }} />
+      </div>
+    </>
+  );
+}
+
+function EstimateSummary({ elec, gas, updated }: { elec: number; gas: number; updated: boolean }) {
+  return (
+    <div style={{ background: "rgba(255,255,255,0.07)", borderRadius: 10, padding: "12px 16px", marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div>
+        <div style={{ fontSize: 12, color: updated ? CTA : "rgba(255,255,255,0.45)", marginBottom: 3, fontWeight: updated ? 700 : 400 }}>
+          {updated ? "Updated estimate" : "Current estimate"}
+        </div>
+        <div style={{ fontSize: 14, color: "#fff", fontWeight: 600 }}>
+          {gas > 0 ? `Gas ${gas.toLocaleString()} kWh · ` : ""}Elec {elec.toLocaleString()} kWh
+        </div>
+      </div>
+      {updated && (
+        <div style={{ background: "rgba(170,255,31,0.12)", borderRadius: 20, padding: "3px 10px", fontSize: 11, color: CTA, fontWeight: 700, flexShrink: 0 }}>Updated</div>
+      )}
     </div>
+  );
+}
+
+function QLabel({ children }: { children: React.ReactNode }) {
+  return <div style={{ fontSize: 14, fontWeight: 600, color: "#fff", marginBottom: 10 }}>{children}</div>;
+}
+
+function OptionBtn({ selected, onClick, children, xstyle }: {
+  selected: boolean; onClick: () => void; children: React.ReactNode; xstyle?: React.CSSProperties;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: "11px 8px", borderRadius: 8, cursor: "pointer", fontSize: 14,
+        color: selected ? "#0b1f3a" : "#fff",
+        border: selected ? `2px solid ${CTA}` : "2px solid rgba(255,255,255,0.15)",
+        background: selected ? CTA : "rgba(255,255,255,0.08)",
+        fontWeight: selected ? 700 : 400,
+        flex: 1,
+        ...xstyle,
+      }}
+    >
+      {children}
+    </button>
   );
 }
 
