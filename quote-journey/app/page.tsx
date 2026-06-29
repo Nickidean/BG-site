@@ -791,7 +791,7 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
         background: "rgba(10,25,65,0.6)",
         border: "1.5px solid rgba(255,255,255,0.18)",
         borderRadius: 20,
-        padding: "24px 20px 16px",
+        padding: "32px 24px 18px",
         display: "flex",
         flexDirection: "column",
         backdropFilter: "blur(8px)",
@@ -799,24 +799,31 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
       }}
       className="alt-card"
     >
-      {/* Kicker */}
+      {/* Kicker — same height slot as the suggestion badge */}
       <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>Prefer to pay less now?</div>
 
       {/* Name */}
-      <div style={{ fontSize: 16, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 12 }}>Standard Variable tariff</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: "rgba(255,255,255,0.8)", marginBottom: 6 }}>Standard Variable tariff</div>
+      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 12, lineHeight: 1.5 }}>
+        A lower rate today, but prices move with the Ofgem cap — no lock-in, no exit fee.
+      </p>
 
-      {/* Price — slightly smaller */}
+      {/* Price */}
       <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 2 }}>
-        <span style={{ fontSize: 40, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
+        <span style={{ fontSize: 42, fontWeight: 900, color: "rgba(255,255,255,0.85)", lineHeight: 1, letterSpacing: "-1px" }}>{fmtPrice(price)}</span>
       </div>
       <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginBottom: 14 }}>Monthly estimate (inc. VAT)</div>
 
-      {/* Body — condensed */}
-      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.55, marginBottom: 14, flex: 1 }}>
+      {/* Body */}
+      <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.6, marginBottom: 10, flex: 1 }}>
         Rates move with the Ofgem price cap — up or down. No exit fee, leave whenever you like.
       </p>
 
       {/* Meta */}
+      <div style={{ fontSize: 13, marginBottom: 4, display: "flex", gap: 8 }}>
+        <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Duration:</span>
+        <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>Rolling monthly</span>
+      </div>
       <div style={{ fontSize: 13, marginBottom: 16, display: "flex", gap: 8 }}>
         <span style={{ color: "rgba(148,197,253,0.7)", width: 110, flexShrink: 0 }}>Early exit fee:</span>
         <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>£0 per fuel</span>
@@ -825,7 +832,7 @@ function AlternativeCard({ price, ratesOpen, onToggleRates, onSelect, ratesPanel
       {/* Outline CTA */}
       <button
         onClick={onSelect}
-        style={{ display: "block", width: "100%", padding: "13px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 8 }}
+        style={{ display: "block", width: "100%", padding: "13px", background: "transparent", color: "#fff", border: "2px solid rgba(255,255,255,0.35)", borderRadius: 28, fontSize: 15, fontWeight: 600, cursor: "pointer", marginBottom: 6 }}
       >
         Select this tariff
       </button>

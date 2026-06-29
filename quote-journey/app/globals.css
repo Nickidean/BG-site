@@ -94,7 +94,7 @@ body {
   }
 
   .tariff-grid-step4 {
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: 1fr 1fr;
     gap: 24px;
     align-items: stretch;
   }
