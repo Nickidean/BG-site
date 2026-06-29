@@ -188,9 +188,9 @@ type HeatingType = "gas" | "electricity" | "heat_pump" | "other";
 type BigMover = "ev" | "electricHeat" | "morePeople" | "homeDuringDay";
 type UsageSubView = "estimate" | "adjust" | "detail" | "rawkwh";
 
-// EPC-sourced figures for 24 Millstream (simulated strong-data path)
-const EPC_ELEC = 1800;
-const EPC_GAS = 6700;
+// Industry-average figures for a 2-3 bed home with 2-3 people
+const EPC_ELEC = 2700;
+const EPC_GAS = 11500;
 
 // Illustrative estimation model — real coefficients to come from data team
 function computeFromDetail(opts: {
@@ -198,7 +198,7 @@ function computeFromDetail(opts: {
   people: number; ev: boolean; homeDuringDay: boolean;
 }): { elec: number; gas: number } {
   const typeMult: Record<HomeType, number> = { flat: 0.58, terraced: 0.78, semi: 1.0, detached: 1.35 };
-  let e = 2900 * typeMult[opts.homeType];
+  let e = 2700 * typeMult[opts.homeType];
   let g = 11500 * typeMult[opts.homeType];
   const bd = (opts.bedrooms - 3) * 0.1;
   const pd = (opts.people - 2.4) * 0.07;
@@ -398,7 +398,7 @@ function EstimateView() {
       </div>
 
       <p style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.65, marginBottom: 6, textAlign: "center" }}>
-        Typical for a 3-bed semi-detached home heated by gas.
+        Typical for a 2–3 bedroom home with 2–3 people, heated by gas.
       </p>
       <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", marginBottom: 0, textAlign: "center" }}>
         This is an estimate — worth a quick check.
@@ -1096,8 +1096,8 @@ export default function QuoteJourney() {
   const [step, setStep] = useState(1);
   const [fuel, setFuel] = useState<FuelType>("dual");
   const [smartDevices, setSmartDevices] = useState<Set<SmartDevice>>(new Set());
-  const [elec, setElec] = useState(1800);
-  const [gas, setGas] = useState(6700);
+  const [elec, setElec] = useState(2700);
+  const [gas, setGas] = useState(11500);
   const [selectedTariff, setSelectedTariff] = useState<TariffType | null>(null);
 
   function handleSelectTariff(t: TariffType) { setSelectedTariff(t); setStep(5); }
