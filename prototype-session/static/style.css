@@ -38,3 +38,41 @@ body {
 .card p {
   color: #666;
 }
+
+.home {
+  max-width: 480px;
+  margin: 3rem auto 0;
+}
+
+.pet-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.pet-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.pet-meta {
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+.home .card {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.recommendation-icon {
+  font-size: 1.75rem;
+}
+
+.feeding-card {
+  background: #fff8e6;
+  border: 1px solid #f5dfa0;
+}
