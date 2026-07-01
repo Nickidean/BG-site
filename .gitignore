@@ -27,3 +27,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# python (prototype-session)
+__pycache__/
+*.pyc
+prototype-session/database.db
