@@ -1,5 +1,5 @@
-import { createElement, useEffect, useState } from 'https://esm.sh/react@18';
-import htm from 'https://esm.sh/htm@3';
+import { createElement, useEffect, useState } from '../vendor/react.js';
+import htm from '../vendor/htm.js';
 
 const html = htm.bind(createElement);
 

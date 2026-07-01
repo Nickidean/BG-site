@@ -1,6 +1,6 @@
-import { createElement } from 'https://esm.sh/react@18';
-import { createRoot } from 'https://esm.sh/react-dom@18/client';
-import htm from 'https://esm.sh/htm@3';
+import { createElement } from './vendor/react.js';
+import { createRoot } from './vendor/react-dom-client.js';
+import htm from './vendor/htm.js';
 import { HomeScreen } from './components/HomeScreen.js';
 
 const html = htm.bind(createElement);
