@@ -26,6 +26,28 @@ The participant has chosen **one** of the following sub-problems to focus on:
 **Important:** The participant is building one angle only. Do not suggest expanding
 scope to cover other angles. When the brief is provided, build only what it specifies.
 
+### Confirmed brief: A — Low engagement
+
+Building a daily home screen for one demo pet ("Buddy") that gives the owner a
+reason to check in most days, without turning into a diagnostic tool.
+
+- **User:** A busy pet owner who treats their pet like family but doesn't want
+  "one more app to manage."
+- **Problem:** They only open the app when something's already wrong. Regular
+  check-ins could catch issues earlier and build a habit.
+- **Screen must show:** (1) today's health status in plain English (no score/
+  traffic-light), (2) what kind of day the pet needs — exercise, rest, or
+  treats, (3) a feeding flag/reminder.
+- **Data:** No real collar exists — simulate a multi-day history (e.g. last 7
+  days of steps/sleep/activity) in SQLite so trends can inform the daily
+  recommendation.
+- **Re-engagement:** Also simulate the daily "pull" — a reminder/notification-
+  style banner nudging the owner back in, not just the screen content itself.
+- **Scope:** One pet only. Explicitly NOT building symptom diagnosis — that's
+  a separate sub-problem (B).
+- **Success looks like:** Owner returns 1-2x/week; the demo should show a
+  believable daily screen plus the reminder mechanic that would drive that.
+
 ## Tech stack
 
 - **Backend:** Python + Flask
